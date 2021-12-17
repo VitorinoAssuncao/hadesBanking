@@ -19,7 +19,7 @@ func cpfIsNotEmpty(cpf string) bool {
 
 func cpfIsJustNumbers(cpf string) bool {
 	p, _ := regexp.Compile("[^0-9]+")
-	return p.Match([]byte(cpf))
+	return !(p.Match([]byte(cpf)))
 }
 
 func cpfIsValid(cpf string) bool {
