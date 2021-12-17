@@ -10,25 +10,16 @@ func ValidateAccountInput(accountData input.CreateAccountVO) (input.CreateAccoun
 }
 
 func nameIsNotEmpty(name string) bool {
-	if name == "" {
-		return false
-	}
-	return true
+	return name != ""
 }
 
 func cpfIsNotEmpty(cpf string) bool {
-	if cpf == "" {
-		return false
-	}
-	return true
+	return cpf != ""
 }
 
 func cpfIsJustNumbers(cpf string) bool {
 	p, _ := regexp.Compile("[^0-9]+")
-	if p.Match([]byte(cpf)) {
-		return false
-	}
-	return true
+	return p.Match([]byte(cpf))
 }
 
 func cpfIsValid(cpf string) bool {
@@ -37,15 +28,9 @@ func cpfIsValid(cpf string) bool {
 }
 
 func secretIsNotEmpty(secret string) bool {
-	if secret == "" {
-		return false
-	}
-	return true
+	return secret != ""
 }
 
 func balanceIsPositive(balance int) bool {
-	if balance < 0 {
-		return false
-	}
-	return true
+	return balance >= 0
 }
