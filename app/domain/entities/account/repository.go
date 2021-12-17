@@ -2,7 +2,7 @@ package account
 
 import (
 	"context"
-	"hades/domain/types"
+	"stoneBanking/app/domain/types"
 )
 
 type Repository interface {

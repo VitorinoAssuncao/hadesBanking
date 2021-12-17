@@ -2,9 +2,9 @@ package account
 
 import (
 	"context"
-	"hades/adapters/vo/input"
-	"stoneBanking/application/entities/account"
-	"stoneBanking/domain/vo/output"
+	"stoneBanking/app/application/vo/input"
+	"stoneBanking/app/application/vo/output"
+	"stoneBanking/app/domain/entities/account"
 )
 
 type UseCase interface {

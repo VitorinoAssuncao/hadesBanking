@@ -1,6 +1,6 @@
 package output
 
-import "hades/domain/entities"
+import "stoneBanking/app/domain/entities/transfer"
 
 type TransferOutputVO struct {
 	ID               string  `json:"transfer_id" example:"1"`
@@ -10,7 +10,7 @@ type TransferOutputVO struct {
 	Created_At       string  `json:"created_at" example:"12/05/2021 00:01:01" `
 }
 
-func TransferToTransferOutput(transfer entities.Transfer) TransferOutputVO {
+func TransferToTransferOutput(transfer transfer.Transfer) TransferOutputVO {
 	transferOutput := TransferOutputVO{
 		ID:               string(transfer.ID),
 		AccountOriginID:  string(transfer.Account_origin_id),

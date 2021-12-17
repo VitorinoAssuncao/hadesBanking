@@ -1,7 +1,7 @@
 package output
 
 import (
-	"hades/domain/entities"
+	"stoneBanking/app/domain/entities/account"
 )
 
 type AccountOutputVO struct {
@@ -16,7 +16,7 @@ type AccountBalanceVO struct {
 	Balance float64 `json:"balance" example:"12.34"`
 }
 
-func AccountToOutput(account entities.Account) AccountOutputVO {
+func AccountToOutput(account account.Account) AccountOutputVO {
 	accountOutput := AccountOutputVO{
 		ID:         string(account.ID),
 		Name:       account.Name,

@@ -1,7 +1,7 @@
 package transfer
 
 import (
-	"hades/domain/types"
+	"stoneBanking/app/domain/types"
 	"time"
 )
 

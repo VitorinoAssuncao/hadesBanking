@@ -2,8 +2,8 @@ package account
 
 import (
 	"context"
-	"hades/adapters/vo/input"
-	"stoneBanking/domain/vo/output"
+	"stoneBanking/app/application/vo/input"
+	"stoneBanking/app/application/vo/output"
 )
 
 func (usecase *usecase) Create(ctx context.Context, accountData input.CreateAccountVO) (*output.AccountOutputVO, error) {

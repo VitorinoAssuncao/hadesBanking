@@ -1,5 +1,6 @@
 package errors
 
+//TODO Separar os erros em suas camadas aprópriadas
 import "errors"
 
 var (
