@@ -2,7 +2,7 @@ package server
 
 import (
 	"stoneBanking/app/domain/entities/account"
-	"stoneBanking/app/gateway/database/postgres"
+	postgres_account "stoneBanking/app/gateway/database/postgres/accounts"
 
 	"github.com/jackc/pgx/v4"
 )
@@ -13,6 +13,6 @@ type RepositorieWrapper struct {
 
 func NewPostgresRepositoryWrapper(db *pgx.Conn) *RepositorieWrapper {
 	return &RepositorieWrapper{
-		Account: postgres.NewAccountRepository(db),
+		Account: postgres_account.NewAccountRepository(db),
 	}
 }
