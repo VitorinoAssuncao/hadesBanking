@@ -6,6 +6,30 @@ import (
 )
 
 func ValidateAccountInput(accountData input.CreateAccountVO) (input.CreateAccountVO, error) {
+	if !nameIsNotEmpty(accountData.Name) {
+		return accountData, errorAccountNameRequired
+	}
+
+	if !cpfIsNotEmpty(accountData.CPF) {
+		return accountData, errorAccountCPFRequired
+	}
+
+	if !cpfIsJustNumbers(accountData.CPF) {
+		return accountData, errorAccountCPFNotNumbers
+	}
+
+	if !cpfIsValid(accountData.CPF) {
+		return accountData, errorAccountCPFInvalid
+	}
+
+	if !secretIsNotEmpty(accountData.Secret) {
+		return accountData, errorAccountSecretRequired
+	}
+
+	if !balanceIsPositive(accountData.Balance) {
+		return accountData, errorAccountBalanceInvalid
+	}
+
 	return accountData, nil
 }
 

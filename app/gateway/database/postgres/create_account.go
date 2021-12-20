@@ -44,10 +44,6 @@ func (r accountRepository) GetAll(ctx context.Context) ([]account.Account, error
 	return nil, nil
 }
 
-func (r accountRepository) GetByCPF(ctx context.Context, accountCPF string) (*account.Account, error) {
-	return nil, nil
-}
-
 func (r accountRepository) GetByID(ctx context.Context, accountID types.AccountID) (*account.Account, error) {
 	return nil, nil
 }

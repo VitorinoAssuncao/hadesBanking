@@ -21,6 +21,11 @@ func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
 
 	account_output, err := controller.usecase.Create(r.Context(), *account_data)
 
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
 	json.NewEncoder(w).Encode(account_output)
 
 }
