@@ -10,7 +10,7 @@ func (repository accountRepository) GetByID(ctx context.Context, accountID types
 
 	var sqlQuery = `
 	SELECT 
-		accounts (id, name, cpf, secret, balance, created_at)
+		id, name, cpf, secret, balance, created_at
 	FROM
 		accounts
 	WHERE

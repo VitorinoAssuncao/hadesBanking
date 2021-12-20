@@ -34,10 +34,6 @@ func (repository accountRepository) Create(ctx context.Context, account *account
 	return account, nil
 }
 
-func (r accountRepository) GetAll(ctx context.Context) ([]account.Account, error) {
-	return nil, nil
-}
-
 func NewAccountRepository(connection *pgx.Conn) account.Repository {
 	return &accountRepository{
 		db: connection,
