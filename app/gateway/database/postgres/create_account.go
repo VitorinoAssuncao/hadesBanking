@@ -3,7 +3,6 @@ package postgres
 import (
 	"context"
 	"stoneBanking/app/domain/entities/account"
-	"stoneBanking/app/domain/types"
 
 	"github.com/jackc/pgx/v4"
 )
@@ -33,14 +32,6 @@ func (repository accountRepository) Create(ctx context.Context, account *account
 		return nil, errorCreateAccount
 	}
 	return account, nil
-}
-
-func (r accountRepository) GetAll(ctx context.Context) ([]account.Account, error) {
-	return nil, nil
-}
-
-func (r accountRepository) GetByID(ctx context.Context, accountID types.AccountID) (*account.Account, error) {
-	return nil, nil
 }
 
 func NewAccountRepository(connection *pgx.Conn) account.Repository {

@@ -38,7 +38,3 @@ func (usecase *usecase) Create(ctx context.Context, accountData input.CreateAcco
 
 	return &accountOutput, err
 }
-
-func (usecase *usecase) GetAll(ctx context.Context) ([]output.AccountOutputVO, error) {
-	return nil, nil
-}
