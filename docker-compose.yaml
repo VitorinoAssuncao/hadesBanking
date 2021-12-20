@@ -1,0 +1,28 @@
+version: '3'
+services:
+  stone_postgres:
+    image: postgres:latest
+    container_name: full_db_postgres
+    environment:
+      - POSTGRES_USER=postgres  
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=bank_stone
+      - DATABASE_HOST= stone_postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - database_postgres:/var/lib/postgresql/data
+
+  # stone_postgres:
+  #   image: postgres:latest
+  #   container_name: full_db_postgres
+  #   environment:
+  #     - POSTGRES_USER= dev  
+  #     - POSTGRES_PASSWORD= dev
+  #     - POSTGRES_MULTIPLE_DATABASES= bank_stone
+  #     - DATABASE_HOST= stone_postgres
+  #   ports:
+  #     - '5432:5432'    
+
+volumes:
+  database_postgres:                  

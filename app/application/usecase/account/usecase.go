@@ -7,18 +7,18 @@ import (
 	"stoneBanking/app/domain/entities/account"
 )
 
-type UseCase interface {
+type Usecase interface {
 	Create(ctx context.Context, accountData input.CreateAccountVO) (*output.AccountOutputVO, error)
 	GetBalance(ctx context.Context, accountID string) (output.AccountBalanceVO, error)
 	GetAll(ctx context.Context) ([]output.AccountOutputVO, error)
 }
 
 type usecase struct {
-	account account.Repository
+	accountRepository account.Repository
 }
 
 func New(account account.Repository) *usecase {
 	return &usecase{
-		account: account,
+		accountRepository: account,
 	}
 }
