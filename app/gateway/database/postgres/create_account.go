@@ -13,7 +13,6 @@ type accountRepository struct {
 }
 
 func (repository accountRepository) Create(ctx context.Context, account *account.Account) (*account.Account, error) {
-	ctx = context.Background()
 	var sqlQuery = `
 	INSERT INTO
 			accounts (id, name, cpf, secret, balance, created_at)
@@ -31,7 +30,7 @@ func (repository accountRepository) Create(ctx context.Context, account *account
 		account.Created_at)
 
 	if err != nil {
-		return nil, err
+		return nil, errorCreateAccount
 	}
 	return account, nil
 }
@@ -41,10 +40,6 @@ func (r accountRepository) GetBalance(ctx context.Context, accountID types.Accou
 }
 
 func (r accountRepository) GetAll(ctx context.Context) ([]account.Account, error) {
-	return nil, nil
-}
-
-func (r accountRepository) GetByCPF(ctx context.Context, accountCPF string) (*account.Account, error) {
 	return nil, nil
 }
 
