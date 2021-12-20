@@ -39,10 +39,6 @@ func (usecase *usecase) Create(ctx context.Context, accountData input.CreateAcco
 	return &accountOutput, err
 }
 
-func (usecase *usecase) GetBalance(ctx context.Context, accountID string) (output.AccountBalanceVO, error) {
-	return output.AccountBalanceVO{Balance: 0}, nil
-}
-
 func (usecase *usecase) GetAll(ctx context.Context) ([]output.AccountOutputVO, error) {
 	return nil, nil
 }

@@ -35,10 +35,6 @@ func (repository accountRepository) Create(ctx context.Context, account *account
 	return account, nil
 }
 
-func (r accountRepository) GetBalance(ctx context.Context, accountID types.AccountID) (types.Money, error) {
-	return 0, nil
-}
-
 func (r accountRepository) GetAll(ctx context.Context) ([]account.Account, error) {
 	return nil, nil
 }
