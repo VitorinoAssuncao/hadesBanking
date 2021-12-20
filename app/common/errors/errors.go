@@ -10,16 +10,6 @@ var (
 	ErrorLoginSecretWrong    = errors.New("Senha incorreta, favor validar novamente")
 	ErrorLoginTokenCreation  = errors.New("Erro na geração do token")
 
-	ErrorAccountCPFRequired    = errors.New("Campo CPF é obrigatório no cadastro de nova conta")
-	ErrorAccountCPFExists      = errors.New("Já existe uma conta cadastrada com este CPF")
-	ErrorAccountCPFNotFound    = errors.New("CPF não localizado, favor validar o cpf informado")
-	ErrorAccountCPFNotNumbers  = errors.New("Deve-se informar apenas números no campo de CPF")
-	ErrorAccountCPFInvalid     = errors.New("CPF adicionado é inválido")
-	ErrorAccountNameRequired   = errors.New("Campo Nome é obrigatório no cadastro de nova conta")
-	ErrorAccountSecretRequired = errors.New("Campo Senha é obrigatorio no cadastro de novas contas")
-	ErrorAccountBalanceInvalid = errors.New("Campo Saldo, deve ser igual ou maior que zero (0)")
-	ErrorCreateAccount         = errors.New("Erro ao criar nova conta")
-
 	ErrorAccountNotFound  = errors.New("Conta não localizada, favor validar o cpf")
 	ErrorGetAllAccounts   = errors.New("Erro ao buscar todas as contas")
 	ErrorAccountInvalidID = errors.New("ID de Conta informado inválido")
