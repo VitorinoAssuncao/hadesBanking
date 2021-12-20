@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type CreateAccountVO struct {
@@ -21,9 +22,19 @@ func GenerateAccount(inputAccount CreateAccountVO) account.Account {
 		ID:         types.AccountID(tempID.String()),
 		Name:       inputAccount.Name,
 		Cpf:        inputAccount.CPF,
-		Secret:     inputAccount.Secret,
+		Secret:     HashPassword(inputAccount.Secret),
 		Balance:    types.Money(inputAccount.Balance),
 		Created_at: time.Now(),
 	}
 	return account
+}
+
+func HashPassword(text string) string {
+	bytes, _ := bcrypt.GenerateFromPassword([]byte(text), 14)
+	return string(bytes)
+}
+
+func ValidateHash(accountSecret, loginSecret string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(accountSecret), []byte(loginSecret))
+	return err == nil
 }
