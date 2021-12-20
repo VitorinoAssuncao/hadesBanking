@@ -2,7 +2,6 @@ package accounts
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"stoneBanking/app/application/vo/input"
@@ -22,7 +21,6 @@ func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
 
 	account_output, err := controller.usecase.Create(r.Context(), *account_data)
 
-	fmt.Println(err)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
