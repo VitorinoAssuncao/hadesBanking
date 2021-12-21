@@ -13,6 +13,7 @@ func (repository accountRepository) Create(ctx context.Context, account *account
 			($1, $2, $3, $4, $5, $6)
 	`
 	_, err := repository.db.Exec(
+		ctx,
 		sqlQuery,
 		account.ID,
 		account.Name,
@@ -22,7 +23,7 @@ func (repository accountRepository) Create(ctx context.Context, account *account
 		account.Created_at)
 
 	if err != nil {
-		return nil, err
+		return nil, errorCreateAccount
 	}
 	return account, nil
 }

@@ -1,37 +1,38 @@
 package postgres
 
 import (
-	"database/sql"
+	"context"
 	"fmt"
 
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+	"github.com/jackc/pgx/v4"
 )
 
-var database *sql.DB
+var database *pgx.Conn
 
 func InitiliazeDatabase() {
 	const user = "postgres"
 	const pass = "postgres"
 	const base = "bank_stone"
 	const dbUrl = "postgres://" + user + ":" + pass + "@0.0.0.0:5432/" + base + "?sslmode=disable"
-	const migrationPath = "file://app/gateway/database/postgres/migrations"
-	db, _ := sql.Open("postgres", dbUrl)
-	err := Migrate(migrationPath, dbUrl)
+	connection, _ := pgx.Connect(context.Background(), dbUrl)
+	err := Migrate(dbUrl)
 
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	database = db
+	database = connection
 }
 
-func RetrieveConnection() *sql.DB {
+func RetrieveConnection() *pgx.Conn {
 	return database
 }
 
-func Migrate(migration_string, db_string string) error {
-	migration, err := migrate.New(migration_string, db_string)
+func Migrate(db_string string) error {
+	path := "file://app/gateway/database/postgres/migrations"
+	migration, err := migrate.New(path, db_string)
 
 	if err != nil {
 		return err

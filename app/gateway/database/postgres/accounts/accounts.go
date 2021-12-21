@@ -1,16 +1,17 @@
 package postgres_account
 
 import (
-	"database/sql"
 	"stoneBanking/app/domain/entities/account"
+
+	"github.com/jackc/pgx/v4"
 )
 
 type accountRepository struct {
-	db *sql.DB
+	db *pgx.Conn
 }
 
-func NewAccountRepository(database *sql.DB) account.Repository {
+func NewAccountRepository(connection *pgx.Conn) account.Repository {
 	return &accountRepository{
-		db: database,
+		db: connection,
 	}
 }

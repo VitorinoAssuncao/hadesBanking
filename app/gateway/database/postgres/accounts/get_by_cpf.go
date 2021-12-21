@@ -16,6 +16,7 @@ func (repository accountRepository) GetByCPF(ctx context.Context, accountCPF str
 			cpf = $1
 	`
 	result := repository.db.QueryRow(
+		ctx,
 		sqlQuery,
 		accountCPF,
 	)
