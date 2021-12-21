@@ -24,7 +24,7 @@ func (repository accountRepository) GetByID(ctx context.Context, accountID types
 	err := result.Scan(&account.ID, &account.Name, &account.Cpf, &account.Secret, &account.Balance, &account.Created_at)
 
 	if err != nil {
-		return nil, errorAccountCPFNotFound
+		return nil, errorAccountIDNotFound
 	}
 
 	return account, nil

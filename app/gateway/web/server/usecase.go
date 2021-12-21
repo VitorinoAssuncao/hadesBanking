@@ -1,13 +1,15 @@
 package server
 
-import "stoneBanking/app/application/usecase/account"
+import (
+	"stoneBanking/app/application/usecase"
+)
 
 type UseCaseWrapper struct {
-	Accounts account.Usecase
+	Accounts usecase.Usecase
 }
 
 func NewUseCaseWrapper(wrapper *RepositorieWrapper) *UseCaseWrapper {
 	return &UseCaseWrapper{
-		Accounts: account.New(wrapper.Account),
+		Accounts: usecase.New(wrapper.Account),
 	}
 }

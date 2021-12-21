@@ -3,13 +3,7 @@ package postgres_account
 import (
 	"context"
 	"stoneBanking/app/domain/entities/account"
-
-	"github.com/jackc/pgx/v4"
 )
-
-type accountRepository struct {
-	db *pgx.Conn
-}
 
 func (repository accountRepository) Create(ctx context.Context, account *account.Account) (*account.Account, error) {
 	var sqlQuery = `
@@ -32,10 +26,4 @@ func (repository accountRepository) Create(ctx context.Context, account *account
 		return nil, errorCreateAccount
 	}
 	return account, nil
-}
-
-func NewAccountRepository(connection *pgx.Conn) account.Repository {
-	return &accountRepository{
-		db: connection,
-	}
 }
