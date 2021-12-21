@@ -17,7 +17,6 @@ func (repository accountRepository) GetByID(ctx context.Context, accountID types
 			id = $1
 	`
 	result := repository.db.QueryRow(
-		ctx,
 		sqlQuery,
 		accountID,
 	)

@@ -9,8 +9,8 @@ import (
 func main() {
 	fmt.Println("Rest API v2.0 - Mux Routers")
 	postgres.InitiliazeDatabase()
-	connection := postgres.RetrieveConnection()
-	repository := server.NewPostgresRepositoryWrapper(connection)
+	db := postgres.RetrieveConnection()
+	repository := server.NewPostgresRepositoryWrapper(db)
 
 	workspaces := server.NewUseCaseWrapper(repository)
 
