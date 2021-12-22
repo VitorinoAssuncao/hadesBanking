@@ -3,6 +3,7 @@ package postgres
 import (
 	"database/sql"
 	"fmt"
+	"os"
 
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
@@ -12,11 +13,13 @@ import (
 var database *sql.DB
 
 func InitiliazeDatabase() {
-	const user = "postgres"
-	const pass = "postgres"
-	const base = "bank_stone"
-	const dbUrl = "postgres://" + user + ":" + pass + "@0.0.0.0:5432/" + base + "?sslmode=disable"
 	const migrationPath = "file://app/gateway/database/postgres/migrations"
+	user := os.Getenv("POSTGRES_USER")
+	pass := os.Getenv("POSTGRES_PASS")
+	base := os.Getenv("POSTGRES_BASE")
+
+	dbUrl := "postgres://" + user + ":" + pass + "@0.0.0.0:5432/" + base + "?sslmode=disable"
+
 	db, _ := sql.Open("postgres", dbUrl)
 	err := Migrate(migrationPath, dbUrl)
 

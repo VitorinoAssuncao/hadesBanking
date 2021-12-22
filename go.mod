@@ -52,6 +52,7 @@ require (
 	github.com/jackc/pgservicefile v0.0.0-20200714003250-2b9c44734f2b // indirect
 	github.com/jackc/pgtype v1.9.1 // indirect
 	github.com/jackc/pgx v3.6.2+incompatible
+	github.com/joho/godotenv v1.4.0
 	github.com/ory/dockertest v3.3.5+incompatible
 	github.com/ory/dockertest/v3 v3.8.1
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect
