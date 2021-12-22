@@ -23,7 +23,7 @@ func (repository accountRepository) GetByID(ctx context.Context, accountID types
 	err := result.Scan(&account.ID, &account.Name, &account.Cpf, &account.Secret, &account.Balance, &account.Created_at)
 
 	if err != nil {
-		return nil, errorAccountIDNotFound
+		return nil, err
 	}
 
 	return account, nil

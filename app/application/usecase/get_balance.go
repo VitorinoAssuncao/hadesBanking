@@ -11,7 +11,7 @@ func (usecase *usecase) GetBalance(ctx context.Context, accountID string) (outpu
 	var tempAccount = &account.Account{}
 	tempAccount, err := usecase.accountRepository.GetByID(ctx, types.AccountID(accountID), tempAccount)
 	if err != nil {
-		return output.AccountBalanceVO{Balance: 0}, err
+		return output.AccountBalanceVO{Balance: 0}, errorAccountIDNotFound
 	}
 	return output.AccountBalanceVO{Balance: tempAccount.Balance.ToFloat()}, nil
 }
