@@ -17,7 +17,7 @@ func (usecase *usecase) Create(ctx context.Context, accountData input.CreateAcco
 	}
 
 	tempAccount, err := usecase.accountRepository.GetByCPF(ctx, accountData.CPF)
-
+	//validate if account with that cpf exist, if not continue the creation of a new account
 	if err == nil {
 		accountOutput = output.AccountToOutput(tempAccount)
 		return &accountOutput, errorAccountCPFExists
