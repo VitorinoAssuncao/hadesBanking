@@ -12,7 +12,7 @@ import (
 	"github.com/ory/dockertest"
 )
 
-var databaseMock *sql.DB
+var databaseTest *sql.DB
 
 func TestMain(m *testing.M) {
 	pool, err := dockertest.NewPool("")
@@ -47,11 +47,11 @@ func SetupTests(pool dockertest.Pool) dockertest.Resource {
 	pool.MaxWait = 120 * time.Second
 
 	if err = pool.Retry(func() error {
-		DatabaseMock, err := sql.Open("postgres", dbUrl)
+		databaseTest, err := sql.Open("postgres", dbUrl)
 		if err != nil {
 			return err
 		}
-		return DatabaseMock.Ping()
+		return databaseTest.Ping()
 	}); err != nil {
 		log.Fatalf("Could not connect to docker: %s", err)
 	}
@@ -62,7 +62,7 @@ func SetupTests(pool dockertest.Pool) dockertest.Resource {
 func setDatabase(resource dockertest.Resource) {
 	hostAndPort := resource.GetHostPort("5432/tcp")
 	dbUrl := fmt.Sprintf("postgres://user_name:secret@%s/dbname?sslmode=disable", hostAndPort)
-	databaseMock, _ = sql.Open("postgres", dbUrl)
+	databaseTest, _ = sql.Open("postgres", dbUrl)
 	migrationPath := "file:../migrations"
 	err := postgres.Migrate(migrationPath, dbUrl)
 	if err != nil {

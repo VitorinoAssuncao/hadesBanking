@@ -11,7 +11,7 @@ import (
 
 func Test_Create(t *testing.T) {
 	ctx := context.Background()
-	database := databaseMock
+	database := databaseTest
 	accountRepository := NewAccountRepository(database)
 	testCases := []struct {
 		name    string
@@ -51,7 +51,7 @@ func Test_Create(t *testing.T) {
 
 func Test_GetAll(t *testing.T) {
 	ctx := context.Background()
-	database := databaseMock
+	database := databaseTest
 	accountRepository := NewAccountRepository(database)
 	testCases := []struct {
 		name    string
@@ -84,7 +84,7 @@ func Test_GetAll(t *testing.T) {
 
 func Test_GetByID(t *testing.T) {
 	ctx := context.Background()
-	database := databaseMock
+	database := databaseTest
 	accountRepository := NewAccountRepository(database)
 	testCases := []struct {
 		name    string
@@ -125,7 +125,7 @@ func Test_GetByID(t *testing.T) {
 
 func Test_GetByCPF(t *testing.T) {
 	ctx := context.Background()
-	database := databaseMock
+	database := databaseTest
 	accountRepository := NewAccountRepository(database)
 	testCases := []struct {
 		name    string
