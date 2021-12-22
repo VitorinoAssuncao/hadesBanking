@@ -5,24 +5,21 @@ import (
 	"stoneBanking/app/application/validations"
 	"stoneBanking/app/application/vo/input"
 	"stoneBanking/app/application/vo/output"
-	"stoneBanking/app/domain/entities/account"
 )
 
 func (usecase *usecase) Create(ctx context.Context, accountData input.CreateAccountVO) (*output.AccountOutputVO, error) {
 	var accountOutput output.AccountOutputVO
 	var err error
-	var tempAccount = &account.Account{}
-
 	accountData, err = validations.ValidateAccountInput(accountData)
 
 	if err != nil {
 		return &accountOutput, err
 	}
 
-	tempAccount, err = usecase.accountRepository.GetByCPF(ctx, accountData.CPF, tempAccount)
+	tempAccount, err := usecase.accountRepository.GetByCPF(ctx, accountData.CPF)
 
 	if err == nil {
-		accountOutput = output.AccountToOutput(*tempAccount)
+		accountOutput = output.AccountToOutput(tempAccount)
 		return &accountOutput, errorAccountCPFExists
 	}
 

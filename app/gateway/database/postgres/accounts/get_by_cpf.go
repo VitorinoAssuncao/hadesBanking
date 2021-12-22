@@ -5,7 +5,7 @@ import (
 	"stoneBanking/app/domain/entities/account"
 )
 
-func (repository accountRepository) GetByCPF(ctx context.Context, accountCPF string, account *account.Account) (*account.Account, error) {
+func (repository accountRepository) GetByCPF(ctx context.Context, accountCPF string) (account.Account, error) {
 
 	var sqlQuery = `
 	SELECT 
@@ -19,11 +19,11 @@ func (repository accountRepository) GetByCPF(ctx context.Context, accountCPF str
 		sqlQuery,
 		accountCPF,
 	)
-
+	var account = account.Account{}
 	err := result.Scan(&account.ID, &account.Name, &account.Cpf, &account.Secret, &account.Balance, &account.Created_at)
 
 	if err != nil {
-		return nil, err
+		return account, err
 	}
 
 	return account, nil
