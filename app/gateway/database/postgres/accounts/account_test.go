@@ -3,133 +3,163 @@ package postgres_account
 import (
 	"context"
 	"stoneBanking/app/domain/entities/account"
-	"stoneBanking/app/domain/types"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func Test_Create(t *testing.T) {
-	t.Run("Conta criada com sucesso - Dados corretos", func(t *testing.T) {
-		account := account.Account{
-			ID:         "d3280f8c-570a-450d-89f7-3509bc84980d",
-			Name:       "Joao da Silva",
-			Cpf:        "38330499912",
-			Balance:    10000,
-			Created_at: time.Now(),
-		}
+	ctx := context.Background()
+	database := databaseMock
+	accountRepository := NewAccountRepository(database)
+	testCases := []struct {
+		name    string
+		input   account.Account
+		want    account.Account
+		wantErr bool
+	}{
+		{name: "cadastro com sucesso",
+			input: account.Account{
+				ID:         "d3280f8c-570a-450d-89f7-3509bc84980d",
+				Name:       "Joao da Silva",
+				Cpf:        "38330499912",
+				Balance:    10000,
+				Created_at: time.Now(),
+			},
+			want: account.Account{
+				ID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
+				Name:    "Joao da Silva",
+				Cpf:     "38330499912",
+				Balance: 10000,
+			},
+			wantErr: false,
+		},
+	}
 
-		ctx := context.Background()
-		database := databaseMock
-		accountRepository := NewAccountRepository(database)
-		result, err := accountRepository.Create(ctx, &account)
-
-		if err != nil {
-			t.Errorf("Problemas no cadastro %v", err)
-		}
-
-		if result != &account {
-			t.Errorf("Problemas no cadastro")
-		}
-	})
-	t.Run("Conta com erro - Dados Duplicados", func(t *testing.T) {
-		account := account.Account{
-			ID:         "d3280f8c-570a-450d-89f7-3509bc84980d",
-			Name:       "Joao da Silva",
-			Cpf:        "38330499912",
-			Balance:    10000,
-			Created_at: time.Now(),
-		}
-
-		ctx := context.Background()
-		database := databaseMock
-		accountRepository := NewAccountRepository(database)
-		_, err := accountRepository.Create(ctx, &account)
-
-		if err == nil {
-			t.Errorf("Deveria ocorrer erro, pois dados estão duplicados")
-		}
-	})
+	for _, test := range testCases {
+		t.Run(test.name, func(t *testing.T) {
+			got, err := accountRepository.Create(ctx, test.input)
+			if err == nil {
+				test.want.Created_at = got.Created_at
+			}
+			assert.Equal(t, (err != nil), test.wantErr)
+			assert.Equal(t, test.want, got)
+		})
+	}
 }
 
 func Test_GetAll(t *testing.T) {
-	t.Run("Retorna todas as contas cadastradas", func(t *testing.T) {
-		accountsResult := []account.Account{}
-		ctx := context.Background()
-		database := databaseMock
-		accountRepository := NewAccountRepository(database)
+	ctx := context.Background()
+	database := databaseMock
+	accountRepository := NewAccountRepository(database)
+	testCases := []struct {
+		name    string
+		input   account.Account
+		want    int
+		wantErr bool
+	}{
+		{name: "localizar todas as contas",
+			input: account.Account{
+				ID:         "d3280f8c-570a-450d-89f7-3509bc84980d",
+				Name:       "Joao da Silva",
+				Cpf:        "38330499912",
+				Balance:    10000,
+				Created_at: time.Now(),
+			},
+			want:    1,
+			wantErr: false,
+		},
+	}
 
-		accountsResult, err := accountRepository.GetAll(ctx)
-
-		if err != nil {
-			t.Errorf("Erro ao buscar todas as contas: %v", err)
-		}
-
-		if accountsResult[0].ID != "d3280f8c-570a-450d-89f7-3509bc84980d" {
-			t.Errorf("Conta diferente da cadastrada")
-		}
-	})
-}
-
-func Test_GetByCPF(t *testing.T) {
-	t.Run("CPF Correto, conta localizada", func(t *testing.T) {
-		cpfTarget := "38330499912"
-
-		ctx := context.Background()
-		database := databaseMock
-		accountRepository := NewAccountRepository(database)
-
-		accountResult, err := accountRepository.GetByCPF(ctx, cpfTarget)
-
-		if err != nil {
-			t.Errorf("Problemas no cadastro %v", err)
-		}
-		if accountResult.Cpf != cpfTarget {
-			t.Errorf("conta não localizada")
-		}
-	})
-	t.Run("CPF incorreto, conta não localizada", func(t *testing.T) {
-		cpfTarget := "38330499999"
-		ctx := context.Background()
-
-		database := databaseMock
-		accountRepository := NewAccountRepository(database)
-
-		_, err := accountRepository.GetByCPF(ctx, cpfTarget)
-
-		if err == nil {
-			t.Errorf("CPF deveria não existir")
-		}
-	})
+	for _, test := range testCases {
+		t.Run(test.name, func(t *testing.T) {
+			_, err := accountRepository.Create(ctx, test.input)
+			got, err := accountRepository.GetAll(ctx)
+			assert.Equal(t, (err != nil), test.wantErr)
+			assert.Equal(t, test.want, len(got))
+		})
+	}
 }
 
 func Test_GetByID(t *testing.T) {
-	t.Run("ID Correto, conta localizada", func(t *testing.T) {
-		idTarget := types.AccountID("d3280f8c-570a-450d-89f7-3509bc84980d")
-		ctx := context.Background()
+	ctx := context.Background()
+	database := databaseMock
+	accountRepository := NewAccountRepository(database)
+	testCases := []struct {
+		name    string
+		input   account.Account
+		want    account.Account
+		wantErr bool
+	}{
+		{name: "localizado a conta usando o ID",
+			input: account.Account{
+				ID:         "d3280f8c-570a-450d-89f7-3509bc84980d",
+				Name:       "Joao da Silva",
+				Cpf:        "38330499912",
+				Balance:    10000,
+				Created_at: time.Now(),
+			},
+			want: account.Account{
+				ID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
+				Name:    "Joao da Silva",
+				Cpf:     "38330499912",
+				Balance: 10000,
+			},
+			wantErr: false,
+		},
+	}
 
-		database := databaseMock
-		accountRepository := NewAccountRepository(database)
+	for _, test := range testCases {
+		t.Run(test.name, func(t *testing.T) {
+			_, err := accountRepository.Create(ctx, test.input)
+			got, err := accountRepository.GetByID(ctx, test.input.ID)
+			if err == nil {
+				test.want.Created_at = got.Created_at
+			}
+			assert.Equal(t, (err != nil), test.wantErr)
+			assert.Equal(t, test.want, got)
+		})
+	}
+}
 
-		accountResult, err := accountRepository.GetByID(ctx, idTarget)
+func Test_GetByCPF(t *testing.T) {
+	ctx := context.Background()
+	database := databaseMock
+	accountRepository := NewAccountRepository(database)
+	testCases := []struct {
+		name    string
+		input   account.Account
+		want    account.Account
+		wantErr bool
+	}{
+		{name: "localizado a conta usando o CPF",
+			input: account.Account{
+				ID:         "d3280f8c-570a-450d-89f7-3509bc84980d",
+				Name:       "Joao da Silva",
+				Cpf:        "38330499912",
+				Balance:    10000,
+				Created_at: time.Now(),
+			},
+			want: account.Account{
+				ID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
+				Name:    "Joao da Silva",
+				Cpf:     "38330499912",
+				Balance: 10000,
+			},
+			wantErr: false,
+		},
+	}
 
-		if err != nil {
-			t.Errorf("Problemas no cadastro %v", err)
-		}
-		if accountResult.ID != idTarget {
-			t.Errorf("conta não localizada")
-		}
-	})
-	t.Run("ID Incorreto, conta  não localizada", func(t *testing.T) {
-		idTarget := types.AccountID("d3280f8c-570a-450d-89f7-3509bc849899")
-		ctx := context.Background()
-
-		database := databaseMock
-		accountRepository := NewAccountRepository(database)
-
-		_, err := accountRepository.GetByID(ctx, idTarget)
-
-		if err == nil {
-			t.Errorf("ID não existente, conta não deveria ser encontrada")
-		}
-	})
+	for _, test := range testCases {
+		t.Run(test.name, func(t *testing.T) {
+			_, err := accountRepository.Create(ctx, test.input)
+			got, err := accountRepository.GetByCPF(ctx, test.input.Cpf)
+			if err == nil {
+				test.want.Created_at = got.Created_at
+			}
+			assert.Equal(t, (err != nil), test.wantErr)
+			assert.Equal(t, test.want, got)
+		})
+	}
 }

@@ -25,13 +25,13 @@ func (usecase *usecase) Create(ctx context.Context, accountData input.CreateAcco
 
 	account := input.GenerateAccount(accountData)
 
-	accountResult, err := usecase.accountRepository.Create(ctx, &account)
+	accountResult, err := usecase.accountRepository.Create(ctx, account)
 
 	if err != nil {
 		return &accountOutput, errorCreateAccount
 	}
 
-	accountOutput = output.AccountToOutput(*accountResult)
+	accountOutput = output.AccountToOutput(accountResult)
 
 	return &accountOutput, err
 }

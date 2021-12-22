@@ -5,7 +5,7 @@ import (
 	"stoneBanking/app/domain/entities/account"
 )
 
-func (repository accountRepository) Create(ctx context.Context, account *account.Account) (*account.Account, error) {
+func (repository accountRepository) Create(ctx context.Context, account account.Account) (account.Account, error) {
 	var sqlQuery = `
 	INSERT INTO
 			accounts (id, name, cpf, secret, balance, created_at)
@@ -22,7 +22,7 @@ func (repository accountRepository) Create(ctx context.Context, account *account
 		account.Created_at)
 
 	if err != nil {
-		return nil, err
+		return account, err
 	}
 	return account, nil
 }
