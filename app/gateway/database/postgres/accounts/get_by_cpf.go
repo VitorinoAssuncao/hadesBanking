@@ -19,12 +19,12 @@ func (repository accountRepository) GetByCPF(ctx context.Context, accountCPF str
 		sqlQuery,
 		accountCPF,
 	)
-	var account = account.Account{}
-	err := result.Scan(&account.ID, &account.Name, &account.Cpf, &account.Secret, &account.Balance, &account.Created_at)
+	var newAccount = account.Account{}
+	err := result.Scan(&newAccount.ID, &newAccount.Name, &newAccount.Cpf, &newAccount.Secret, &newAccount.Balance, &newAccount.Created_at)
 
 	if err != nil {
-		return account, err
+		return account.Account{}, err
 	}
 
-	return account, nil
+	return newAccount, nil
 }

@@ -16,17 +16,17 @@ func (repository accountRepository) GetByID(ctx context.Context, accountID types
 	WHERE
 			id = $1
 	`
-	var account = account.Account{}
+	var newAccount = account.Account{}
 
 	result := repository.db.QueryRow(
 		sqlQuery,
 		accountID,
 	)
-	err := result.Scan(&account.ID, &account.Name, &account.Cpf, &account.Secret, &account.Balance, &account.Created_at)
+	err := result.Scan(&newAccount.ID, &newAccount.Name, &newAccount.Cpf, &newAccount.Secret, &newAccount.Balance, &newAccount.Created_at)
 
 	if err != nil {
-		return account, err
+		return account.Account{}, err
 	}
 
-	return account, nil
+	return newAccount, nil
 }
