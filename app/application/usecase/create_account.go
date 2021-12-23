@@ -28,7 +28,7 @@ func (usecase *usecase) Create(ctx context.Context, accountData input.CreateAcco
 	accountResult, err := usecase.accountRepository.Create(ctx, account)
 
 	if err != nil {
-		return &accountOutput, errorCreateAccount
+		return &accountOutput, err
 	}
 
 	accountOutput = output.AccountToOutput(accountResult)
