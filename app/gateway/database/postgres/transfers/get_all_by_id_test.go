@@ -32,6 +32,18 @@ func Test_GetAllByID(t *testing.T) {
 			want:    1,
 			wantErr: false,
 		},
+		{
+			name: "conta não existente",
+			input: transfer.Transfer{
+				External_ID:            "d3280f8c-570a-450d-89f7-3509bc849899",
+				Account_origin_id:      "d3280f8c-570a-450d-89f7-3509bc84980d",
+				Account_destination_id: "d3280f8c-570a-450d-89f7-3509bc84980d",
+				Amount:                 100,
+				Created_at:             time.Now(),
+			},
+			want:    0,
+			wantErr: false,
+		},
 	}
 
 	for _, test := range testCases {

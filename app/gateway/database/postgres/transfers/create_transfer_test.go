@@ -37,6 +37,18 @@ func Test_Create(t *testing.T) {
 			},
 			wantErr: false,
 		},
+		{
+			name: "cadastro duplicado",
+			input: transfer.Transfer{
+				External_ID:            "d3280f8c-570a-450d-89f7-3509bc84980d",
+				Account_origin_id:      "d3280f8c-570a-450d-89f7-3509bc84980d",
+				Account_destination_id: "d3280f8c-570a-450d-89f7-3509bc84980d",
+				Amount:                 100,
+				Created_at:             time.Now(),
+			},
+			want:    transfer.Transfer{},
+			wantErr: true,
+		},
 	}
 
 	for _, test := range testCases {
