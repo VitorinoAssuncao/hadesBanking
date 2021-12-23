@@ -10,6 +10,6 @@ CREATE TABLE IF NOT EXISTS public.transfers
     created_at          timestamp with time zone    NOT NULL,
     
     CONSTRAINT transfers_pkey PRIMARY KEY (id)
-)
+);
 
 COMMIT;
