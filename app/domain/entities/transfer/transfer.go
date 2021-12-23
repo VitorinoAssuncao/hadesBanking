@@ -6,18 +6,20 @@ import (
 )
 
 type Transfer struct {
-	//ID único da transfêrencia
-	ID types.TransferID `json:"id"`
+	//ID único da transfêrencia (Númerico gerado pelo banco)
+	ID int
+
+	External_ID types.TransferID
 
 	//Código da conta de origem
-	Account_origin_id types.AccountOriginID `json:"acount_origin_id"`
+	Account_origin_id types.AccountOriginID
 
 	//Código da conta de destino
-	Account_destination_id types.AccountDestinyID `json:"acount_destination_id"`
+	Account_destination_id types.AccountDestinyID
 
 	//Valor referente a transfêrencia, em centavos brasileiros (R$)
-	Amount types.Money `json:"amount"`
+	Amount types.Money
 
 	//Data da transfêrencia
-	Created_at time.Time `json:"created_at"`
+	Created_at time.Time
 }
