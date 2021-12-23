@@ -19,7 +19,8 @@ func Test_Create(t *testing.T) {
 		want    account.Account
 		wantErr bool
 	}{
-		{name: "cadastro com sucesso",
+		{
+			name: "cadastro com sucesso",
 			input: account.Account{
 				ID:         "d3280f8c-570a-450d-89f7-3509bc84980d",
 				Name:       "Joao da Silva",
@@ -35,7 +36,8 @@ func Test_Create(t *testing.T) {
 			},
 			wantErr: false,
 		},
-		{name: "cadastro duplicado",
+		{
+			name: "cadastro duplicado",
 			input: account.Account{
 				ID:         "d3280f8c-570a-450d-89f7-3509bc84980d",
 				Name:       "Joao da Silva",
@@ -81,7 +83,8 @@ func Test_GetAll(t *testing.T) {
 		want    int
 		wantErr bool
 	}{
-		{name: "localizar todas as contas",
+		{
+			name: "localizar todas as contas",
 			input: account.Account{
 				ID:         "d3280f8c-570a-450d-89f7-3509bc84980d",
 				Name:       "Joao da Silva",
@@ -114,7 +117,8 @@ func Test_GetByID(t *testing.T) {
 		want    account.Account
 		wantErr bool
 	}{
-		{name: "localizado a conta usando o ID",
+		{
+			name: "localizado a conta usando o ID",
 			input: account.Account{
 				ID:         "d3280f8c-570a-450d-89f7-3509bc84980d",
 				Name:       "Joao da Silva",
@@ -129,7 +133,8 @@ func Test_GetByID(t *testing.T) {
 				Balance: 10000,
 			},
 			wantErr: false,
-		}, {name: "tentar localizar conta que não existe",
+		}, {
+			name: "tentar localizar conta que não existe",
 			input: account.Account{
 				ID:         "d3280f8c-570a-450d-89f7-3509bc84980d",
 				Name:       "Joao da Silva",
@@ -170,7 +175,8 @@ func Test_GetByCPF(t *testing.T) {
 		want    account.Account
 		wantErr bool
 	}{
-		{name: "localizado a conta usando o CPF",
+		{
+			name: "localizado a conta usando o CPF",
 			input: account.Account{
 				ID:         "d3280f8c-570a-450d-89f7-3509bc84980d",
 				Name:       "Joao da Silva",
@@ -186,7 +192,8 @@ func Test_GetByCPF(t *testing.T) {
 			},
 			wantErr: false,
 		},
-		{name: "tentar localizar a conta com cpf inexistente",
+		{
+			name: "tentar localizar a conta com cpf inexistente",
 			input: account.Account{
 				ID:         "d3280f8c-570a-450d-89f7-3509bc84980d",
 				Name:       "Joao da Silva",
