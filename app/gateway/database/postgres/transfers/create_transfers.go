@@ -26,8 +26,3 @@ func (repository transferRepository) Create(ctx context.Context, transferData tr
 	}
 	return transferData, nil
 }
-
-func (repository transferRepository) GetAll(ctx context.Context) ([]transfer.Transfer, error) {
-	transfers := []transfer.Transfer{}
-	return transfers, nil
-}
