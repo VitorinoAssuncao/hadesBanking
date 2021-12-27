@@ -6,7 +6,6 @@ import (
 )
 
 func (repository transferRepository) GetAll(ctx context.Context) ([]transfer.Transfer, error) {
-	var tempTransfer transfer.Transfer
 	var transfers = make([]transfer.Transfer, 0)
 	var sqlQuery = `
 	SELECT 
@@ -18,6 +17,8 @@ func (repository transferRepository) GetAll(ctx context.Context) ([]transfer.Tra
 	if err != nil {
 		return transfers, err
 	}
+
+	var tempTransfer transfer.Transfer
 
 	for result.Next() {
 		err = result.Scan(&tempTransfer.ID, &tempTransfer.External_ID, &tempTransfer.Account_origin_id, &tempTransfer.Account_destination_id, &tempTransfer.Amount, &tempTransfer.Created_at)
