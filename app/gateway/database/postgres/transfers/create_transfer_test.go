@@ -37,29 +37,11 @@ func Test_Create(t *testing.T) {
 			},
 			wantErr: false,
 		},
-		{
-			name: "cadastro gera erro, quando tentativa de criar conta com cpf existente",
-			input: transfer.Transfer{
-				ExternalID:           "d3280f8c-570a-450d-89f7-3509bc84980d",
-				AccountOriginID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
-				AccountDestinationID: "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Amount:               100,
-				CreatedAt:            time.Now(),
-			},
-			want:    transfer.Transfer{},
-			wantErr: true,
-		},
 	}
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
 			got, err := transferRepository.Create(ctx, test.input)
-
-			if test.name == "cadastro duplicado" {
-				_, err = transferRepository.Create(ctx, test.input)
-				got = transfer.Transfer{}
-			}
-
 			if err == nil {
 				test.want.CreatedAt = got.CreatedAt
 			}
