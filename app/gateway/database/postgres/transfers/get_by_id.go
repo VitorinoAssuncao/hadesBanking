@@ -7,7 +7,7 @@ import (
 )
 
 func (repository transferRepository) GetByID(ctx context.Context, transferID types.TransferID) (transfer.Transfer, error) {
-	var sqlQuery = `
+	const sqlQuery = `
 	SELECT 
 		id,external_id, account_origin_id, account_destiny_id, amount, created_at
 	FROM

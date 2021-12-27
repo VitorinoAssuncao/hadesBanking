@@ -6,7 +6,7 @@ import (
 )
 
 func (repository transferRepository) Create(ctx context.Context, transferData transfer.Transfer) (transfer.Transfer, error) {
-	var sqlQuery = `
+	const sqlQuery = `
 	INSERT INTO
 			transfers (external_id, account_origin_id, account_destiny_id, amount, created_at)
 	VALUES

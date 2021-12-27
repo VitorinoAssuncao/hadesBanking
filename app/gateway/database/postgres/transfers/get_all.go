@@ -7,7 +7,7 @@ import (
 
 func (repository transferRepository) GetAll(ctx context.Context) ([]transfer.Transfer, error) {
 	var transfers = make([]transfer.Transfer, 0)
-	var sqlQuery = `
+	const sqlQuery = `
 	SELECT 
 		id,external_id, account_origin_id, account_destiny_id, amount, created_at
 	FROM
