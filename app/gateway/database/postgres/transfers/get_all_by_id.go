@@ -6,7 +6,7 @@ import (
 	"stoneBanking/app/domain/types"
 )
 
-func (repository transferRepository) GetAllByID(ctx context.Context, acccountID types.AccountID) ([]transfer.Transfer, error) {
+func (repository transferRepository) GetAllByAccountID(ctx context.Context, acccountID types.AccountID) ([]transfer.Transfer, error) {
 	var tempTransfer transfer.Transfer
 	var transfers = make([]transfer.Transfer, 0)
 	var sqlQuery = `

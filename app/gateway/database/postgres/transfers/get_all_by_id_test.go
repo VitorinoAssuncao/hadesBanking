@@ -49,7 +49,7 @@ func Test_GetAllByID(t *testing.T) {
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
 			_, err := transferRepository.Create(ctx, test.input)
-			got, err := transferRepository.GetAllByID(ctx, types.AccountID(test.input.External_ID))
+			got, err := transferRepository.GetAllByAccountID(ctx, types.AccountID(test.input.External_ID))
 			assert.Equal(t, (err != nil), test.wantErr)
 			assert.Equal(t, test.want, len(got))
 		})
