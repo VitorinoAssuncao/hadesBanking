@@ -8,7 +8,7 @@ import (
 func (repository transferRepository) Create(ctx context.Context, transferData transfer.Transfer) (transfer.Transfer, error) {
 	var sqlQuery = `
 	INSERT INTO
-			transfers (external_id, account_origin_id, account_destiny_id, ammount, created_at)
+			transfers (external_id, account_origin_id, account_destiny_id, amount, created_at)
 	VALUES
 			($1, $2, $3, $4, $5)
 	`

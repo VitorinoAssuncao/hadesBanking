@@ -10,7 +10,7 @@ func (repository transferRepository) GetAll(ctx context.Context) ([]transfer.Tra
 	var transfers = make([]transfer.Transfer, 0)
 	var sqlQuery = `
 	SELECT 
-		id,external_id, account_origin_id, account_destiny_id, ammount, created_at
+		id,external_id, account_origin_id, account_destiny_id, amount, created_at
 	FROM
 		transfers
 	`

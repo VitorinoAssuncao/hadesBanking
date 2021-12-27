@@ -11,7 +11,7 @@ func (repository transferRepository) GetAllByAccountID(ctx context.Context, accc
 	var transfers = make([]transfer.Transfer, 0)
 	var sqlQuery = `
 	SELECT 
-		id,external_id, account_origin_id, account_destiny_id, ammount, created_at
+		id,external_id, account_origin_id, account_destiny_id, amount, created_at
 	FROM
 		transfers
 	WHERE
