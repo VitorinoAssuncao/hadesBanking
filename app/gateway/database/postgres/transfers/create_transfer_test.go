@@ -38,7 +38,7 @@ func Test_Create(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "cadastro deve gerar erro, quando tentativa de criar conta com cpf existente",
+			name: "cadastro gera erro, quando tentativa de criar conta com cpf existente",
 			input: transfer.Transfer{
 				External_ID:            "d3280f8c-570a-450d-89f7-3509bc84980d",
 				Account_origin_id:      "d3280f8c-570a-450d-89f7-3509bc84980d",
