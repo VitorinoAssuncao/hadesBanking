@@ -1,4 +1,4 @@
-package postgres_transfer
+package transfer
 
 import (
 	"database/sql"
@@ -53,7 +53,7 @@ func SetupTests(pool dockertest.Pool) dockertest.Resource {
 		}
 		return databaseTest.Ping()
 	}); err != nil {
-		log.Fatalf("Could not connect to docker: %s", err)
+		log.Fatalf("Não foi possível conectar ao docker: %s", err)
 	}
 	setDatabase(*resource)
 	return *resource
