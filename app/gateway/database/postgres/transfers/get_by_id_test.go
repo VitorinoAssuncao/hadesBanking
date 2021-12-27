@@ -22,29 +22,29 @@ func Test_GetByID(t *testing.T) {
 		{
 			name: "conta localizada com sucesso, retorna dados da conta",
 			input: transfer.Transfer{
-				External_ID:            "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Account_origin_id:      "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Account_destination_id: "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Amount:                 100,
-				Created_at:             time.Now(),
+				ExternalID:           "d3280f8c-570a-450d-89f7-3509bc84980d",
+				AccountOriginID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
+				AccountDestinationID: "d3280f8c-570a-450d-89f7-3509bc84980d",
+				Amount:               100,
+				CreatedAt:            time.Now(),
 			},
 			want: transfer.Transfer{
-				External_ID:            "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Account_origin_id:      "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Account_destination_id: "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Amount:                 100,
-				Created_at:             time.Now(),
+				ExternalID:           "d3280f8c-570a-450d-89f7-3509bc84980d",
+				AccountOriginID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
+				AccountDestinationID: "d3280f8c-570a-450d-89f7-3509bc84980d",
+				Amount:               100,
+				CreatedAt:            time.Now(),
 			},
 			wantErr: false,
 		},
 		{
 			name: "busca por conta inexistente, deve retornar erro e dados",
 			input: transfer.Transfer{
-				External_ID:            "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Account_origin_id:      "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Account_destination_id: "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Amount:                 100,
-				Created_at:             time.Now(),
+				ExternalID:           "d3280f8c-570a-450d-89f7-3509bc84980d",
+				AccountOriginID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
+				AccountDestinationID: "d3280f8c-570a-450d-89f7-3509bc84980d",
+				Amount:               100,
+				CreatedAt:            time.Now(),
 			},
 			want:    transfer.Transfer{},
 			wantErr: false,
@@ -59,10 +59,10 @@ func Test_GetByID(t *testing.T) {
 				t.Errorf(err.Error())
 			}
 
-			got, err := transferRepository.GetByID(ctx, test.want.External_ID)
+			got, err := transferRepository.GetByID(ctx, test.want.ExternalID)
 
 			if err == nil {
-				test.want.Created_at = got.Created_at
+				test.want.CreatedAt = got.CreatedAt
 				test.want.ID = got.ID
 			}
 			assert.Equal(t, (err != nil), test.wantErr)

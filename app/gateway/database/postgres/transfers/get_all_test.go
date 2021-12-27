@@ -22,11 +22,11 @@ func Test_GetAll(t *testing.T) {
 		{
 			name: "localizados todas as transferencias para conta existente",
 			input: transfer.Transfer{
-				External_ID:            "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Account_origin_id:      "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Account_destination_id: "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Amount:                 100,
-				Created_at:             time.Now(),
+				ExternalID:           "d3280f8c-570a-450d-89f7-3509bc84980d",
+				AccountOriginID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
+				AccountDestinationID: "d3280f8c-570a-450d-89f7-3509bc84980d",
+				Amount:               100,
+				CreatedAt:            time.Now(),
 			},
 			want:    1,
 			wantErr: false,

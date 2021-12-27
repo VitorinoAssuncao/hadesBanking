@@ -23,7 +23,7 @@ func (repository transferRepository) GetAllByAccountID(ctx context.Context, accc
 	}
 
 	for result.Next() {
-		err = result.Scan(&tempTransfer.ID, &tempTransfer.External_ID, &tempTransfer.Account_origin_id, &tempTransfer.Account_destination_id, &tempTransfer.Amount, &tempTransfer.Created_at)
+		err = result.Scan(&tempTransfer.ID, &tempTransfer.ExternalID, &tempTransfer.AccountOriginID, &tempTransfer.AccountDestinationID, &tempTransfer.Amount, &tempTransfer.CreatedAt)
 		if err != nil {
 			return transfers, err
 		}

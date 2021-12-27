@@ -23,11 +23,11 @@ func Test_GetAllByID(t *testing.T) {
 		{
 			name: "conta localizada, quando usado o id correto",
 			input: transfer.Transfer{
-				External_ID:            "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Account_origin_id:      "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Account_destination_id: "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Amount:                 100,
-				Created_at:             time.Now(),
+				ExternalID:           "d3280f8c-570a-450d-89f7-3509bc84980d",
+				AccountOriginID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
+				AccountDestinationID: "d3280f8c-570a-450d-89f7-3509bc84980d",
+				Amount:               100,
+				CreatedAt:            time.Now(),
 			},
 			want:    1,
 			wantErr: false,
@@ -35,11 +35,11 @@ func Test_GetAllByID(t *testing.T) {
 		{
 			name: "conta não localizada, pois id não existe",
 			input: transfer.Transfer{
-				External_ID:            "d3280f8c-570a-450d-89f7-3509bc849899",
-				Account_origin_id:      "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Account_destination_id: "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Amount:                 100,
-				Created_at:             time.Now(),
+				ExternalID:           "d3280f8c-570a-450d-89f7-3509bc849899",
+				AccountOriginID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
+				AccountDestinationID: "d3280f8c-570a-450d-89f7-3509bc84980d",
+				Amount:               100,
+				CreatedAt:            time.Now(),
 			},
 			want:    0,
 			wantErr: false,
@@ -49,7 +49,7 @@ func Test_GetAllByID(t *testing.T) {
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
 			_, err := transferRepository.Create(ctx, test.input)
-			got, err := transferRepository.GetAllByAccountID(ctx, types.AccountID(test.input.External_ID))
+			got, err := transferRepository.GetAllByAccountID(ctx, types.AccountID(test.input.ExternalID))
 			assert.Equal(t, (err != nil), test.wantErr)
 			assert.Equal(t, test.want, len(got))
 		})

@@ -22,7 +22,7 @@ func (repository transferRepository) GetByID(ctx context.Context, transferID typ
 	)
 	transferData := transfer.Transfer{}
 
-	err := result.Scan(&transferData.ID, &transferData.External_ID, &transferData.Account_origin_id, &transferData.Account_destination_id, &transferData.Amount, &transferData.Created_at)
+	err := result.Scan(&transferData.ID, &transferData.ExternalID, &transferData.AccountOriginID, &transferData.AccountDestinationID, &transferData.Amount, &transferData.CreatedAt)
 
 	if err != nil {
 		return transfer.Transfer{}, err

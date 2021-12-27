@@ -14,11 +14,11 @@ func (repository transferRepository) Create(ctx context.Context, transferData tr
 	`
 	_, err := repository.db.Exec(
 		sqlQuery,
-		transferData.External_ID,
-		transferData.Account_origin_id,
-		transferData.Account_destination_id,
+		transferData.ExternalID,
+		transferData.AccountOriginID,
+		transferData.AccountDestinationID,
 		transferData.Amount,
-		transferData.Created_at)
+		transferData.CreatedAt)
 
 	if err != nil {
 		return transfer.Transfer{}, err

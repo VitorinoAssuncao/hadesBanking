@@ -22,29 +22,29 @@ func Test_Create(t *testing.T) {
 		{
 			name: "conta cadastrada com sucesso, quando dados corretos",
 			input: transfer.Transfer{
-				External_ID:            "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Account_origin_id:      "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Account_destination_id: "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Amount:                 100,
-				Created_at:             time.Now(),
+				ExternalID:           "d3280f8c-570a-450d-89f7-3509bc84980d",
+				AccountOriginID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
+				AccountDestinationID: "d3280f8c-570a-450d-89f7-3509bc84980d",
+				Amount:               100,
+				CreatedAt:            time.Now(),
 			},
 			want: transfer.Transfer{
-				External_ID:            "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Account_origin_id:      "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Account_destination_id: "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Amount:                 100,
-				Created_at:             time.Now(),
+				ExternalID:           "d3280f8c-570a-450d-89f7-3509bc84980d",
+				AccountOriginID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
+				AccountDestinationID: "d3280f8c-570a-450d-89f7-3509bc84980d",
+				Amount:               100,
+				CreatedAt:            time.Now(),
 			},
 			wantErr: false,
 		},
 		{
 			name: "cadastro gera erro, quando tentativa de criar conta com cpf existente",
 			input: transfer.Transfer{
-				External_ID:            "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Account_origin_id:      "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Account_destination_id: "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Amount:                 100,
-				Created_at:             time.Now(),
+				ExternalID:           "d3280f8c-570a-450d-89f7-3509bc84980d",
+				AccountOriginID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
+				AccountDestinationID: "d3280f8c-570a-450d-89f7-3509bc84980d",
+				Amount:               100,
+				CreatedAt:            time.Now(),
 			},
 			want:    transfer.Transfer{},
 			wantErr: true,
@@ -61,7 +61,7 @@ func Test_Create(t *testing.T) {
 			}
 
 			if err == nil {
-				test.want.Created_at = got.Created_at
+				test.want.CreatedAt = got.CreatedAt
 			}
 			assert.Equal(t, (err != nil), test.wantErr)
 			assert.Equal(t, test.want, got)
