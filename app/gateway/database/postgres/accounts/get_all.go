@@ -14,8 +14,7 @@ func (repository accountRepository) GetAll(ctx context.Context) ([]account.Accou
 	FROM
 		accounts
 	`
-	result, err := repository.db.Query(ctx, sqlQuery)
-
+	result, err := repository.db.Query(sqlQuery)
 	if err != nil {
 		return accounts, err
 	}

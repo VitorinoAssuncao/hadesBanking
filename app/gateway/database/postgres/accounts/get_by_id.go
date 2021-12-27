@@ -6,7 +6,7 @@ import (
 	"stoneBanking/app/domain/types"
 )
 
-func (repository accountRepository) GetByID(ctx context.Context, accountID types.AccountID, account *account.Account) (*account.Account, error) {
+func (repository accountRepository) GetByID(ctx context.Context, accountID types.AccountID) (account.Account, error) {
 
 	var sqlQuery = `
 	SELECT 
@@ -16,16 +16,17 @@ func (repository accountRepository) GetByID(ctx context.Context, accountID types
 	WHERE
 			id = $1
 	`
+	var newAccount = account.Account{}
+
 	result := repository.db.QueryRow(
-		ctx,
 		sqlQuery,
 		accountID,
 	)
-	err := result.Scan(&account.ID, &account.Name, &account.Cpf, &account.Secret, &account.Balance, &account.Created_at)
+	err := result.Scan(&newAccount.ID, &newAccount.Name, &newAccount.Cpf, &newAccount.Secret, &newAccount.Balance, &newAccount.Created_at)
 
 	if err != nil {
-		return nil, errorAccountIDNotFound
+		return account.Account{}, err
 	}
 
-	return account, nil
+	return newAccount, nil
 }
