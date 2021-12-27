@@ -19,14 +19,13 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		log.Fatalf("Erro ao conectar ao docker")
 	}
-	SetupTests(*pool)
-
+	resource := setupTests(*pool)
 	code := m.Run()
-
+	defer dropTests(*pool, &resource)
 	os.Exit(code)
 }
 
-func SetupTests(pool dockertest.Pool) dockertest.Resource {
+func setupTests(pool dockertest.Pool) dockertest.Resource {
 	resource, err := pool.RunWithOptions(&dockertest.RunOptions{
 		Repository: "postgres",
 		Tag:        "13",
@@ -70,7 +69,7 @@ func setDatabase(resource dockertest.Resource) {
 	}
 }
 
-func DropTests(pool dockertest.Pool, resource *dockertest.Resource) {
+func dropTests(pool dockertest.Pool, resource *dockertest.Resource) {
 	if err := pool.Purge(resource); err != nil {
 		log.Fatalf("Não foi possível limpar o banco - %s", err)
 	}
