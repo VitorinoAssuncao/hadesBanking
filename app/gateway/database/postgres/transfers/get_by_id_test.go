@@ -3,6 +3,7 @@ package transfer
 import (
 	"context"
 	"stoneBanking/app/domain/entities/transfer"
+	"stoneBanking/app/domain/types"
 	"testing"
 	"time"
 
@@ -14,10 +15,11 @@ func Test_GetByID(t *testing.T) {
 	database := databaseTest
 	transferRepository := NewTransferRepository(database)
 	testCases := []struct {
-		name    string
-		input   transfer.Transfer
-		want    transfer.Transfer
-		wantErr bool
+		name     string
+		input    transfer.Transfer
+		wantedID string
+		want     transfer.Transfer
+		wantErr  bool
 	}{
 		{
 			name: "conta localizada com sucesso, retorna dados da conta",
@@ -28,6 +30,7 @@ func Test_GetByID(t *testing.T) {
 				Amount:               100,
 				CreatedAt:            time.Now(),
 			},
+			wantedID: "d3280f8c-570a-450d-89f7-3509bc84980d",
 			want: transfer.Transfer{
 				ExternalID:           "d3280f8c-570a-450d-89f7-3509bc84980d",
 				AccountOriginID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
@@ -46,8 +49,9 @@ func Test_GetByID(t *testing.T) {
 				Amount:               100,
 				CreatedAt:            time.Now(),
 			},
-			want:    transfer.Transfer{},
-			wantErr: false,
+			wantedID: "d3280f8c-570a-450d-89f7-3509bc849899",
+			want:     transfer.Transfer{},
+			wantErr:  true,
 		},
 	}
 
@@ -59,7 +63,7 @@ func Test_GetByID(t *testing.T) {
 				t.Errorf(err.Error())
 			}
 
-			got, err := transferRepository.GetByID(ctx, test.want.ExternalID)
+			got, err := transferRepository.GetByID(ctx, types.TransferID(test.wantedID))
 
 			if err == nil {
 				test.want.CreatedAt = got.CreatedAt
