@@ -5,7 +5,7 @@ import (
 	"stoneBanking/app/domain/entities/transfer"
 )
 
-func (repository transferRepository) GetAll(ctx context.Context) ([]transfer.Transfer, error) {
+func (r transferRepository) GetAll(ctx context.Context) ([]transfer.Transfer, error) {
 	var transfers = make([]transfer.Transfer, 0)
 	const sqlQuery = `
 	SELECT 
@@ -13,7 +13,7 @@ func (repository transferRepository) GetAll(ctx context.Context) ([]transfer.Tra
 	FROM
 		transfers
 	`
-	result, err := repository.db.Query(sqlQuery)
+	result, err := r.db.Query(sqlQuery)
 	if err != nil {
 		return transfers, err
 	}
