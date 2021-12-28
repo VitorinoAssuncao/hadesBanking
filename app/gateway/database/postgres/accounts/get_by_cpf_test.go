@@ -57,6 +57,7 @@ func Test_GetByCPF(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
+			TruncateTable(database)
 			_, err := accountRepository.Create(ctx, test.input)
 			got, err := accountRepository.GetByCPF(ctx, test.wanted)
 			if err == nil {

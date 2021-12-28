@@ -57,8 +57,12 @@ func Test_GetByID(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
+			TruncateTable(database)
 			_, err := accountRepository.Create(ctx, test.input)
 			got, err := accountRepository.GetByID(ctx, types.AccountID(test.wanted))
+			if err == nil {
+				test.want.CreatedAt = got.CreatedAt
+			}
 			assert.Equal(t, (err != nil), test.wantErr)
 			assert.Equal(t, test.want, got)
 		})

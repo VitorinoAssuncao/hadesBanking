@@ -33,6 +33,7 @@ func Test_GetAll(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
+			TruncateTable(database)
 			_, err := accountRepository.Create(ctx, test.input)
 			got, err := accountRepository.GetAll(ctx)
 			assert.Equal(t, (err != nil), test.wantErr)

@@ -46,13 +46,6 @@ func Test_Create(t *testing.T) {
 				Balance: 10000,
 			},
 			runBefore: func(db *sql.DB) {
-				truncateQuery := `TRUNCATE accounts`
-				_, err := db.Exec(truncateQuery)
-
-				if err != nil {
-					t.Errorf(err.Error())
-				}
-
 				sqlQuery :=
 					`
 				INSERT INTO
@@ -60,7 +53,7 @@ func Test_Create(t *testing.T) {
 				VALUES
 					('d3280f8c-570a-450d-89f7-3509bc84980d', 'Joao da Silva', '38330499912', 'password', 100, $1)
 				`
-				_, err = db.Exec(sqlQuery, time.Now())
+				_, err := db.Exec(sqlQuery, time.Now())
 				if err != nil {
 					t.Errorf(err.Error())
 				}
@@ -77,6 +70,7 @@ func Test_Create(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
+			TruncateTable(database)
 			if test.runBefore != nil {
 				test.runBefore(database)
 			}
