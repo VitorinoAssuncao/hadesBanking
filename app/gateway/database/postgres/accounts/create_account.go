@@ -8,9 +8,9 @@ import (
 func (repository accountRepository) Create(ctx context.Context, newAccount account.Account) (account.Account, error) {
 	var sqlQuery = `
 	INSERT INTO
-			accounts (id, name, cpf, secret, balance, created_at)
+			accounts (id, name, cpf, secret, balance)
 	VALUES
-			($1, $2, $3, $4, $5, $6)
+			($1, $2, $3, $4, $5)
 	`
 	_, err := repository.db.Exec(
 		sqlQuery,
@@ -19,7 +19,7 @@ func (repository accountRepository) Create(ctx context.Context, newAccount accou
 		newAccount.CPF,
 		newAccount.Secret,
 		newAccount.Balance.ToInt(),
-		newAccount.CreatedAt)
+	)
 
 	if err != nil {
 		return account.Account{}, err
