@@ -1,4 +1,4 @@
-package postgres_account
+package account
 
 import (
 	"database/sql"
