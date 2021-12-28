@@ -14,7 +14,6 @@ func Test_Create(t *testing.T) {
 	ctx := context.Background()
 	database := databaseTest
 	accountRepository := NewAccountRepository(database)
-	now := time.Now()
 	testCases := []struct {
 		name      string
 		input     account.Account
@@ -25,29 +24,26 @@ func Test_Create(t *testing.T) {
 		{
 			name: "conta cadastrada com sucesso, quando dados corretos",
 			input: account.Account{
-				ID:        "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Name:      "Joao da Silva",
-				CPF:       "38330499912",
-				Balance:   10000,
-				CreatedAt: now,
+				ID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
+				Name:    "Joao da Silva",
+				CPF:     "38330499912",
+				Balance: 10000,
 			},
 			want: account.Account{
-				ID:        "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Name:      "Joao da Silva",
-				CPF:       "38330499912",
-				Balance:   10000,
-				CreatedAt: now,
+				ID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
+				Name:    "Joao da Silva",
+				CPF:     "38330499912",
+				Balance: 10000,
 			},
 			wantErr: false,
 		},
 		{
 			name: "ao tentar criar a conta apresenta que já existe conta cadastrada com este cpf",
 			input: account.Account{
-				ID:        "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Name:      "Joao da Silva",
-				CPF:       "38330499912",
-				Balance:   10000,
-				CreatedAt: now,
+				ID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
+				Name:    "Joao da Silva",
+				CPF:     "38330499912",
+				Balance: 10000,
 			},
 			runBefore: func(db *sql.DB) {
 				truncateQuery := `TRUNCATE accounts`
