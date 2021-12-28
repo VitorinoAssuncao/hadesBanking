@@ -20,7 +20,7 @@ func Test_GetByID(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "localizado a conta usando o ID",
+			name: "localizado a conta usando o ID externo (uuid), e retorna os dados da mesma ",
 			input: account.Account{
 				ID:        "d3280f8c-570a-450d-89f7-3509bc84980d",
 				Name:      "Joao da Silva",
@@ -36,7 +36,7 @@ func Test_GetByID(t *testing.T) {
 			},
 			wantErr: false,
 		}, {
-			name: "tentar localizar conta que não existe",
+			name: "retorna dados vazios e erro, ao tentar localizar conta com ID inexistente",
 			input: account.Account{
 				ID:        "d3280f8c-570a-450d-89f7-3509bc84980d",
 				Name:      "Joao da Silva",

@@ -20,7 +20,7 @@ func Test_GetAll(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "localizar todas as contas",
+			name: "localiza todas as contas, quando existe ao menos uma cadastrada",
 			input: account.Account{
 				ID:        "d3280f8c-570a-450d-89f7-3509bc84980d",
 				Name:      "Joao da Silva",
