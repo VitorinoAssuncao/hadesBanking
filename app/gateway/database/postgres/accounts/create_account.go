@@ -16,10 +16,10 @@ func (repository accountRepository) Create(ctx context.Context, newAccount accou
 		sqlQuery,
 		newAccount.ID,
 		newAccount.Name,
-		newAccount.Cpf,
+		newAccount.CPF,
 		newAccount.Secret,
 		newAccount.Balance.ToInt(),
-		newAccount.Created_at)
+		newAccount.CreatedAt)
 
 	if err != nil {
 		return account.Account{}, err

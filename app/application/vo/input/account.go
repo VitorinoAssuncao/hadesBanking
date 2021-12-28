@@ -19,12 +19,12 @@ type CreateAccountVO struct {
 func GenerateAccount(inputAccount CreateAccountVO) account.Account {
 	tempID, _ := uuid.NewRandom()
 	account := account.Account{
-		ID:         types.AccountID(tempID.String()),
-		Name:       inputAccount.Name,
-		Cpf:        inputAccount.CPF,
-		Secret:     HashPassword(inputAccount.Secret),
-		Balance:    types.Money(inputAccount.Balance),
-		Created_at: time.Now(),
+		ID:        types.AccountID(tempID.String()),
+		Name:      inputAccount.Name,
+		CPF:       inputAccount.CPF,
+		Secret:    HashPassword(inputAccount.Secret),
+		Balance:   types.Money(inputAccount.Balance),
+		CreatedAt: time.Now(),
 	}
 	return account
 }
