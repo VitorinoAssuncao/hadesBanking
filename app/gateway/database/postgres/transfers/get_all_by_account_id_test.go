@@ -2,6 +2,7 @@ package transfer
 
 import (
 	"context"
+	"database/sql"
 	"stoneBanking/app/domain/entities/transfer"
 	"stoneBanking/app/domain/types"
 	"testing"
@@ -15,11 +16,12 @@ func Test_GetAllByID(t *testing.T) {
 	database := databaseTest
 	transferRepository := NewTransferRepository(database)
 	testCases := []struct {
-		name     string
-		input    transfer.Transfer
-		wantedID string
-		want     int
-		wantErr  bool
+		name      string
+		input     transfer.Transfer
+		runBefore func(db *sql.DB)
+		wantedID  string
+		want      int
+		wantErr   bool
 	}{
 		{
 			name: "conta localizada, quando usado o id correto",
@@ -29,6 +31,13 @@ func Test_GetAllByID(t *testing.T) {
 				AccountDestinationID: "d3280f8c-570a-450d-89f7-3509bc84980d",
 				Amount:               100,
 				CreatedAt:            time.Now(),
+			},
+			runBefore: func(db *sql.DB) {
+				sqlQuery := `TRUNCATE transfers`
+				_, err := db.Exec(sqlQuery)
+				if err != nil {
+					t.Errorf(err.Error())
+				}
 			},
 			wantedID: "d3280f8c-570a-450d-89f7-3509bc84980d",
 			want:     1,
@@ -51,6 +60,9 @@ func Test_GetAllByID(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
+			if test.runBefore != nil {
+				test.runBefore(database)
+			}
 			_, err := transferRepository.Create(ctx, test.input)
 			got, err := transferRepository.GetAllByAccountID(ctx, types.AccountID(test.wantedID))
 			assert.Equal(t, (err != nil), test.wantErr)

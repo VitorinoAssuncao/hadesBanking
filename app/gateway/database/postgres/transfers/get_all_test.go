@@ -31,13 +31,21 @@ func Test_GetAll(t *testing.T) {
 				CreatedAt:            time.Now(),
 			},
 			runBefore: func(db *sql.DB) {
+				truncateQuery := `TRUNCATE transfers`
+				_, err := db.Exec(truncateQuery)
+
+				if err != nil {
+					t.Errorf(err.Error())
+				}
+
 				sqlQuery := `
 				INSERT INTO
 					transfers (external_id, account_origin_id, account_destiny_id, amount, created_at)
 				VALUES
 					('d3280f8c-570a-450d-89f7-3509bc84980d', 'd3280f8c-570a-450d-89f7-3509bc84980d', 'd3280f8c-570a-450d-89f7-3509bc84980d', 100, $1)
 				`
-				_, err := db.Exec(sqlQuery, time.Now())
+				_, err = db.Exec(sqlQuery, time.Now())
+
 				if err != nil {
 					t.Errorf(err.Error())
 				}
@@ -46,8 +54,15 @@ func Test_GetAll(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name:    "teste com o banco vazio, deve retornar lista vazia",
-			input:   transfer.Transfer{},
+			name:  "teste com o banco vazio, deve retornar lista vazia",
+			input: transfer.Transfer{},
+			runBefore: func(db *sql.DB) {
+				sqlQuery := `TRUNCATE transfers`
+				_, err := db.Exec(sqlQuery)
+				if err != nil {
+					t.Errorf(err.Error())
+				}
+			},
 			want:    0,
 			wantErr: false,
 		},

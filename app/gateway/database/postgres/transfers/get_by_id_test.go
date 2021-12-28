@@ -2,6 +2,7 @@ package transfer
 
 import (
 	"context"
+	"database/sql"
 	"stoneBanking/app/domain/entities/transfer"
 	"stoneBanking/app/domain/types"
 	"testing"
@@ -15,11 +16,12 @@ func Test_GetByID(t *testing.T) {
 	database := databaseTest
 	transferRepository := NewTransferRepository(database)
 	testCases := []struct {
-		name     string
-		input    transfer.Transfer
-		wantedID string
-		want     transfer.Transfer
-		wantErr  bool
+		name      string
+		input     transfer.Transfer
+		runBefore func(db *sql.DB)
+		wantedID  string
+		want      transfer.Transfer
+		wantErr   bool
 	}{
 		{
 			name: "conta localizada com sucesso, retorna dados da conta",
@@ -29,6 +31,13 @@ func Test_GetByID(t *testing.T) {
 				AccountDestinationID: "d3280f8c-570a-450d-89f7-3509bc84980d",
 				Amount:               100,
 				CreatedAt:            time.Now(),
+			},
+			runBefore: func(db *sql.DB) {
+				sqlQuery := `TRUNCATE transfers`
+				_, err := db.Exec(sqlQuery)
+				if err != nil {
+					t.Errorf(err.Error())
+				}
 			},
 			wantedID: "d3280f8c-570a-450d-89f7-3509bc84980d",
 			want: transfer.Transfer{
@@ -49,6 +58,13 @@ func Test_GetByID(t *testing.T) {
 				Amount:               100,
 				CreatedAt:            time.Now(),
 			},
+			runBefore: func(db *sql.DB) {
+				sqlQuery := `TRUNCATE transfers`
+				_, err := db.Exec(sqlQuery)
+				if err != nil {
+					t.Errorf(err.Error())
+				}
+			},
 			wantedID: "d3280f8c-570a-450d-89f7-3509bc849899",
 			want:     transfer.Transfer{},
 			wantErr:  true,
@@ -57,6 +73,9 @@ func Test_GetByID(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
+			if test.runBefore != nil {
+				test.runBefore(database)
+			}
 			_, err := transferRepository.Create(ctx, test.input)
 
 			if err != nil {
