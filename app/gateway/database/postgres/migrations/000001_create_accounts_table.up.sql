@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS public.accounts(
     cpf           text                                         NOT NULL,
     secret        text                                         NOT NULL,
     balance       bigint                                       NOT NULL,
-    created_at    timestamp with time zone                     NOT NULL,
+    created_at    timestamp with time zone                     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT accounts_pkey PRIMARY KEY (id)
 );
 
