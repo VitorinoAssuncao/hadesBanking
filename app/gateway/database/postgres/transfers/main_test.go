@@ -20,8 +20,10 @@ func TestMain(m *testing.M) {
 		log.Fatalf("Erro ao conectar ao docker")
 	}
 	resource := setupTests(*pool)
-	code := m.Run()
+
 	defer dropTests(*pool, &resource)
+
+	code := m.Run()
 	os.Exit(code)
 }
 
