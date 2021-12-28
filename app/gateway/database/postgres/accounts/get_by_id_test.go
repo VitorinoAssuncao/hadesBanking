@@ -3,6 +3,7 @@ package account
 import (
 	"context"
 	"stoneBanking/app/domain/entities/account"
+	"stoneBanking/app/domain/types"
 	"testing"
 	"time"
 
@@ -18,6 +19,7 @@ func Test_GetByID(t *testing.T) {
 		name    string
 		input   account.Account
 		want    account.Account
+		wanted  string
 		wantErr bool
 	}{
 		{
@@ -36,6 +38,7 @@ func Test_GetByID(t *testing.T) {
 				Balance:   10000,
 				CreatedAt: now,
 			},
+			wanted:  "d3280f8c-570a-450d-89f7-3509bc84980d",
 			wantErr: false,
 		}, {
 			name: "retorna dados vazios e erro, ao tentar localizar conta com ID inexistente",
@@ -46,8 +49,9 @@ func Test_GetByID(t *testing.T) {
 				Balance:   10000,
 				CreatedAt: now,
 			},
+			wanted: "d3280f8c-570a-450d-89f7-3509bc849899",
 			want: account.Account{
-				ID:      "d3280f8c-570a-450d-89f7-3509bc849899",
+				ID:      "",
 				Name:    "",
 				CPF:     "",
 				Balance: 0,
@@ -59,9 +63,9 @@ func Test_GetByID(t *testing.T) {
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
 			_, err := accountRepository.Create(ctx, test.input)
-			got, err := accountRepository.GetByID(ctx, test.want.ID)
+			got, err := accountRepository.GetByID(ctx, types.AccountID(test.wanted))
 			assert.Equal(t, (err != nil), test.wantErr)
-			assert.Equal(t, test.want.Name, got.Name)
+			assert.Equal(t, test.want, got)
 		})
 	}
 }

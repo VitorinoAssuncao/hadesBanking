@@ -17,6 +17,7 @@ func Test_GetByCPF(t *testing.T) {
 		name    string
 		input   account.Account
 		want    account.Account
+		wanted  string
 		wantErr bool
 	}{
 		{
@@ -34,6 +35,7 @@ func Test_GetByCPF(t *testing.T) {
 				CPF:     "38330499912",
 				Balance: 10000,
 			},
+			wanted:  "38330499912",
 			wantErr: false,
 		},
 		{
@@ -48,9 +50,10 @@ func Test_GetByCPF(t *testing.T) {
 			want: account.Account{
 				ID:      "",
 				Name:    "",
-				CPF:     "38330499999",
+				CPF:     "",
 				Balance: 0,
 			},
+			wanted:  "38330499999",
 			wantErr: true,
 		},
 	}
@@ -58,12 +61,12 @@ func Test_GetByCPF(t *testing.T) {
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
 			_, err := accountRepository.Create(ctx, test.input)
-			got, err := accountRepository.GetByCPF(ctx, test.want.CPF)
+			got, err := accountRepository.GetByCPF(ctx, test.wanted)
 			if err == nil {
 				test.want.CreatedAt = got.CreatedAt
 			}
 			assert.Equal(t, (err != nil), test.wantErr)
-			assert.Equal(t, test.want.Name, got.Name)
+			assert.Equal(t, test.want, got)
 		})
 	}
 }
