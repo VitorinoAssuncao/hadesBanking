@@ -22,11 +22,11 @@ func Test_GetAll(t *testing.T) {
 		{
 			name: "localizar todas as contas",
 			input: account.Account{
-				ID:         "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Name:       "Joao da Silva",
-				Cpf:        "38330499912",
-				Balance:    10000,
-				Created_at: time.Now(),
+				ID:        "d3280f8c-570a-450d-89f7-3509bc84980d",
+				Name:      "Joao da Silva",
+				CPF:       "38330499912",
+				Balance:   10000,
+				CreatedAt: time.Now(),
 			},
 			want:    1,
 			wantErr: false,

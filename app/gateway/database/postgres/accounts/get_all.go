@@ -20,7 +20,7 @@ func (repository accountRepository) GetAll(ctx context.Context) ([]account.Accou
 	}
 
 	for result.Next() {
-		err = result.Scan(&tempAccount.ID, &tempAccount.Name, &tempAccount.Cpf, &tempAccount.Secret, &tempAccount.Balance, &tempAccount.Created_at)
+		err = result.Scan(&tempAccount.ID, &tempAccount.Name, &tempAccount.CPF, &tempAccount.Secret, &tempAccount.Balance, &tempAccount.CreatedAt)
 		if err != nil {
 			return accounts, err
 		}

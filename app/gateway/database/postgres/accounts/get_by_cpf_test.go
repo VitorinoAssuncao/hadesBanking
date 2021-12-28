@@ -22,16 +22,16 @@ func Test_GetByCPF(t *testing.T) {
 		{
 			name: "localizado a conta usando o CPF",
 			input: account.Account{
-				ID:         "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Name:       "Joao da Silva",
-				Cpf:        "38330499912",
-				Balance:    10000,
-				Created_at: time.Now(),
+				ID:        "d3280f8c-570a-450d-89f7-3509bc84980d",
+				Name:      "Joao da Silva",
+				CPF:       "38330499912",
+				Balance:   10000,
+				CreatedAt: time.Now(),
 			},
 			want: account.Account{
 				ID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
 				Name:    "Joao da Silva",
-				Cpf:     "38330499912",
+				CPF:     "38330499912",
 				Balance: 10000,
 			},
 			wantErr: false,
@@ -39,16 +39,16 @@ func Test_GetByCPF(t *testing.T) {
 		{
 			name: "tentar localizar a conta com cpf inexistente",
 			input: account.Account{
-				ID:         "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Name:       "Joao da Silva",
-				Cpf:        "38330499912",
-				Balance:    10000,
-				Created_at: time.Now(),
+				ID:        "d3280f8c-570a-450d-89f7-3509bc84980d",
+				Name:      "Joao da Silva",
+				CPF:       "38330499912",
+				Balance:   10000,
+				CreatedAt: time.Now(),
 			},
 			want: account.Account{
 				ID:      "",
 				Name:    "",
-				Cpf:     "38330499999",
+				CPF:     "38330499999",
 				Balance: 0,
 			},
 			wantErr: true,
@@ -58,9 +58,9 @@ func Test_GetByCPF(t *testing.T) {
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
 			_, err := accountRepository.Create(ctx, test.input)
-			got, err := accountRepository.GetByCPF(ctx, test.want.Cpf)
+			got, err := accountRepository.GetByCPF(ctx, test.want.CPF)
 			if err == nil {
-				test.want.Created_at = got.Created_at
+				test.want.CreatedAt = got.CreatedAt
 			}
 			assert.Equal(t, (err != nil), test.wantErr)
 			assert.Equal(t, test.want.Name, got.Name)

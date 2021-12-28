@@ -22,7 +22,7 @@ func (repository accountRepository) GetByID(ctx context.Context, accountID types
 		sqlQuery,
 		accountID,
 	)
-	err := result.Scan(&newAccount.ID, &newAccount.Name, &newAccount.Cpf, &newAccount.Secret, &newAccount.Balance, &newAccount.Created_at)
+	err := result.Scan(&newAccount.ID, &newAccount.Name, &newAccount.CPF, &newAccount.Secret, &newAccount.Balance, &newAccount.CreatedAt)
 
 	if err != nil {
 		return account.Account{}, err
