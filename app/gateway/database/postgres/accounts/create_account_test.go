@@ -74,13 +74,14 @@ func Test_Create(t *testing.T) {
 			if test.runBefore != nil {
 				test.runBefore(database)
 			}
-      
-      if err != nil{
-        				test.want.CreatedAt = got.CreatedAt
+			got, err := accountRepository.Create(ctx, test.input)
+
+			if err != nil {
+				test.want.CreatedAt = got.CreatedAt
 				test.want.ID = got.ID
 				test.want.ExternalID = got.ExternalID
-      }
-			got, err := accountRepository.Create(ctx, test.input)
+			}
+
 			assert.Equal(t, (err != nil), test.wantErr)
 			assert.Equal(t, test.want, got)
 		})
