@@ -24,9 +24,8 @@ func Test_GetAll(t *testing.T) {
 		{
 			name: "localizados todas as transferencias para conta existente",
 			input: transfer.Transfer{
-				ExternalID:           "d3280f8c-570a-450d-89f7-3509bc84980d",
-				AccountOriginID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
-				AccountDestinationID: "d3280f8c-570a-450d-89f7-3509bc84980d",
+				AccountOriginID:      1,
+				AccountDestinationID: 1,
 				Amount:               100,
 				CreatedAt:            time.Now(),
 			},
@@ -42,7 +41,7 @@ func Test_GetAll(t *testing.T) {
 				INSERT INTO
 					transfers (account_origin_id, account_destiny_id, amount)
 				VALUES
-					('d3280f8c-570a-450d-89f7-3509bc84980d', 'd3280f8c-570a-450d-89f7-3509bc84980d', 100)
+					(1, 1, 100)
 				`
 				_, err = db.Exec(sqlQuery)
 

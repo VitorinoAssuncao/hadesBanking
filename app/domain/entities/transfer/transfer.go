@@ -8,8 +8,8 @@ import (
 type Transfer struct {
 	ID                   int
 	ExternalID           types.TransferID
-	AccountOriginID      types.AccountOriginID
-	AccountDestinationID types.AccountDestinyID
+	AccountOriginID      types.AccountTransferID
+	AccountDestinationID types.AccountTransferID
 	Amount               types.Money
 	CreatedAt            time.Time
 }

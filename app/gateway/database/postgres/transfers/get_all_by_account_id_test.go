@@ -19,31 +19,39 @@ func Test_GetAllByID(t *testing.T) {
 		name      string
 		input     transfer.Transfer
 		runBefore func(db *sql.DB)
-		wantedID  string
+		wantedID  int
 		want      int
 		wantErr   bool
 	}{
 		{
 			name: "conta localizada, quando usado o id correto",
 			input: transfer.Transfer{
-				AccountOriginID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
-				AccountDestinationID: "d3280f8c-570a-450d-89f7-3509bc84980d",
+				AccountOriginID:      1,
+				AccountDestinationID: 1,
 				Amount:               100,
 				CreatedAt:            time.Now(),
 			},
-			wantedID: "d3280f8c-570a-450d-89f7-3509bc84980d",
+			runBefore: func(db *sql.DB) {
+				sqlQuery :=
+					`
+				INSERT INTO
+					accounts (name, cpf, secret, balance)
+				VALUES
+					('Joao da Silva', '38330499912', 'password', 100)
+				`
+				_, err := db.Exec(sqlQuery)
+				if err != nil {
+					t.Errorf(err.Error())
+				}
+			},
+			wantedID: 1,
 			want:     1,
 			wantErr:  false,
 		},
 		{
-			name: "conta não localizada, pois id não existe",
-			input: transfer.Transfer{
-				AccountOriginID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
-				AccountDestinationID: "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Amount:               100,
-				CreatedAt:            time.Now(),
-			},
-			wantedID: "d3280f8c-570a-450d-89f7-3509bc849899",
+			name:     "conta não localizada, pois id não existe",
+			input:    transfer.Transfer{},
+			wantedID: 99,
 			want:     0,
 			wantErr:  false,
 		},
@@ -56,7 +64,7 @@ func Test_GetAllByID(t *testing.T) {
 				test.runBefore(database)
 			}
 			_, err := transferRepository.Create(ctx, test.input)
-			got, err := transferRepository.GetAllByAccountID(ctx, types.AccountID(test.wantedID))
+			got, err := transferRepository.GetAllByAccountID(ctx, types.AccountTransferID(test.wantedID))
 			assert.Equal(t, (err != nil), test.wantErr)
 			assert.Equal(t, test.want, len(got))
 		})

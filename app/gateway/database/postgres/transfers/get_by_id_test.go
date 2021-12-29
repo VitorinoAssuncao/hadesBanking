@@ -25,18 +25,17 @@ func Test_GetByID(t *testing.T) {
 		{
 			name: "conta localizada com sucesso, retorna dados da conta",
 			input: transfer.Transfer{
-				AccountOriginID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
-				AccountDestinationID: "d3280f8c-570a-450d-89f7-3509bc84980d",
+				AccountOriginID:      1,
+				AccountDestinationID: 1,
 				Amount:               100,
 				CreatedAt:            time.Now(),
 			},
 			runBefore: func(value string) string {
 				return value
 			},
-			wantedID: "d3280f8c-570a-450d-89f7-3509bc84980d",
 			want: transfer.Transfer{
-				AccountOriginID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
-				AccountDestinationID: "d3280f8c-570a-450d-89f7-3509bc84980d",
+				AccountOriginID:      1,
+				AccountDestinationID: 1,
 				Amount:               100,
 				CreatedAt:            time.Now(),
 			},
@@ -45,8 +44,8 @@ func Test_GetByID(t *testing.T) {
 		{
 			name: "busca por conta inexistente, deve retornar erro e dados",
 			input: transfer.Transfer{
-				AccountOriginID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
-				AccountDestinationID: "d3280f8c-570a-450d-89f7-3509bc84980d",
+				AccountOriginID:      1,
+				AccountDestinationID: 1,
 				Amount:               100,
 				CreatedAt:            time.Now(),
 			},
