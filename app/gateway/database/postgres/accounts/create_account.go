@@ -6,7 +6,7 @@ import (
 )
 
 func (repository accountRepository) Create(ctx context.Context, newAccount account.Account) (account.Account, error) {
-	var sqlQuery = `
+	const sqlQuery = `
 	INSERT INTO
 			accounts (name, cpf, secret, balance)
 	VALUES

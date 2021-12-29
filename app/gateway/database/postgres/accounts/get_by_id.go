@@ -8,7 +8,7 @@ import (
 
 func (repository accountRepository) GetByID(ctx context.Context, accountExternalID types.AccountID) (account.Account, error) {
 
-	var sqlQuery = `
+	const sqlQuery = `
 	SELECT 
 		id, external_id, name, cpf, secret, balance, created_at
 	FROM

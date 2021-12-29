@@ -7,7 +7,7 @@ import (
 
 func (repository accountRepository) GetByCPF(ctx context.Context, accountCPF string) (account.Account, error) {
 
-	var sqlQuery = `
+	const sqlQuery = `
 	SELECT 
 		id, external_id, name, cpf, secret, balance, created_at
 	FROM

@@ -6,7 +6,7 @@ import (
 )
 
 func (repository accountRepository) GetAll(ctx context.Context) ([]account.Account, error) {
-	var sqlQuery = `
+	const sqlQuery = `
 	SELECT 
 		id,external_id, name, cpf, secret, balance, created_at
 	FROM
