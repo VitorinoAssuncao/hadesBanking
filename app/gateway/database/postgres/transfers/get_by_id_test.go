@@ -32,13 +32,6 @@ func Test_GetByID(t *testing.T) {
 				Amount:               100,
 				CreatedAt:            time.Now(),
 			},
-			runBefore: func(db *sql.DB) {
-				sqlQuery := `TRUNCATE transfers`
-				_, err := db.Exec(sqlQuery)
-				if err != nil {
-					t.Errorf(err.Error())
-				}
-			},
 			wantedID: "d3280f8c-570a-450d-89f7-3509bc84980d",
 			want: transfer.Transfer{
 				ExternalID:           "d3280f8c-570a-450d-89f7-3509bc84980d",
@@ -73,6 +66,7 @@ func Test_GetByID(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
+			TruncateTable(database)
 			if test.runBefore != nil {
 				test.runBefore(database)
 			}

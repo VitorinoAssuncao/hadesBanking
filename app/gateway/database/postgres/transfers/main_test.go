@@ -76,3 +76,12 @@ func dropTests(pool dockertest.Pool, resource *dockertest.Resource) {
 		log.Fatalf("Não foi possível limpar o banco - %s", err)
 	}
 }
+
+func TruncateTable(db *sql.DB) error {
+	sqlQuery := `TRUNCATE transfers`
+	_, err := db.Exec(sqlQuery)
+	if err != nil {
+		return err
+	}
+	return nil
+}

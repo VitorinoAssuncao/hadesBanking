@@ -70,6 +70,8 @@ func Test_GetAll(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
+			TruncateTable(database)
+
 			if test.runBefore != nil {
 				test.runBefore(database)
 			}
