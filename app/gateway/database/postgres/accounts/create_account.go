@@ -12,7 +12,7 @@ func (repository accountRepository) Create(ctx context.Context, newAccount accou
 	VALUES
 			($1, $2, $3, $4)
 	RETURNING
-			id, external_id
+			id, external_id, created_at
 	`
 	row := repository.db.QueryRow(
 		sqlQuery,
@@ -22,7 +22,7 @@ func (repository accountRepository) Create(ctx context.Context, newAccount accou
 		newAccount.Balance.ToInt(),
 	)
 
-	err := row.Scan(&newAccount.ID, &newAccount.ExternalID)
+	err := row.Scan(&newAccount.ID, &newAccount.ExternalID, &newAccount.CreatedAt)
 
 	if err != nil {
 		return account.Account{}, err
