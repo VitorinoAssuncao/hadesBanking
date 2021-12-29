@@ -4,7 +4,6 @@ import (
 	"context"
 	"stoneBanking/app/domain/entities/transfer"
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -22,18 +21,14 @@ func Test_Create(t *testing.T) {
 		{
 			name: "conta cadastrada com sucesso, quando dados corretos",
 			input: transfer.Transfer{
-				ExternalID:           "d3280f8c-570a-450d-89f7-3509bc84980d",
 				AccountOriginID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
 				AccountDestinationID: "d3280f8c-570a-450d-89f7-3509bc84980d",
 				Amount:               100,
-				CreatedAt:            time.Now(),
 			},
 			want: transfer.Transfer{
-				ExternalID:           "d3280f8c-570a-450d-89f7-3509bc84980d",
 				AccountOriginID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
 				AccountDestinationID: "d3280f8c-570a-450d-89f7-3509bc84980d",
 				Amount:               100,
-				CreatedAt:            time.Now(),
 			},
 			wantErr: false,
 		},
@@ -41,9 +36,14 @@ func Test_Create(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
+			TruncateTable(database)
+
 			got, err := transferRepository.Create(ctx, test.input)
+
 			if err == nil {
 				test.want.CreatedAt = got.CreatedAt
+				test.want.ExternalID = got.ExternalID
+				test.want.ID = got.ID
 			}
 			assert.Equal(t, (err != nil), test.wantErr)
 			assert.Equal(t, test.want, got)

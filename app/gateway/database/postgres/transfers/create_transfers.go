@@ -8,17 +8,19 @@ import (
 func (r transferRepository) Create(ctx context.Context, transferData transfer.Transfer) (transfer.Transfer, error) {
 	const sqlQuery = `
 	INSERT INTO
-			transfers (external_id, account_origin_id, account_destiny_id, amount, created_at)
+			transfers (account_origin_id, account_destiny_id, amount)
 	VALUES
-			($1, $2, $3, $4, $5)
+			($1, $2, $3)
+	RETURNING
+			id, external_id, created_at
 	`
-	_, err := r.db.Exec(
+	row := r.db.QueryRow(
 		sqlQuery,
-		transferData.ExternalID,
 		transferData.AccountOriginID,
 		transferData.AccountDestinationID,
-		transferData.Amount,
-		transferData.CreatedAt)
+		transferData.Amount)
+
+	err := row.Scan(&transferData.ID, &transferData.ExternalID, &transferData.CreatedAt)
 
 	if err != nil {
 		return transfer.Transfer{}, err
