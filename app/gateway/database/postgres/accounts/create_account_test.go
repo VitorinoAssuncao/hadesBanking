@@ -2,6 +2,7 @@ package account
 
 import (
 	"context"
+	"database/sql"
 	"stoneBanking/app/domain/entities/account"
 	"testing"
 	"time"
@@ -14,13 +15,14 @@ func Test_Create(t *testing.T) {
 	database := databaseTest
 	accountRepository := NewAccountRepository(database)
 	testCases := []struct {
-		name    string
-		input   account.Account
-		want    account.Account
-		wantErr bool
+		name      string
+		input     account.Account
+		runBefore func(db *sql.DB)
+		want      account.Account
+		wantErr   bool
 	}{
 		{
-			name: "cadastro com sucesso",
+			name: "conta cadastrada com sucesso, quando dados corretos",
 			input: account.Account{
 				Name:      "Joao da Silva",
 				CPF:       "38330499912",
@@ -35,12 +37,25 @@ func Test_Create(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "cadastro duplicado",
+			name: "ao tentar criar a conta apresenta que já existe conta cadastrada com este cpf",
 			input: account.Account{
 				Name:      "Joao da Silva",
 				CPF:       "38330499912",
 				Balance:   10000,
 				CreatedAt: time.Now(),
+			},
+			runBefore: func(db *sql.DB) {
+				sqlQuery :=
+					`
+				INSERT INTO
+					accounts (id, name, cpf, secret, balance, created_at)
+				VALUES
+					('d3280f8c-570a-450d-89f7-3509bc84980d', 'Joao da Silva', '38330499912', 'password', 100, $1)
+				`
+				_, err := db.Exec(sqlQuery, time.Now())
+				if err != nil {
+					t.Errorf(err.Error())
+				}
 			},
 			want: account.Account{
 				ExternalID: "",
@@ -54,18 +69,18 @@ func Test_Create(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			got, err := accountRepository.Create(ctx, test.input)
 
-			if test.name == "cadastro duplicado" {
-				_, err = accountRepository.Create(ctx, test.input)
-				got = account.Account{}
+			TruncateTable(database)
+			if test.runBefore != nil {
+				test.runBefore(database)
 			}
-
-			if err == nil {
-				test.want.CreatedAt = got.CreatedAt
+      
+      if err != nil{
+        				test.want.CreatedAt = got.CreatedAt
 				test.want.ID = got.ID
 				test.want.ExternalID = got.ExternalID
-			}
+      }
+			got, err := accountRepository.Create(ctx, test.input)
 			assert.Equal(t, (err != nil), test.wantErr)
 			assert.Equal(t, test.want, got)
 		})

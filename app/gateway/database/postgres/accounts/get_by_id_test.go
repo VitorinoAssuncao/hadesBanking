@@ -3,8 +3,8 @@ package account
 import (
 	"context"
 	"stoneBanking/app/domain/entities/account"
+	"stoneBanking/app/domain/types"
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -17,43 +17,51 @@ func Test_GetByID(t *testing.T) {
 		name    string
 		input   account.Account
 		want    account.Account
+		wanted  string
 		wantErr bool
 	}{
 		{
-			name: "localizado a conta usando o ID",
+			name: "localizado a conta usando o ID externo (uuid), e retorna os dados da mesma ",
 			input: account.Account{
 				Name:      "Joao da Silva",
 				CPF:       "38330499912",
 				Balance:   10000,
-				CreatedAt: time.Now(),
 			},
 			want: account.Account{
 				Name:    "Joao da Silva",
 				CPF:     "38330499912",
 				Balance: 10000,
 			},
+			wanted:  "d3280f8c-570a-450d-89f7-3509bc84980d",
 			wantErr: false,
 		}, {
-			name: "tentar localizar conta que não existe",
+			name: "retorna dados vazios e erro, ao tentar localizar conta com ID inexistente",
 			input: account.Account{
 				Name:      "Joao da Silva",
 				CPF:       "38330499912",
 				Balance:   10000,
-				CreatedAt: time.Now(),
 			},
 			want:    account.Account{},
+			wanted: "d3280f8c-570a-450d-89f7-3509bc849899",
 			wantErr: true,
 		},
 	}
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			_, err := accountRepository.Create(ctx, test.input)
-			got, err := accountRepository.GetByID(ctx, created.ExternalID)
+			TruncateTable(database)
+			created, err := accountRepository.Create(ctx, test.input)
+      if err == nil{
+        wanted = created.ID
+      }
+			got, err := accountRepository.GetByID(ctx, wanted)
 			if err == nil {
 				test.want.CreatedAt = got.CreatedAt
+        test.want.ID = got.ID
+        test.want.ExternalID = got.ExternalID
 			}
 			assert.Equal(t, (err != nil), test.wantErr)
+			assert.Equal(t, test.want, got)
 		})
 	}
 }

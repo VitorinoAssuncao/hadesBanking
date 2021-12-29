@@ -20,7 +20,7 @@ func (repository accountRepository) Create(ctx context.Context, newAccount accou
 		newAccount.CPF,
 		newAccount.Secret,
 		newAccount.Balance.ToInt(),
-		newAccount.CreatedAt)
+	)
 
 	err := row.Scan(&newAccount.ID, &newAccount.ExternalID)
 
