@@ -7,13 +7,14 @@ import (
 
 func (repository accountRepository) GetAll(ctx context.Context) ([]account.Account, error) {
 	var tempAccount account.Account
-	var accounts = make([]account.Account, 0)
 	var sqlQuery = `
 	SELECT 
 		id,external_id, name, cpf, secret, balance, created_at
 	FROM
 		accounts
 	`
+	var accounts = make([]account.Account, 0)
+
 	result, err := repository.db.Query(sqlQuery)
 	if err != nil {
 		return accounts, err
