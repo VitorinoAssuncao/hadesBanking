@@ -7,7 +7,7 @@ import (
 
 type Transfer struct {
 	ID                   int
-	ExternalID           types.TransferID
+	ExternalID           types.TransferExternalID
 	AccountOriginID      types.TransferAccountID
 	AccountDestinationID types.TransferAccountID
 	Amount               types.Money

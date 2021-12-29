@@ -69,7 +69,7 @@ func Test_GetByID(t *testing.T) {
 				test.input = test.runBefore(database)
 			}
 
-			got, err := transferRepository.GetByID(ctx, types.TransferID(test.input))
+			got, err := transferRepository.GetByID(ctx, types.TransferExternalID(test.input))
 
 			if err == nil {
 				test.want.CreatedAt = got.CreatedAt

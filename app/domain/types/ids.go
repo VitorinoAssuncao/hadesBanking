@@ -1,7 +1,7 @@
 package types
 
-type AccountID string
+type AccountExternalID string
 
-type TransferID string
+type TransferExternalID string
 
 type TransferAccountID int
