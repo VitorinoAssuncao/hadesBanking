@@ -24,13 +24,12 @@ func Test_Create(t *testing.T) {
 		{
 			name: "conta cadastrada com sucesso, quando dados corretos",
 			input: account.Account{
-				ID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Name:    "Joao da Silva",
-				CPF:     "38330499912",
-				Balance: 10000,
+				Name:      "Joao da Silva",
+				CPF:       "38330499912",
+				Balance:   10000,
+				CreatedAt: time.Now(),
 			},
 			want: account.Account{
-				ID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
 				Name:    "Joao da Silva",
 				CPF:     "38330499912",
 				Balance: 10000,
@@ -40,41 +39,44 @@ func Test_Create(t *testing.T) {
 		{
 			name: "ao tentar criar a conta apresenta que já existe conta cadastrada com este cpf",
 			input: account.Account{
-				ID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Name:    "Joao da Silva",
-				CPF:     "38330499912",
-				Balance: 10000,
+				Name:      "Joao da Silva",
+				CPF:       "38330499912",
+				Balance:   10000,
+				CreatedAt: time.Now(),
 			},
 			runBefore: func(db *sql.DB) {
 				sqlQuery :=
 					`
 				INSERT INTO
-					accounts (id, name, cpf, secret, balance, created_at)
+					accounts (name, cpf, secret, balance)
 				VALUES
-					('d3280f8c-570a-450d-89f7-3509bc84980d', 'Joao da Silva', '38330499912', 'password', 100, $1)
+					('Joao da Silva', '38330499912', 'password', 100)
 				`
-				_, err := db.Exec(sqlQuery, time.Now())
+				_, err := db.Exec(sqlQuery)
 				if err != nil {
 					t.Errorf(err.Error())
 				}
 			},
-			want: account.Account{
-				ID:      "",
-				Name:    "",
-				CPF:     "",
-				Balance: 0,
-			},
+			want:    account.Account{},
 			wantErr: true,
 		},
 	}
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
+
 			TruncateTable(database)
 			if test.runBefore != nil {
 				test.runBefore(database)
 			}
 			got, err := accountRepository.Create(ctx, test.input)
+
+			if err == nil {
+				test.want.CreatedAt = got.CreatedAt
+				test.want.ID = got.ID
+				test.want.ExternalID = got.ExternalID
+			}
+
 			assert.Equal(t, (err != nil), test.wantErr)
 			assert.Equal(t, test.want, got)
 		})

@@ -6,23 +6,27 @@ import (
 )
 
 func (repository accountRepository) Create(ctx context.Context, newAccount account.Account) (account.Account, error) {
-	var sqlQuery = `
+	const sqlQuery = `
 	INSERT INTO
-			accounts (id, name, cpf, secret, balance)
+			accounts (name, cpf, secret, balance)
 	VALUES
-			($1, $2, $3, $4, $5)
+			($1, $2, $3, $4)
+	RETURNING
+			id, external_id, created_at
 	`
-	_, err := repository.db.Exec(
+	row := repository.db.QueryRow(
 		sqlQuery,
-		newAccount.ID,
 		newAccount.Name,
 		newAccount.CPF,
 		newAccount.Secret,
 		newAccount.Balance.ToInt(),
 	)
 
+	err := row.Scan(&newAccount.ID, &newAccount.ExternalID, &newAccount.CreatedAt)
+
 	if err != nil {
 		return account.Account{}, err
 	}
+
 	return newAccount, nil
 }

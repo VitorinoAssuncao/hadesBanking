@@ -40,11 +40,11 @@ func Test_GetAll(t *testing.T) {
 
 				sqlQuery := `
 				INSERT INTO
-					transfers (external_id, account_origin_id, account_destiny_id, amount, created_at)
+					transfers (account_origin_id, account_destiny_id, amount)
 				VALUES
-					('d3280f8c-570a-450d-89f7-3509bc84980d', 'd3280f8c-570a-450d-89f7-3509bc84980d', 'd3280f8c-570a-450d-89f7-3509bc84980d', 100, $1)
+					('d3280f8c-570a-450d-89f7-3509bc84980d', 'd3280f8c-570a-450d-89f7-3509bc84980d', 100)
 				`
-				_, err = db.Exec(sqlQuery, time.Now())
+				_, err = db.Exec(sqlQuery)
 
 				if err != nil {
 					t.Errorf(err.Error())
@@ -70,6 +70,8 @@ func Test_GetAll(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
+			TruncateTable(database)
+
 			if test.runBefore != nil {
 				test.runBefore(database)
 			}

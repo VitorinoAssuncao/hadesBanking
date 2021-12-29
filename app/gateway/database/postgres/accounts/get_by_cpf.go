@@ -7,9 +7,9 @@ import (
 
 func (repository accountRepository) GetByCPF(ctx context.Context, accountCPF string) (account.Account, error) {
 
-	var sqlQuery = `
+	const sqlQuery = `
 	SELECT 
-		id, name, cpf, secret, balance, created_at
+		id, external_id, name, cpf, secret, balance, created_at
 	FROM
 		accounts
 	WHERE
@@ -19,8 +19,10 @@ func (repository accountRepository) GetByCPF(ctx context.Context, accountCPF str
 		sqlQuery,
 		accountCPF,
 	)
+
 	var newAccount = account.Account{}
-	err := result.Scan(&newAccount.ID, &newAccount.Name, &newAccount.CPF, &newAccount.Secret, &newAccount.Balance, &newAccount.CreatedAt)
+
+	err := result.Scan(&newAccount.ID, &newAccount.ExternalID, &newAccount.Name, &newAccount.CPF, &newAccount.Secret, &newAccount.Balance, &newAccount.CreatedAt)
 
 	if err != nil {
 		return account.Account{}, err
