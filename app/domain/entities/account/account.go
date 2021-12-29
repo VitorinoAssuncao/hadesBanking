@@ -6,10 +6,11 @@ import (
 )
 
 type Account struct {
-	ID        types.AccountID
-	Name      string
-	CPF       string
-	Secret    string
-	Balance   types.Money
-	CreatedAt time.Time
+	ID         int
+	ExternalID types.AccountID
+	Name       string
+	CPF        string
+	Secret     string
+	Balance    types.Money
+	CreatedAt  time.Time
 }
