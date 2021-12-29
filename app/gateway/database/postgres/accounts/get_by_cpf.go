@@ -19,7 +19,9 @@ func (repository accountRepository) GetByCPF(ctx context.Context, accountCPF str
 		sqlQuery,
 		accountCPF,
 	)
+
 	var newAccount = account.Account{}
+
 	err := result.Scan(&newAccount.ID, &newAccount.ExternalID, &newAccount.Name, &newAccount.CPF, &newAccount.Secret, &newAccount.Balance, &newAccount.CreatedAt)
 
 	if err != nil {
