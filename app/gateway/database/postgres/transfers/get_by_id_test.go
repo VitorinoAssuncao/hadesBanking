@@ -2,7 +2,6 @@ package transfer
 
 import (
 	"context"
-	"database/sql"
 	"stoneBanking/app/domain/entities/transfer"
 	"stoneBanking/app/domain/types"
 	"testing"
@@ -18,7 +17,7 @@ func Test_GetByID(t *testing.T) {
 	testCases := []struct {
 		name      string
 		input     transfer.Transfer
-		runBefore func(db *sql.DB)
+		runBefore func(value string) string
 		wantedID  string
 		want      transfer.Transfer
 		wantErr   bool
@@ -26,15 +25,16 @@ func Test_GetByID(t *testing.T) {
 		{
 			name: "conta localizada com sucesso, retorna dados da conta",
 			input: transfer.Transfer{
-				ExternalID:           "d3280f8c-570a-450d-89f7-3509bc84980d",
 				AccountOriginID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
 				AccountDestinationID: "d3280f8c-570a-450d-89f7-3509bc84980d",
 				Amount:               100,
 				CreatedAt:            time.Now(),
 			},
+			runBefore: func(value string) string {
+				return value
+			},
 			wantedID: "d3280f8c-570a-450d-89f7-3509bc84980d",
 			want: transfer.Transfer{
-				ExternalID:           "d3280f8c-570a-450d-89f7-3509bc84980d",
 				AccountOriginID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
 				AccountDestinationID: "d3280f8c-570a-450d-89f7-3509bc84980d",
 				Amount:               100,
@@ -45,18 +45,10 @@ func Test_GetByID(t *testing.T) {
 		{
 			name: "busca por conta inexistente, deve retornar erro e dados",
 			input: transfer.Transfer{
-				ExternalID:           "d3280f8c-570a-450d-89f7-3509bc84980d",
 				AccountOriginID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
 				AccountDestinationID: "d3280f8c-570a-450d-89f7-3509bc84980d",
 				Amount:               100,
 				CreatedAt:            time.Now(),
-			},
-			runBefore: func(db *sql.DB) {
-				sqlQuery := `TRUNCATE transfers`
-				_, err := db.Exec(sqlQuery)
-				if err != nil {
-					t.Errorf(err.Error())
-				}
 			},
 			wantedID: "d3280f8c-570a-450d-89f7-3509bc849899",
 			want:     transfer.Transfer{},
@@ -67,13 +59,14 @@ func Test_GetByID(t *testing.T) {
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
 			TruncateTable(database)
-			if test.runBefore != nil {
-				test.runBefore(database)
-			}
-			_, err := transferRepository.Create(ctx, test.input)
+			created, err := transferRepository.Create(ctx, test.input)
 
 			if err != nil {
 				t.Errorf(err.Error())
+			}
+
+			if test.runBefore != nil {
+				test.wantedID = test.runBefore(string(created.ExternalID))
 			}
 
 			got, err := transferRepository.GetByID(ctx, types.TransferID(test.wantedID))
@@ -81,6 +74,7 @@ func Test_GetByID(t *testing.T) {
 			if err == nil {
 				test.want.CreatedAt = got.CreatedAt
 				test.want.ID = got.ID
+				test.want.ExternalID = got.ExternalID
 			}
 			assert.Equal(t, (err != nil), test.wantErr)
 			assert.Equal(t, test.want, got)

@@ -26,7 +26,6 @@ func Test_GetAllByID(t *testing.T) {
 		{
 			name: "conta localizada, quando usado o id correto",
 			input: transfer.Transfer{
-				ExternalID:           "d3280f8c-570a-450d-89f7-3509bc84980d",
 				AccountOriginID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
 				AccountDestinationID: "d3280f8c-570a-450d-89f7-3509bc84980d",
 				Amount:               100,
@@ -39,7 +38,6 @@ func Test_GetAllByID(t *testing.T) {
 		{
 			name: "conta não localizada, pois id não existe",
 			input: transfer.Transfer{
-				ExternalID:           "d3280f8c-570a-450d-89f7-3509bc84980d",
 				AccountOriginID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
 				AccountDestinationID: "d3280f8c-570a-450d-89f7-3509bc84980d",
 				Amount:               100,

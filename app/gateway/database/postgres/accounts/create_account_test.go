@@ -48,21 +48,16 @@ func Test_Create(t *testing.T) {
 				sqlQuery :=
 					`
 				INSERT INTO
-					accounts (id, name, cpf, secret, balance, created_at)
+					accounts (name, cpf, secret, balance)
 				VALUES
-					('d3280f8c-570a-450d-89f7-3509bc84980d', 'Joao da Silva', '38330499912', 'password', 100, $1)
+					('Joao da Silva', '38330499912', 'password', 100)
 				`
-				_, err := db.Exec(sqlQuery, time.Now())
+				_, err := db.Exec(sqlQuery)
 				if err != nil {
 					t.Errorf(err.Error())
 				}
 			},
-			want: account.Account{
-				ExternalID: "",
-				Name:       "",
-				CPF:        "",
-				Balance:    0,
-			},
+			want:    account.Account{},
 			wantErr: true,
 		},
 	}
@@ -76,7 +71,7 @@ func Test_Create(t *testing.T) {
 			}
 			got, err := accountRepository.Create(ctx, test.input)
 
-			if err != nil {
+			if err == nil {
 				test.want.CreatedAt = got.CreatedAt
 				test.want.ID = got.ID
 				test.want.ExternalID = got.ExternalID
