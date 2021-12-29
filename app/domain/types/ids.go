@@ -4,4 +4,4 @@ type AccountID string
 
 type TransferID string
 
-type AccountTransferID int
+type TransferAccountID int

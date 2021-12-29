@@ -64,7 +64,7 @@ func Test_GetAllByID(t *testing.T) {
 			if test.runBefore != nil {
 				test.input = test.runBefore(database)
 			}
-			got, err := transferRepository.GetAllByAccountID(ctx, types.AccountTransferID(test.input))
+			got, err := transferRepository.GetAllByAccountID(ctx, types.TransferAccountID(test.input))
 			assert.Equal(t, (err != nil), test.wantErr)
 			assert.Equal(t, test.want, len(got))
 		})
