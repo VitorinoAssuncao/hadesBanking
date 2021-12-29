@@ -10,7 +10,7 @@ func (repository accountRepository) GetAll(ctx context.Context) ([]account.Accou
 	var accounts = make([]account.Account, 0)
 	var sqlQuery = `
 	SELECT 
-		id, name, cpf, secret, balance, created_at
+		id,external_id, name, cpf, secret, balance, created_at
 	FROM
 		accounts
 	`
@@ -20,7 +20,7 @@ func (repository accountRepository) GetAll(ctx context.Context) ([]account.Accou
 	}
 
 	for result.Next() {
-		err = result.Scan(&tempAccount.ID, &tempAccount.Name, &tempAccount.CPF, &tempAccount.Secret, &tempAccount.Balance, &tempAccount.CreatedAt)
+		err = result.Scan(&tempAccount.ID, &tempAccount.ExternalID, &tempAccount.Name, &tempAccount.CPF, &tempAccount.Secret, &tempAccount.Balance, &tempAccount.CreatedAt)
 		if err != nil {
 			return accounts, err
 		}

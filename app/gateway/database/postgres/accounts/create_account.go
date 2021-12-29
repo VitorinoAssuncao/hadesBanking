@@ -8,21 +8,25 @@ import (
 func (repository accountRepository) Create(ctx context.Context, newAccount account.Account) (account.Account, error) {
 	var sqlQuery = `
 	INSERT INTO
-			accounts (id, name, cpf, secret, balance, created_at)
+			accounts (name, cpf, secret, balance, created_at)
 	VALUES
-			($1, $2, $3, $4, $5, $6)
+			($1, $2, $3, $4, $5)
+	RETURNING
+			id, external_id
 	`
-	_, err := repository.db.Exec(
+	row := repository.db.QueryRow(
 		sqlQuery,
-		newAccount.ID,
 		newAccount.Name,
 		newAccount.CPF,
 		newAccount.Secret,
 		newAccount.Balance.ToInt(),
 		newAccount.CreatedAt)
 
+	err := row.Scan(&newAccount.ID, &newAccount.ExternalID)
+
 	if err != nil {
 		return account.Account{}, err
 	}
+
 	return newAccount, nil
 }

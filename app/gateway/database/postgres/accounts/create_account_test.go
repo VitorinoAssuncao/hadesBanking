@@ -22,14 +22,12 @@ func Test_Create(t *testing.T) {
 		{
 			name: "cadastro com sucesso",
 			input: account.Account{
-				ID:        "d3280f8c-570a-450d-89f7-3509bc84980d",
 				Name:      "Joao da Silva",
 				CPF:       "38330499912",
 				Balance:   10000,
 				CreatedAt: time.Now(),
 			},
 			want: account.Account{
-				ID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
 				Name:    "Joao da Silva",
 				CPF:     "38330499912",
 				Balance: 10000,
@@ -39,17 +37,16 @@ func Test_Create(t *testing.T) {
 		{
 			name: "cadastro duplicado",
 			input: account.Account{
-				ID:        "d3280f8c-570a-450d-89f7-3509bc84980d",
 				Name:      "Joao da Silva",
 				CPF:       "38330499912",
 				Balance:   10000,
 				CreatedAt: time.Now(),
 			},
 			want: account.Account{
-				ID:      "",
-				Name:    "",
-				CPF:     "",
-				Balance: 0,
+				ExternalID: "",
+				Name:       "",
+				CPF:        "",
+				Balance:    0,
 			},
 			wantErr: true,
 		},
@@ -66,6 +63,8 @@ func Test_Create(t *testing.T) {
 
 			if err == nil {
 				test.want.CreatedAt = got.CreatedAt
+				test.want.ID = got.ID
+				test.want.ExternalID = got.ExternalID
 			}
 			assert.Equal(t, (err != nil), test.wantErr)
 			assert.Equal(t, test.want, got)
