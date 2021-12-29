@@ -17,8 +17,8 @@ func Test_GetByID(t *testing.T) {
 		name      string
 		input     account.Account
 		want      account.Account
-		runBefore func(value string) string
-		wanted    string
+		runBefore func(value types.AccountID) types.AccountID
+		wanted    types.AccountID
 		wantErr   bool
 	}{
 		{
@@ -28,7 +28,7 @@ func Test_GetByID(t *testing.T) {
 				CPF:     "38330499912",
 				Balance: 10000,
 			},
-			runBefore: func(value string) string {
+			runBefore: func(value types.AccountID) types.AccountID {
 				return value
 			},
 			want: account.Account{
@@ -57,7 +57,7 @@ func Test_GetByID(t *testing.T) {
 			created, err := accountRepository.Create(ctx, test.input)
 
 			if test.runBefore != nil && err == nil {
-				test.wanted = test.runBefore(string(created.ExternalID))
+				test.wanted = test.runBefore(created.ExternalID)
 			}
 
 			got, err := accountRepository.GetByID(ctx, types.AccountID(test.wanted))
