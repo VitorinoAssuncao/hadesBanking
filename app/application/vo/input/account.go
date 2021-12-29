@@ -5,7 +5,6 @@ import (
 	"stoneBanking/app/domain/types"
 	"time"
 
-	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -17,9 +16,7 @@ type CreateAccountVO struct {
 }
 
 func GenerateAccount(inputAccount CreateAccountVO) account.Account {
-	tempID, _ := uuid.NewRandom()
 	account := account.Account{
-		ID:        types.AccountID(tempID.String()),
 		Name:      inputAccount.Name,
 		CPF:       inputAccount.CPF,
 		Secret:    HashPassword(inputAccount.Secret),
