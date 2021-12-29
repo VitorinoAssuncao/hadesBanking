@@ -6,7 +6,6 @@ import (
 )
 
 func (repository accountRepository) GetAll(ctx context.Context) ([]account.Account, error) {
-	var tempAccount account.Account
 	var sqlQuery = `
 	SELECT 
 		id,external_id, name, cpf, secret, balance, created_at
@@ -19,6 +18,8 @@ func (repository accountRepository) GetAll(ctx context.Context) ([]account.Accou
 	if err != nil {
 		return accounts, err
 	}
+
+	var tempAccount account.Account
 
 	for result.Next() {
 		err = result.Scan(&tempAccount.ID, &tempAccount.ExternalID, &tempAccount.Name, &tempAccount.CPF, &tempAccount.Secret, &tempAccount.Balance, &tempAccount.CreatedAt)
