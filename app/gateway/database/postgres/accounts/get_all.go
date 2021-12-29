@@ -8,7 +8,7 @@ import (
 func (repository accountRepository) GetAll(ctx context.Context) ([]account.Account, error) {
 	const sqlQuery = `
 	SELECT 
-		id,external_id, name, cpf, secret, balance, created_at
+		id, external_id, name, cpf, secret, balance, created_at
 	FROM
 		accounts
 	`
