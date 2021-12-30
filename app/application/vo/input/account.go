@@ -19,7 +19,7 @@ type CreateAccountVO struct {
 func GenerateAccount(inputAccount CreateAccountVO) account.Account {
 	account := account.Account{
 		Name:      inputAccount.Name,
-		CPF:       normatizeCPF(inputAccount.CPF),
+		CPF:       normalizeCPF(inputAccount.CPF),
 		Secret:    HashPassword(inputAccount.Secret),
 		Balance:   types.Money(inputAccount.Balance),
 		CreatedAt: time.Now(),
@@ -37,7 +37,7 @@ func ValidateHash(accountSecret, loginSecret string) bool {
 	return err == nil
 }
 
-func normatizeCPF(cpf string) (result string) {
+func normalizeCPF(cpf string) (result string) {
 	regex := regexp.MustCompile("[^0-9]+")
 	result = regex.ReplaceAllString(cpf, "")
 	return result
