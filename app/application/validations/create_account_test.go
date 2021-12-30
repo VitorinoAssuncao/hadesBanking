@@ -1,6 +1,8 @@
 package validations
 
-import "testing"
+import (
+	"testing"
+)
 
 func Test_nameIsNotEmpty(t *testing.T) {
 	t.Run("Nome não etá vazio", func(t *testing.T) {
@@ -109,4 +111,42 @@ func Test_balanceIsPositive(t *testing.T) {
 			t.Errorf("Saldo pode ser igual a zero")
 		}
 	})
+}
+
+func Test_calculateFirstVerifyingDigit(t *testing.T) {
+	cpf := "383433358"
+	cpfArray := make([]int, 0)
+
+	for _, i := range cpf {
+		value := int(i) - '0' //subtração devolve o valor do inteiro corretamente (49 - valor de 1, - valor do 0 (48))
+		cpfArray = append(cpfArray, value)
+	}
+
+	firstDigit := calculateFirstVerifyingDigit(cpfArray)
+	if firstDigit != 1 {
+		t.Errorf("Calculo do digito verificador incorreto")
+	}
+}
+
+func Test_calculateSecondVerifyingDigit(t *testing.T) {
+	cpf := "3834333581"
+	cpfArray := make([]int, 0)
+
+	for _, i := range cpf {
+		value := int(i) - '0' //subtração devolve o valor do inteiro corretamente (49 - valor de 1, - valor do 0 (48))
+		cpfArray = append(cpfArray, value)
+	}
+
+	firstDigit := calculateSecondVerifyingDigit(cpfArray)
+	if firstDigit != 3 {
+		t.Errorf("Calculo do digito verificador incorreto")
+	}
+}
+
+func Test_cpfIsValid(t *testing.T) {
+	cpf := "38343335813"
+	result := cpfIsValid(cpf)
+	if !result {
+		t.Errorf("Valor calculado inválido")
+	}
 }
