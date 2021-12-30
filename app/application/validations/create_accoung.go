@@ -18,6 +18,10 @@ func ValidateAccountInput(accountData input.CreateAccountVO) (input.CreateAccoun
 		return accountData, errorAccountCPFNotNumbers
 	}
 
+	if cpfIsNotATestValue(accountData.CPF) {
+		return accountData, errorAccountCPFInvalid
+	}
+
 	if !cpfIsValid(accountData.CPF) {
 		return accountData, errorAccountCPFInvalid
 	}
@@ -93,4 +97,17 @@ func calculateSecondVerifyingDigit(values []int) int {
 	}
 
 	return result
+}
+
+func cpfIsNotATestValue(cpf string) bool {
+	// Validação leva em conta se CPF apresenta dados inválidos de teste (todos os números iguais ou padrão sequencial 12345678901)
+	if cpf == "12345678901" {
+		return false
+	}
+
+	if cpf[0:5] == cpf[5:10] {
+		return false
+	}
+
+	return true
 }

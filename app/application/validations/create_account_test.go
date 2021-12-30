@@ -150,3 +150,12 @@ func Test_cpfIsValid(t *testing.T) {
 		t.Errorf("Valor calculado inválido")
 	}
 }
+
+func Test_cpfIsNotATestValue(t *testing.T) {
+	cpf := "11111111111"
+	result := cpfIsNotATestValue(cpf)
+
+	if result {
+		t.Errorf("CPF é com dados de teste")
+	}
+}
