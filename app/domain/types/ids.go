@@ -1,9 +1,7 @@
 package types
 
-type AccountID string
+type AccountExternalID string
 
-type TransferID string
+type TransferExternalID string
 
-type AccountOriginID string
-
-type AccountDestinyID string
+type TransferAccountID int

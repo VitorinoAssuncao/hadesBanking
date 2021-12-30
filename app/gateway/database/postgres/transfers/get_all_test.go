@@ -16,53 +16,38 @@ func Test_GetAll(t *testing.T) {
 	transferRepository := NewTransferRepository(database)
 	testCases := []struct {
 		name      string
-		input     transfer.Transfer
 		runBefore func(db *sql.DB)
 		want      int
 		wantErr   bool
 	}{
 		{
 			name: "localizados todas as transferencias para conta existente",
-			input: transfer.Transfer{
-				ExternalID:           "d3280f8c-570a-450d-89f7-3509bc84980d",
-				AccountOriginID:      "d3280f8c-570a-450d-89f7-3509bc84980d",
-				AccountDestinationID: "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Amount:               100,
-				CreatedAt:            time.Now(),
-			},
 			runBefore: func(db *sql.DB) {
-				truncateQuery := `TRUNCATE transfers`
-				_, err := db.Exec(truncateQuery)
-
-				if err != nil {
-					t.Errorf(err.Error())
-				}
-
-				sqlQuery := `
+				sqlQuery :=
+					`
 				INSERT INTO
-					transfers (account_origin_id, account_destiny_id, amount)
+					accounts (name, cpf, secret, balance)
 				VALUES
-					('d3280f8c-570a-450d-89f7-3509bc84980d', 'd3280f8c-570a-450d-89f7-3509bc84980d', 100)
+					('Joao da Silva', '38330499912', 'password', 100)
 				`
-				_, err = db.Exec(sqlQuery)
-
+				_, err := db.Exec(sqlQuery)
 				if err != nil {
 					t.Errorf(err.Error())
 				}
+
+				input := transfer.Transfer{
+					AccountOriginID:      1,
+					AccountDestinationID: 1,
+					Amount:               100,
+					CreatedAt:            time.Now(),
+				}
+				_, err = transferRepository.Create(ctx, input)
 			},
 			want:    1,
 			wantErr: false,
 		},
 		{
-			name:  "teste com o banco vazio, deve retornar lista vazia",
-			input: transfer.Transfer{},
-			runBefore: func(db *sql.DB) {
-				sqlQuery := `TRUNCATE transfers`
-				_, err := db.Exec(sqlQuery)
-				if err != nil {
-					t.Errorf(err.Error())
-				}
-			},
+			name:    "teste com o banco vazio, deve retornar lista vazia",
 			want:    0,
 			wantErr: false,
 		},
