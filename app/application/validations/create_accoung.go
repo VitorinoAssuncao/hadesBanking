@@ -18,6 +18,10 @@ func ValidateAccountInput(accountData input.CreateAccountVO) (input.CreateAccoun
 		return accountData, errorAccountCPFNotNumbers
 	}
 
+	if cpfIsNotATestValue(accountData.CPF) {
+		return accountData, errorAccountCPFInvalid
+	}
+
 	if !cpfIsValid(accountData.CPF) {
 		return accountData, errorAccountCPFInvalid
 	}
@@ -47,8 +51,16 @@ func cpfIsJustNumbers(cpf string) bool {
 }
 
 func cpfIsValid(cpf string) bool {
-	//TODO implementar regra de validação de cpf
-	return true
+	cpfArray := make([]int, 0)
+
+	for _, i := range cpf {
+		value := int(i) - '0' //subtração devolve o valor do inteiro corretamente (49 - valor de 1, - valor do 0 (48))
+		cpfArray = append(cpfArray, value)
+	}
+
+	firstDigit := calculateFirstVerifyingDigit(cpfArray[0:9])
+	secondDigit := calculateSecondVerifyingDigit(cpfArray[0:10])
+	return firstDigit == cpfArray[9] && secondDigit == cpfArray[10]
 }
 
 func secretIsNotEmpty(secret string) bool {
@@ -57,4 +69,45 @@ func secretIsNotEmpty(secret string) bool {
 
 func balanceIsPositive(balance int) bool {
 	return balance >= 0
+}
+
+func calculateFirstVerifyingDigit(values []int) int {
+	var total int
+	for index, value := range values {
+		total += ((index + 1) * value)
+	}
+	result := total % 11
+
+	if result == 10 {
+		return 0
+	}
+
+	return result
+}
+
+func calculateSecondVerifyingDigit(values []int) int {
+	var total int
+	for index, value := range values {
+		total += ((index) * value)
+	}
+	result := total % 11
+
+	if result == 10 {
+		return 0
+	}
+
+	return result
+}
+
+func cpfIsNotATestValue(cpf string) bool {
+	// Validação leva em conta se CPF apresenta dados inválidos de teste (todos os números iguais ou padrão sequencial 12345678901)
+	if cpf == "12345678901" {
+		return false
+	}
+
+	if cpf[0:5] == cpf[5:10] {
+		return false
+	}
+
+	return true
 }
