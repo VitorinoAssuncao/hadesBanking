@@ -44,26 +44,6 @@ func Test_cpfIsNotEmpty(t *testing.T) {
 	})
 }
 
-func Test_cpfIsJustNumber(t *testing.T) {
-	t.Run("CPF é apenas números", func(t *testing.T) {
-		cpf := "12345678912"
-		result := cpfIsJustNumbers(cpf)
-
-		if !result {
-			t.Errorf("CPF deverá conter apenas números")
-		}
-	})
-
-	t.Run("CPF contem simbolos", func(t *testing.T) {
-		cpf := "123.456.789-12"
-		result := cpfIsJustNumbers(cpf)
-
-		if result {
-			t.Errorf("CPF deverá conter apenas números")
-		}
-	})
-}
-
 func Test_secretIsNotEmpty(t *testing.T) {
 	t.Run("Senha não é vazia", func(t *testing.T) {
 		secret := "12345"
