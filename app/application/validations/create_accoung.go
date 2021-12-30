@@ -9,6 +9,10 @@ func ValidateAccountInput(accountData input.CreateAccountVO) (input.CreateAccoun
 		return accountData, errorAccountNameRequired
 	}
 
+	if !cpfIsRightSIze(accountData.CPF) {
+		return accountData, errorAccountCPFWrongSize
+	}
+
 	if !cpfIsNotEmpty(accountData.CPF) {
 		return accountData, errorAccountCPFRequired
 	}
@@ -38,6 +42,10 @@ func nameIsNotEmpty(name string) bool {
 
 func cpfIsNotEmpty(cpf string) bool {
 	return cpf != ""
+}
+
+func cpfIsRightSIze(cpf string) bool {
+	return len(cpf) == 11
 }
 
 func cpfIsValid(cpf string) bool {

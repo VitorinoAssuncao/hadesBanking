@@ -24,6 +24,16 @@ func Test_nameIsNotEmpty(t *testing.T) {
 	})
 }
 
+func Test_cpfIsRightSIze(t *testing.T) {
+	cpf := "11111111111"
+
+	result := cpfIsRightSIze(cpf)
+
+	if !result {
+		t.Errorf("CPF com tamanho incorreto")
+	}
+}
+
 func Test_cpfIsNotEmpty(t *testing.T) {
 	t.Run("CPF não é vazia", func(t *testing.T) {
 		cpf := "123456789"
