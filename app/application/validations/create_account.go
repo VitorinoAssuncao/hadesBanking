@@ -29,7 +29,7 @@ func ValidateAccountInput(accountData input.CreateAccountVO) (input.CreateAccoun
 }
 
 func validateName(name string) (bool, error) {
-	if name != "" {
+	if name == "" {
 		return false, errorAccountNameRequired
 	}
 
@@ -37,7 +37,7 @@ func validateName(name string) (bool, error) {
 }
 
 func validateCPF(cpf string) (bool, error) {
-	if cpf != "" {
+	if cpf == "" {
 		return false, errorAccountCPFRequired
 	}
 
