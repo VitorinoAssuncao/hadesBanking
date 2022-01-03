@@ -5,47 +5,70 @@ import (
 )
 
 func ValidateAccountInput(accountData input.CreateAccountVO) (input.CreateAccountVO, error) {
-	if !nameIsNotEmpty(accountData.Name) {
-		return accountData, errorAccountNameRequired
+	_, err := validateName(accountData.Name)
+	if err != nil {
+		return input.CreateAccountVO{}, err
 	}
 
-	if !cpfIsRightSIze(accountData.CPF) {
-		return accountData, errorAccountCPFWrongSize
+	_, err = validateCPF(accountData.CPF)
+	if err != nil {
+		return input.CreateAccountVO{}, err
 	}
 
-	if !cpfIsNotEmpty(accountData.CPF) {
-		return accountData, errorAccountCPFRequired
+	_, err = validateSecret(accountData.Secret)
+	if err != nil {
+		return input.CreateAccountVO{}, err
 	}
 
-	if cpfIsNotATestValue(accountData.CPF) {
-		return accountData, errorAccountCPFInvalid
-	}
-
-	if !cpfIsValid(accountData.CPF) {
-		return accountData, errorAccountCPFInvalid
-	}
-
-	if !secretIsNotEmpty(accountData.Secret) {
-		return accountData, errorAccountSecretRequired
-	}
-
-	if !balanceIsPositive(accountData.Balance) {
-		return accountData, errorAccountBalanceInvalid
+	_, err = validateBalance(accountData.Balance)
+	if err != nil {
+		return input.CreateAccountVO{}, err
 	}
 
 	return accountData, nil
 }
 
-func nameIsNotEmpty(name string) bool {
-	return name != ""
+func validateName(name string) (bool, error) {
+	if name != "" {
+		return false, errorAccountNameRequired
+	}
+
+	return true, nil
 }
 
-func cpfIsNotEmpty(cpf string) bool {
-	return cpf != ""
+func validateCPF(cpf string) (bool, error) {
+	if cpf != "" {
+		return false, errorAccountCPFRequired
+	}
+
+	if len(cpf) != 11 {
+		return false, errorAccountCPFWrongSize
+	}
+
+	if !cpfIsValid(cpf) {
+		return false, errorAccountCPFInvalid
+	}
+
+	if !cpfIsNotATestValue(cpf) {
+		return false, errorAccountCPFTestNumber
+	}
+	return true, nil
 }
 
-func cpfIsRightSIze(cpf string) bool {
-	return len(cpf) == 11
+func validateSecret(secret string) (bool, error) {
+	if secret == "" {
+		return false, errorAccountSecretRequired
+	}
+
+	return true, nil
+}
+
+func validateBalance(balance int) (bool, error) {
+	if balance < 0 {
+		return false, errorAccountBalanceInvalid
+	}
+
+	return true, nil
 }
 
 func cpfIsValid(cpf string) bool {
@@ -59,10 +82,6 @@ func cpfIsValid(cpf string) bool {
 	firstDigit := calculateFirstVerifyingDigit(cpfArray[0:9])
 	secondDigit := calculateSecondVerifyingDigit(cpfArray[0:10])
 	return firstDigit == cpfArray[9] && secondDigit == cpfArray[10]
-}
-
-func secretIsNotEmpty(secret string) bool {
-	return secret != ""
 }
 
 func balanceIsPositive(balance int) bool {
