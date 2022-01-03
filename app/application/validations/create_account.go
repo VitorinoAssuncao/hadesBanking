@@ -84,10 +84,6 @@ func cpfIsValid(cpf string) bool {
 	return firstDigit == cpfArray[9] && secondDigit == cpfArray[10]
 }
 
-func balanceIsPositive(balance int) bool {
-	return balance >= 0
-}
-
 func calculateFirstVerifyingDigit(values []int) int {
 	var total int
 	for index, value := range values {
@@ -118,11 +114,7 @@ func calculateSecondVerifyingDigit(values []int) int {
 
 func cpfIsNotATestValue(cpf string) bool {
 	// Validação leva em conta se CPF apresenta dados inválidos de teste (todos os números iguais ou padrão sequencial 12345678901)
-	if cpf == "12345678901" {
-		return false
-	}
-
-	if cpf[0:5] == cpf[5:10] {
+	if cpf == "12345678901" || cpf[0:5] == cpf[5:10] {
 		return false
 	}
 

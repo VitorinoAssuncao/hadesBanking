@@ -64,6 +64,28 @@ func Test_ValidateAccountInput(t *testing.T) {
 			wantErr: true,
 		},
 		{
+			name: "dados de entrada com cpf de tamanho incorreto, irá retornar dados de input vazios, e erro",
+			input: input.CreateAccountVO{
+				Name:    "Joao da Silva",
+				CPF:     "105453950",
+				Secret:  "123456",
+				Balance: 0,
+			},
+			want:    input.CreateAccountVO{},
+			wantErr: true,
+		},
+		{
+			name: "dados de entrada com cpf de teste, irá retornar dados de input vazios, e erro",
+			input: input.CreateAccountVO{
+				Name:    "Joao da Silva",
+				CPF:     "11111111111",
+				Secret:  "123456",
+				Balance: 0,
+			},
+			want:    input.CreateAccountVO{},
+			wantErr: true,
+		},
+		{
 			name: "dados de entrada com senha vazia, irá retornar dados de input vazios, e erro",
 			input: input.CreateAccountVO{
 				Name:    "Joao da Silva",
