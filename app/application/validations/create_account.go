@@ -1,53 +1,74 @@
 package validations
 
 import (
-	"regexp"
 	"stoneBanking/app/application/vo/input"
 )
 
 func ValidateAccountInput(accountData input.CreateAccountVO) (input.CreateAccountVO, error) {
-	if !nameIsNotEmpty(accountData.Name) {
-		return accountData, errorAccountNameRequired
+	_, err := validateName(accountData.Name)
+	if err != nil {
+		return input.CreateAccountVO{}, err
 	}
 
-	if !cpfIsNotEmpty(accountData.CPF) {
-		return accountData, errorAccountCPFRequired
+	_, err = validateCPF(accountData.CPF)
+	if err != nil {
+		return input.CreateAccountVO{}, err
 	}
 
-	if !cpfIsJustNumbers(accountData.CPF) {
-		return accountData, errorAccountCPFNotNumbers
+	_, err = validateSecret(accountData.Secret)
+	if err != nil {
+		return input.CreateAccountVO{}, err
 	}
 
-	if cpfIsNotATestValue(accountData.CPF) {
-		return accountData, errorAccountCPFInvalid
-	}
-
-	if !cpfIsValid(accountData.CPF) {
-		return accountData, errorAccountCPFInvalid
-	}
-
-	if !secretIsNotEmpty(accountData.Secret) {
-		return accountData, errorAccountSecretRequired
-	}
-
-	if !balanceIsPositive(accountData.Balance) {
-		return accountData, errorAccountBalanceInvalid
+	_, err = validateBalance(accountData.Balance)
+	if err != nil {
+		return input.CreateAccountVO{}, err
 	}
 
 	return accountData, nil
 }
 
-func nameIsNotEmpty(name string) bool {
-	return name != ""
+func validateName(name string) (bool, error) {
+	if name == "" {
+		return false, errorAccountNameRequired
+	}
+
+	return true, nil
 }
 
-func cpfIsNotEmpty(cpf string) bool {
-	return cpf != ""
+func validateCPF(cpf string) (bool, error) {
+	if cpf == "" {
+		return false, errorAccountCPFRequired
+	}
+
+	if len(cpf) != 11 {
+		return false, errorAccountCPFWrongSize
+	}
+
+	if !cpfIsValid(cpf) {
+		return false, errorAccountCPFInvalid
+	}
+
+	if !cpfIsNotATestValue(cpf) {
+		return false, errorAccountCPFTestNumber
+	}
+	return true, nil
 }
 
-func cpfIsJustNumbers(cpf string) bool {
-	p, _ := regexp.Compile("[^0-9]+")
-	return !(p.Match([]byte(cpf)))
+func validateSecret(secret string) (bool, error) {
+	if secret == "" {
+		return false, errorAccountSecretRequired
+	}
+
+	return true, nil
+}
+
+func validateBalance(balance int) (bool, error) {
+	if balance < 0 {
+		return false, errorAccountBalanceInvalid
+	}
+
+	return true, nil
 }
 
 func cpfIsValid(cpf string) bool {
@@ -61,14 +82,6 @@ func cpfIsValid(cpf string) bool {
 	firstDigit := calculateFirstVerifyingDigit(cpfArray[0:9])
 	secondDigit := calculateSecondVerifyingDigit(cpfArray[0:10])
 	return firstDigit == cpfArray[9] && secondDigit == cpfArray[10]
-}
-
-func secretIsNotEmpty(secret string) bool {
-	return secret != ""
-}
-
-func balanceIsPositive(balance int) bool {
-	return balance >= 0
 }
 
 func calculateFirstVerifyingDigit(values []int) int {
@@ -101,11 +114,7 @@ func calculateSecondVerifyingDigit(values []int) int {
 
 func cpfIsNotATestValue(cpf string) bool {
 	// Validação leva em conta se CPF apresenta dados inválidos de teste (todos os números iguais ou padrão sequencial 12345678901)
-	if cpf == "12345678901" {
-		return false
-	}
-
-	if cpf[0:5] == cpf[5:10] {
+	if cpf == "12345678901" || cpf[0:5] == cpf[5:10] {
 		return false
 	}
 
