@@ -47,7 +47,7 @@ func generetateToken(accountData account.Account) (signedToken string, err error
 	claims := &ClaimStruct{
 		User_id: accountData.ID,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Local().Add(time.Hour * time.Duration(2)).Unix(),
+			ExpiresAt: time.Now().Local().Add(2 * time.Hour).Unix(),
 			Issuer:    "vitorino",
 		},
 	}
