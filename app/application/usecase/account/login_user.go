@@ -18,7 +18,7 @@ type ClaimStruct struct {
 	User_id int
 }
 
-func (usecase *usecase) LoginUser(loginInput input.LoginVO) (output.LoginOutputVO, error) {
+func (usecase *usecase) LoginUser(ctx context.Context, loginInput input.LoginVO) (output.LoginOutputVO, error) {
 	loginInput.CPF = utils.TrimCPF(loginInput.CPF)
 	_, err := validations.ValidateLoginInputData(loginInput)
 	if err != nil {
@@ -27,16 +27,16 @@ func (usecase *usecase) LoginUser(loginInput input.LoginVO) (output.LoginOutputV
 
 	account, err := usecase.accountRepository.GetByCPF(context.Background(), loginInput.CPF)
 	if err != nil {
-		return output.LoginOutputVO{}, errorAccountLogin
+		return output.LoginOutputVO{}, ErrorAccountLogin
 	}
 
 	if !input.ValidateHash(account.Secret, loginInput.Secret) {
-		return output.LoginOutputVO{}, errorAccountLogin
+		return output.LoginOutputVO{}, ErrorAccountLogin
 	}
 
 	token, err := generetateToken(account)
 	if err != nil {
-		return output.LoginOutputVO{}, errorAccountTokenGeneration
+		return output.LoginOutputVO{}, ErrorAccountTokenGeneration
 	}
 
 	return output.LoginOutputVO{Token: token}, nil

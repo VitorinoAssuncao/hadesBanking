@@ -30,7 +30,7 @@ func ValidateAccountInput(accountData input.CreateAccountVO) (input.CreateAccoun
 
 func validateName(name string) (bool, error) {
 	if name == "" {
-		return false, errorAccountNameRequired
+		return false, ErrorAccountNameRequired
 	}
 
 	return true, nil
@@ -38,26 +38,26 @@ func validateName(name string) (bool, error) {
 
 func validateCPF(cpf string) (bool, error) {
 	if cpf == "" {
-		return false, errorAccountCPFRequired
+		return false, ErrorAccountCPFRequired
 	}
 
 	if len(cpf) != 11 {
-		return false, errorAccountCPFWrongSize
+		return false, ErrorAccountCPFWrongSize
 	}
 
 	if !cpfIsValid(cpf) {
-		return false, errorAccountCPFInvalid
+		return false, ErrorAccountCPFInvalid
 	}
 
 	if !cpfIsNotATestValue(cpf) {
-		return false, errorAccountCPFTestNumber
+		return false, ErrorAccountCPFTestNumber
 	}
 	return true, nil
 }
 
 func validateSecret(secret string) (bool, error) {
 	if secret == "" {
-		return false, errorAccountSecretRequired
+		return false, ErrorAccountSecretRequired
 	}
 
 	return true, nil
@@ -65,7 +65,7 @@ func validateSecret(secret string) (bool, error) {
 
 func validateBalance(balance int) (bool, error) {
 	if balance < 0 {
-		return false, errorAccountBalanceInvalid
+		return false, ErrorAccountBalanceInvalid
 	}
 
 	return true, nil

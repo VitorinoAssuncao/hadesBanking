@@ -20,7 +20,7 @@ func (usecase *usecase) Create(ctx context.Context, accountData input.CreateAcco
 	//validate if account with that cpf exist, if not continue the creation of a new account
 	if err == nil {
 		accountOutput = output.AccountToOutput(tempAccount)
-		return &accountOutput, errorAccountCPFExists
+		return &output.AccountOutputVO{}, ErrorAccountCPFExists
 	}
 
 	account := input.GenerateAccount(accountData)
@@ -28,10 +28,10 @@ func (usecase *usecase) Create(ctx context.Context, accountData input.CreateAcco
 	accountResult, err := usecase.accountRepository.Create(ctx, account)
 
 	if err != nil {
-		return &accountOutput, err
+		return &output.AccountOutputVO{}, ErrorCreateAccount
 	}
 
 	accountOutput = output.AccountToOutput(accountResult)
 
-	return &accountOutput, err
+	return &accountOutput, nil
 }

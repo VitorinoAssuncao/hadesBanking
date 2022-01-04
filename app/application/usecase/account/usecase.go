@@ -11,7 +11,7 @@ type Usecase interface {
 	Create(ctx context.Context, accountData input.CreateAccountVO) (*output.AccountOutputVO, error)
 	GetBalance(ctx context.Context, accountID string) (output.AccountBalanceVO, error)
 	GetAll(ctx context.Context) ([]output.AccountOutputVO, error)
-	LoginUser(ctx context.Context) (output.LoginOutputVO, error)
+	LoginUser(ctx context.Context, loginInput input.LoginVO) (output.LoginOutputVO, error)
 }
 
 type usecase struct {
