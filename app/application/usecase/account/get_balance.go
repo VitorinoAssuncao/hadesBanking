@@ -9,7 +9,7 @@ import (
 func (usecase *usecase) GetBalance(ctx context.Context, accountID string) (output.AccountBalanceVO, error) {
 	tempAccount, err := usecase.accountRepository.GetByID(ctx, types.AccountExternalID(accountID))
 	if err != nil {
-		return output.AccountBalanceVO{}, errorAccountIDNotFound
+		return output.AccountBalanceVO{}, ErrorAccountIDNotFound
 	}
 	return output.AccountBalanceVO{Balance: tempAccount.Balance.ToFloat()}, nil
 }

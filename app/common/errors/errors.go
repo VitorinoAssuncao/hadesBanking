@@ -4,12 +4,6 @@ package errors
 import "errors"
 
 var (
-	ErrorLoginCPFRequired    = errors.New("Campo CPF é obrigatório no login")
-	ErrorLoginSecretRequired = errors.New("Campo Senha é obrigatório no login")
-	ErrorLoginCPFNotFound    = errors.New("CPF Não localizado, favor validar o cadastro")
-	ErrorLoginSecretWrong    = errors.New("Senha incorreta, favor validar novamente")
-	ErrorLoginTokenCreation  = errors.New("Erro na geração do token")
-
 	ErrorAccountNotFound  = errors.New("Conta não localizada, favor validar o cpf")
 	ErrorGetAllAccounts   = errors.New("Erro ao buscar todas as contas")
 	ErrorAccountInvalidID = errors.New("ID de Conta informado inválido")

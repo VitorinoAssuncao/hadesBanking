@@ -27,16 +27,16 @@ func (usecase *usecase) LoginUser(ctx context.Context, loginInput input.LoginVO)
 
 	account, err := usecase.accountRepository.GetByCPF(context.Background(), loginInput.CPF)
 	if err != nil {
-		return output.LoginOutputVO{}, errorAccountLogin
+		return output.LoginOutputVO{}, ErrorAccountLogin
 	}
 
 	if !input.ValidateHash(account.Secret, loginInput.Secret) {
-		return output.LoginOutputVO{}, errorAccountLogin
+		return output.LoginOutputVO{}, ErrorAccountLogin
 	}
 
 	token, err := generetateToken(account)
 	if err != nil {
-		return output.LoginOutputVO{}, errorAccountTokenGeneration
+		return output.LoginOutputVO{}, ErrorAccountTokenGeneration
 	}
 
 	return output.LoginOutputVO{Token: token}, nil
