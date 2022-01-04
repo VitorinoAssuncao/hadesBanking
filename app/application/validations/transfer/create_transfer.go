@@ -5,15 +5,15 @@ import (
 )
 
 func ValidateTransferData(transferData input.CreateTransferVO) (input.CreateTransferVO, error) {
-	if transferData.AccountOrigin_ID == transferData.AccountDestiny_ID {
+	if transferData.AccountOriginID == transferData.AccountDestinyID {
 		return input.CreateTransferVO{}, ErrorTransferOriginEqualDestiny
 	}
 
-	if transferData.AccountOrigin_ID == "" {
+	if transferData.AccountOriginID == "" {
 		return input.CreateTransferVO{}, ErrorTransferAccountOriginIDRequired
 	}
 
-	if transferData.AccountDestiny_ID == "" {
+	if transferData.AccountDestinyID == "" {
 		return input.CreateTransferVO{}, ErrorTransferAccountDestinyIDRequired
 	}
 
