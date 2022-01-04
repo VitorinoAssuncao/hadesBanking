@@ -23,8 +23,8 @@ func Test_Create(t *testing.T) {
 		{
 			name: "conta cadastrada com sucesso, quando dados corretos",
 			input: transfer.Transfer{
-				AccountOriginID:      1,
-				AccountDestinationID: 1,
+				AccountOriginID:      "1a05b9b9-6949-40ed-bcfa-aa5c3dd6a88e",
+				AccountDestinationID: "7808ae45-ec59-44cd-9458-277564ce7775",
 				Amount:               100,
 			},
 			runBefore: func(db *sql.DB) {
@@ -41,8 +41,8 @@ func Test_Create(t *testing.T) {
 				}
 			},
 			want: transfer.Transfer{
-				AccountOriginID:      1,
-				AccountDestinationID: 1,
+				AccountOriginID:      "1a05b9b9-6949-40ed-bcfa-aa5c3dd6a88e",
+				AccountDestinationID: "7808ae45-ec59-44cd-9458-277564ce7775",
 				Amount:               100,
 			},
 			wantErr: false,
