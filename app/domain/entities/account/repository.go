@@ -10,4 +10,5 @@ type Repository interface {
 	GetByID(ctx context.Context, accountID types.AccountExternalID) (Account, error)
 	GetByCPF(ctx context.Context, accountCPF string) (Account, error)
 	GetAll(ctx context.Context) ([]Account, error)
+	UpdateBalance(ctx context.Context, value int, externalID types.AccountExternalID) (bool, error)
 }
