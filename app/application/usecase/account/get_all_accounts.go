@@ -10,7 +10,6 @@ func (usecase *usecase) GetAll(ctx context.Context) ([]output.AccountOutputVO, e
 	var accounts = make([]account.Account, 0)
 	var resultAccounts = make([]output.AccountOutputVO, 0)
 	accounts, err := usecase.accountRepository.GetAll(ctx)
-
 	if err != nil {
 		return resultAccounts, ErrorAccountsListing
 	}
