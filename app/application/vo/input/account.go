@@ -1,7 +1,7 @@
 package input
 
 import (
-	"regexp"
+	"stoneBanking/app/common/utils"
 	"stoneBanking/app/domain/entities/account"
 	"stoneBanking/app/domain/types"
 	"time"
@@ -19,7 +19,7 @@ type CreateAccountVO struct {
 func GenerateAccount(inputAccount CreateAccountVO) account.Account {
 	account := account.Account{
 		Name:      inputAccount.Name,
-		CPF:       trimCPF(inputAccount.CPF),
+		CPF:       utils.TrimCPF(inputAccount.CPF),
 		Secret:    HashPassword(inputAccount.Secret),
 		Balance:   types.Money(inputAccount.Balance),
 		CreatedAt: time.Now(),
@@ -35,10 +35,4 @@ func HashPassword(text string) string {
 func ValidateHash(accountSecret, loginSecret string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(accountSecret), []byte(loginSecret))
 	return err == nil
-}
-
-func trimCPF(cpf string) (result string) {
-	regex := regexp.MustCompile("[^0-9]+")
-	result = regex.ReplaceAllString(cpf, "")
-	return result
 }

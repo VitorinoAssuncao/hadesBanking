@@ -1,14 +1,14 @@
 package accounts
 
 import (
-	"stoneBanking/app/application/usecase"
+	account_usecase "stoneBanking/app/application/usecase/account"
 )
 
 type Controller struct {
-	usecase usecase.Usecase
+	usecase account_usecase.Usecase
 }
 
-func New(useCase usecase.Usecase) Controller {
+func New(useCase account_usecase.Usecase) Controller {
 	return Controller{
 		usecase: useCase,
 	}
