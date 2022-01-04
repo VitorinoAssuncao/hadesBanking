@@ -18,7 +18,7 @@ type ClaimStruct struct {
 	User_id int
 }
 
-func (usecase *usecase) LoginUser(loginInput input.LoginVO) (output.LoginOutputVO, error) {
+func (usecase *usecase) LoginUser(ctx context.Context, loginInput input.LoginVO) (output.LoginOutputVO, error) {
 	loginInput.CPF = utils.TrimCPF(loginInput.CPF)
 	_, err := validations.ValidateLoginInputData(loginInput)
 	if err != nil {
