@@ -3,6 +3,11 @@ package errors
 //TODO Separar os erros em suas camadas aprópriadas
 import "errors"
 
+type CustomError struct {
+	InternalError error
+	ExternalError error
+}
+
 var (
 	ErrorAccountNotFound  = errors.New("Conta não localizada, favor validar o cpf")
 	ErrorGetAllAccounts   = errors.New("Erro ao buscar todas as contas")
