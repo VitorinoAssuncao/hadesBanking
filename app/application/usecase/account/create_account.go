@@ -5,11 +5,14 @@ import (
 	validations "stoneBanking/app/application/validations/account"
 	"stoneBanking/app/application/vo/input"
 	"stoneBanking/app/application/vo/output"
+	"stoneBanking/app/common/utils"
 )
 
 func (usecase *usecase) Create(ctx context.Context, accountData input.CreateAccountVO) (*output.AccountOutputVO, error) {
 	var accountOutput output.AccountOutputVO
 	var err error
+
+	accountData.CPF = utils.TrimCPF(accountData.CPF)
 	accountData, err = validations.ValidateAccountInput(accountData)
 
 	if err != nil {

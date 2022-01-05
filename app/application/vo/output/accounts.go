@@ -18,7 +18,7 @@ type AccountBalanceVO struct {
 
 func AccountToOutput(account account.Account) AccountOutputVO {
 	accountOutput := AccountOutputVO{
-		ID:         string(account.ID),
+		ID:         string(account.ExternalID),
 		Name:       account.Name,
 		CPF:        account.CPF,
 		Balance:    account.Balance.ToFloat(),
