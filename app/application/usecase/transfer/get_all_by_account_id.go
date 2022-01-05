@@ -6,7 +6,7 @@ import (
 	"stoneBanking/app/domain/types"
 )
 
-func (usecase *usecase) GetAllByID(ctx context.Context, accountID types.AccountExternalID) ([]output.TransferOutputVO, error) {
+func (usecase *usecase) GetAllByAccountID(ctx context.Context, accountID types.AccountExternalID) ([]output.TransferOutputVO, error) {
 	var resultTransfers = make([]output.TransferOutputVO, 0)
 
 	account, err := usecase.accountRepository.GetByID(ctx, accountID)
