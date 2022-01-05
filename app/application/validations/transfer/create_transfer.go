@@ -21,5 +21,5 @@ func ValidateTransferData(transferData input.CreateTransferVO) (input.CreateTran
 		return input.CreateTransferVO{}, ErrorTransferAmountInvalid
 	}
 
-	return input.CreateTransferVO{}, nil
+	return transferData, nil
 }
