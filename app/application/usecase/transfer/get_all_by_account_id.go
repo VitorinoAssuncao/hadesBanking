@@ -8,7 +8,13 @@ import (
 
 func (usecase *usecase) GetAllByID(ctx context.Context, accountID types.AccountExternalID) ([]output.TransferOutputVO, error) {
 	var resultTransfers = make([]output.TransferOutputVO, 0)
-	transfers, err := usecase.transferRepository.GetAllByAccountID(ctx, accountID)
+
+	account, err := usecase.accountRepository.GetByID(ctx, accountID)
+	if err != nil {
+		return resultTransfers, err
+	}
+
+	transfers, err := usecase.transferRepository.GetAllByAccountID(ctx, types.InternalID(account.ID))
 	if err != nil {
 		return resultTransfers, err
 	}
