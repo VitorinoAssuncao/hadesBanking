@@ -43,7 +43,7 @@ func (usecase *usecase) LoginUser(ctx context.Context, loginInput input.LoginVO)
 }
 
 func generetateToken(accountData account.Account) (signedToken string, err error) {
-	mySigningKey := os.Getenv("SIGN_KEY")
+	mySigningKey := []byte(os.Getenv("SIGN_KEY"))
 	claims := &ClaimStruct{
 		User_id: accountData.ID,
 		StandardClaims: jwt.StandardClaims{
@@ -54,9 +54,9 @@ func generetateToken(accountData account.Account) (signedToken string, err error
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	signedToken, err = token.SignedString(mySigningKey)
+
 	if err != nil {
 		println("Erro na geração do token")
 	}
-
 	return signedToken, nil
 }
