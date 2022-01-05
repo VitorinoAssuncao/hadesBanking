@@ -36,8 +36,8 @@ func Test_GetAll(t *testing.T) {
 				}
 
 				input := transfer.Transfer{
-					AccountOriginID:      "1a05b9b9-6949-40ed-bcfa-aa5c3dd6a88e",
-					AccountDestinationID: "7808ae45-ec59-44cd-9458-277564ce7775",
+					AccountOriginID:      1,
+					AccountDestinationID: 1,
 					Amount:               100,
 					CreatedAt:            time.Now(),
 				}

@@ -3,3 +3,5 @@ package types
 type AccountExternalID string
 
 type TransferExternalID string
+
+type InternalID int

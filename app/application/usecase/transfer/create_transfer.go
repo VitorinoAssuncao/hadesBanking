@@ -31,8 +31,8 @@ func (usecase *usecase) Create(ctx context.Context, transferData input.CreateTra
 	}
 
 	transfer := transfer.Transfer{
-		AccountOriginID:      types.AccountExternalID(transferData.AccountOriginID),
-		AccountDestinationID: types.AccountExternalID(transferData.AccountDestinyID),
+		AccountOriginID:      types.InternalID(accountOrigin.ID),
+		AccountDestinationID: types.InternalID(accountDestiny.ID),
 		Amount:               types.Money(transferData.Amount),
 	}
 
