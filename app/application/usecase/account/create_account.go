@@ -2,7 +2,7 @@ package account
 
 import (
 	"context"
-	"stoneBanking/app/application/validations"
+	validations "stoneBanking/app/application/validations/account"
 	"stoneBanking/app/application/vo/input"
 	"stoneBanking/app/application/vo/output"
 )

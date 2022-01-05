@@ -4,4 +4,4 @@ type AccountExternalID string
 
 type TransferExternalID string
 
-type TransferAccountID int
+type InternalID int

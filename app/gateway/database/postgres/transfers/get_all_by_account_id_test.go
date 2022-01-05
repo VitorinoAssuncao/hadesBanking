@@ -3,6 +3,7 @@ package transfer
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"stoneBanking/app/domain/entities/transfer"
 	"stoneBanking/app/domain/types"
 	"testing"
@@ -17,7 +18,7 @@ func Test_GetAllByID(t *testing.T) {
 	transferRepository := NewTransferRepository(database)
 	testCases := []struct {
 		name      string
-		runBefore func(db *sql.DB) (value int)
+		runBefore func(db *sql.DB) (value types.InternalID)
 		input     int
 		want      int
 		wantErr   bool
@@ -25,7 +26,7 @@ func Test_GetAllByID(t *testing.T) {
 		{
 			name: "conta localizada, quando usado o id correto",
 
-			runBefore: func(db *sql.DB) (value int) {
+			runBefore: func(db *sql.DB) (value types.InternalID) {
 				sqlQuery :=
 					`
 				INSERT INTO
@@ -45,14 +46,17 @@ func Test_GetAllByID(t *testing.T) {
 					CreatedAt:            time.Now(),
 				}
 				created, err := transferRepository.Create(ctx, input)
-				return int(created.AccountOriginID)
+				if err != nil {
+					t.Errorf("Não foi possível inicializar o teste")
+				}
+				return created.ID
 			},
 			want:    1,
 			wantErr: false,
 		},
 		{
 			name:    "conta não localizada, pois id não existe",
-			input:   99,
+			input:   91,
 			want:    0,
 			wantErr: false,
 		},
@@ -62,9 +66,10 @@ func Test_GetAllByID(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			TruncateTable(database)
 			if test.runBefore != nil {
-				test.input = test.runBefore(database)
+				fmt.Println("valor:", test.runBefore(database))
+				test.input = 1
 			}
-			got, err := transferRepository.GetAllByAccountID(ctx, types.TransferAccountID(test.input))
+			got, err := transferRepository.GetAllByAccountID(ctx, types.InternalID(test.input))
 			assert.Equal(t, (err != nil), test.wantErr)
 			assert.Equal(t, test.want, len(got))
 		})
