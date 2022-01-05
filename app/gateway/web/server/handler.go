@@ -16,6 +16,7 @@ func New(usecase *UseCaseWrapper) *Server {
 	router := mux.NewRouter().StrictSlash(true)
 	controller := accounts.New(usecase.Accounts)
 	router.HandleFunc("/account", controller.Create).Methods("POST")
+	router.HandleFunc("/account/login", controller.LoginUser).Methods("POST")
 	router.HandleFunc("/accounts", controller.GetAll).Methods("GET")
 	router.HandleFunc("/account/{user_id}/balance", controller.GetBalance).Methods("GET")
 	log.Fatal(http.ListenAndServe(":3000", router))
