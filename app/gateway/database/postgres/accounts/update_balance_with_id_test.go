@@ -56,9 +56,8 @@ func Test_UpdateBalance(t *testing.T) {
 			if test.runBefore != nil {
 				test.inputID = string(test.runBefore())
 			}
-			got, err := accountRepository.UpdateBalance(ctx, test.inputValue, types.AccountExternalID(test.inputID))
+			err := accountRepository.UpdateBalance(ctx, test.inputValue, types.AccountExternalID(test.inputID))
 			assert.Equal(t, (err != nil), test.wantErr)
-			assert.Equal(t, test.want, got)
 		})
 	}
 }
