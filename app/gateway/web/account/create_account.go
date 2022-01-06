@@ -8,7 +8,7 @@ import (
 )
 
 func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
-	var account_data = &input.CreateAccountVO{}
+	var accountData = &input.CreateAccountVO{}
 	//var connection = database_connector.RetrieveConnection()
 
 	reqBody, err := ioutil.ReadAll(r.Body)
@@ -17,9 +17,9 @@ func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	json.Unmarshal(reqBody, &account_data)
+	json.Unmarshal(reqBody, &accountData)
 
-	account_output, err := controller.usecase.Create(r.Context(), *account_data)
+	account_output, err := controller.usecase.Create(r.Context(), *accountData)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
