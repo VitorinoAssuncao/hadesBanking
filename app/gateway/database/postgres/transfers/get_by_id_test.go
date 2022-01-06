@@ -38,8 +38,10 @@ func Test_GetByID(t *testing.T) {
 				}
 
 				input := transfer.Transfer{
-					Amount:    100,
-					CreatedAt: time.Now(),
+					Amount:               100,
+					AccountOriginID:      1,
+					AccountDestinationID: 1,
+					CreatedAt:            time.Now(),
 				}
 				created, err := transferRepository.Create(ctx, input)
 
@@ -50,8 +52,10 @@ func Test_GetByID(t *testing.T) {
 				return string(created.ExternalID)
 			},
 			want: transfer.Transfer{
-				Amount:    100,
-				CreatedAt: time.Now(),
+				Amount:               100,
+				AccountOriginID:      1,
+				AccountDestinationID: 1,
+				CreatedAt:            time.Now(),
 			},
 			wantErr: false,
 		},
