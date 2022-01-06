@@ -13,8 +13,8 @@ type TransferOutputVO struct {
 func TransferToTransferOutput(transfer transfer.Transfer) TransferOutputVO {
 	transferOutput := TransferOutputVO{
 		ID:               string(transfer.ExternalID),
-		AccountOriginID:  string(transfer.AccountOriginID),
-		AccountDestinyID: string(transfer.AccountDestinationID),
+		AccountOriginID:  string(transfer.AccountOriginExternalID),
+		AccountDestinyID: string(transfer.AccountDestinationExternalID),
 		Amount:           transfer.Amount.ToFloat(),
 		Created_At:       transfer.CreatedAt.Format("2006-01-02T15:04:05Z07:00"),
 	}

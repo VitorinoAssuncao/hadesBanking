@@ -6,10 +6,12 @@ import (
 )
 
 type Transfer struct {
-	ID                   types.InternalID
-	ExternalID           types.TransferExternalID
-	AccountOriginID      types.InternalID
-	AccountDestinationID types.InternalID
-	Amount               types.Money
-	CreatedAt            time.Time
+	ID                           types.InternalID
+	ExternalID                   types.TransferExternalID
+	AccountOriginID              types.InternalID
+	AccountOriginExternalID      types.AccountExternalID
+	AccountDestinationID         types.InternalID
+	AccountDestinationExternalID types.AccountExternalID
+	Amount                       types.Money
+	CreatedAt                    time.Time
 }
