@@ -6,7 +6,7 @@ import (
 	"stoneBanking/app/domain/types"
 )
 
-func (r transferRepository) GetByID(ctx context.Context, transferID types.TransferExternalID) (transfer.Transfer, error) {
+func (r transferRepository) GetByID(ctx context.Context, transferID types.ExternalID) (transfer.Transfer, error) {
 	const sqlQuery = `
 	SELECT 
 		id,external_id, account_origin_id, account_destiny_id, amount, created_at

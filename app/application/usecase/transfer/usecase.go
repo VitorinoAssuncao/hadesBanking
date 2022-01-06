@@ -11,7 +11,7 @@ import (
 
 type Usecase interface {
 	Create(ctx context.Context, transferData input.CreateTransferVO) (*output.TransferOutputVO, error)
-	GetAllByAccountID(ctx context.Context, accountID types.AccountExternalID) ([]output.TransferOutputVO, error)
+	GetAllByAccountID(ctx context.Context, accountID types.ExternalID) ([]output.TransferOutputVO, error)
 }
 
 type usecase struct {

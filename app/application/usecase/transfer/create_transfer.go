@@ -16,12 +16,12 @@ func (usecase *usecase) Create(ctx context.Context, transferData input.CreateTra
 		return &output.TransferOutputVO{}, err
 	}
 
-	accountOrigin, err := usecase.accountRepository.GetByID(ctx, types.AccountExternalID(transferData.AccountOriginID))
+	accountOrigin, err := usecase.accountRepository.GetByID(ctx, types.ExternalID(transferData.AccountOriginID))
 	if err != nil {
 		return &output.TransferOutputVO{}, ErrorTransferCreateOriginError
 	}
 
-	accountDestiny, err := usecase.accountRepository.GetByID(ctx, types.AccountExternalID(transferData.AccountDestinyID))
+	accountDestiny, err := usecase.accountRepository.GetByID(ctx, types.ExternalID(transferData.AccountDestinyID))
 	if err != nil {
 		return &output.TransferOutputVO{}, ErrorTransferCreateOriginError
 	}
@@ -32,10 +32,10 @@ func (usecase *usecase) Create(ctx context.Context, transferData input.CreateTra
 
 	transfer := transfer.Transfer{
 		AccountOriginID:              types.InternalID(accountOrigin.ID),
-		AccountOriginExternalID:      types.AccountExternalID(accountOrigin.ExternalID),
+		AccountOriginExternalID:      types.ExternalID(accountOrigin.ExternalID),
 		AccountOriginName:            accountOrigin.Name,
 		AccountDestinationID:         types.InternalID(accountDestiny.ID),
-		AccountDestinationExternalID: types.AccountExternalID(accountDestiny.ExternalID),
+		AccountDestinationExternalID: types.ExternalID(accountDestiny.ExternalID),
 		AccountDestinationName:       accountDestiny.Name,
 		Amount:                       types.Money(transferData.Amount),
 	}

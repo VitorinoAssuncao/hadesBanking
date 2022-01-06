@@ -16,13 +16,13 @@ func Test_GetByID(t *testing.T) {
 	testCases := []struct {
 		name      string
 		want      account.Account
-		runBefore func() (value types.AccountExternalID)
-		input     types.AccountExternalID
+		runBefore func() (value types.ExternalID)
+		input     types.ExternalID
 		wantErr   bool
 	}{
 		{
 			name: "localizado a conta usando o ID externo (uuid), e retorna os dados da mesma ",
-			runBefore: func() (value types.AccountExternalID) {
+			runBefore: func() (value types.ExternalID) {
 				input := account.Account{
 					Name:    "Joao da Silva",
 					CPF:     "38330499912",
@@ -57,7 +57,7 @@ func Test_GetByID(t *testing.T) {
 			if test.runBefore != nil {
 				test.input = test.runBefore()
 			}
-			got, err := accountRepository.GetByID(ctx, types.AccountExternalID(test.input))
+			got, err := accountRepository.GetByID(ctx, types.ExternalID(test.input))
 			if err == nil {
 				test.want.CreatedAt = got.CreatedAt
 				test.want.ID = got.ID

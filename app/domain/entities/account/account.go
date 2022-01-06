@@ -7,7 +7,7 @@ import (
 
 type Account struct {
 	ID         int
-	ExternalID types.AccountExternalID
+	ExternalID types.ExternalID
 	Name       string
 	CPF        string
 	Secret     string

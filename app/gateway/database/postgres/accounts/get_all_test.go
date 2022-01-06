@@ -34,6 +34,9 @@ func Test_GetAll(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			TruncateTable(database)
 			_, err := accountRepository.Create(ctx, test.input)
+			if err != nil {
+				t.Errorf("Não foi possível criar uma conta")
+			}
 			got, err := accountRepository.GetAll(ctx)
 			assert.Equal(t, (err != nil), test.wantErr)
 			assert.Equal(t, test.want, len(got))
