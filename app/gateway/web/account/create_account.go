@@ -9,7 +9,6 @@ import (
 
 func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
 	var accountData = &input.CreateAccountVO{}
-	//var connection = database_connector.RetrieveConnection()
 
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
