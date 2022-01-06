@@ -13,7 +13,6 @@ func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Re
 	vars := mux.Vars(r)
 	accountId := vars["account_id"]
 	transfersOutput, err := controller.usecase.GetAllByAccountID(context.Background(), types.AccountExternalID(accountId))
-
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
