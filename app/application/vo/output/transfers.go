@@ -3,7 +3,7 @@ package output
 import "stoneBanking/app/domain/entities/transfer"
 
 type TransferOutputVO struct {
-	ID                 string  `json:"transfer_id" example:"1"`
+	ID                 string  `json:"id" example:"1"`
 	AccountOriginName  string  `json:"account_origin_name" example:"1"`
 	AccountDestinyName string  `json:"account_destiny_name" example:"3"`
 	Amount             float64 `json:"value" example:"123.32"`

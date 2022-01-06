@@ -5,7 +5,7 @@ import (
 )
 
 type AccountOutputVO struct {
-	ID         string  `json:"account_id" example:"123"`
+	ID         string  `json:"id" example:"123"`
 	Name       string  `json:"name" example:"João da Silva"`
 	CPF        string  `json:"cpf" example:"600.246.058-67"`
 	Balance    float64 `json:"balance" example:"10.00"`
