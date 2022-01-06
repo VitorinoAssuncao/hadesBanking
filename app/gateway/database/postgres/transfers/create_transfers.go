@@ -33,11 +33,12 @@ func (r transferRepository) Create(ctx context.Context, transferData transfer.Tr
 		id = $1
 	`
 
-	tx, err := r.db.Begin()
+	tx, err := r.db.BeginTx(ctx, nil)
 	if err != nil {
 		return transfer.Transfer{}, err
 	}
 
+	defer tx.Rollback()
 	row := tx.QueryRow(
 		sqlQueryCreate,
 		transferData.AccountOriginID,
@@ -46,19 +47,16 @@ func (r transferRepository) Create(ctx context.Context, transferData transfer.Tr
 
 	err = row.Scan(&transferData.ID, &transferData.ExternalID, &transferData.CreatedAt)
 	if err != nil {
-		tx.Rollback()
 		return transfer.Transfer{}, err
 	}
 
 	_, err = tx.Exec(sqlQueryUpdateOrigin, transferData.AccountOriginID, transferData.Amount)
 	if err != nil {
-		tx.Rollback()
 		return transfer.Transfer{}, err
 	}
 
 	_, err = tx.Exec(sqlQueryUpdateDestiny, transferData.AccountDestinationID, transferData.Amount)
 	if err != nil {
-		tx.Rollback()
 		return transfer.Transfer{}, err
 	}
 
