@@ -21,6 +21,7 @@ func (controller Controller) Create(w http.ResponseWriter, r *http.Request) {
 	transferOutput, err := controller.usecase.Create(context.Background(), transferData)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	json.NewEncoder(w).Encode(transferOutput)
