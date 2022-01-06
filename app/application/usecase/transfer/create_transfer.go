@@ -40,11 +40,6 @@ func (usecase *usecase) Create(ctx context.Context, transferData input.CreateTra
 		Amount:                       types.Money(transferData.Amount),
 	}
 
-	accountOrigin.Balance -= types.Money(transferData.Amount)
-	accountDestiny.Balance += types.Money(transferData.Amount)
-
-	usecase.accountRepository.UpdateBalance(ctx, accountOrigin.Balance.ToInt(), accountOrigin.ExternalID)
-	usecase.accountRepository.UpdateBalance(ctx, accountDestiny.Balance.ToInt(), accountDestiny.ExternalID)
 	transfer, err = usecase.transferRepository.Create(ctx, transfer)
 	if err != nil {
 		return &output.TransferOutputVO{}, err
