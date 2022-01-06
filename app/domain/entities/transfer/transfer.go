@@ -10,8 +10,10 @@ type Transfer struct {
 	ExternalID                   types.TransferExternalID
 	AccountOriginID              types.InternalID
 	AccountOriginExternalID      types.AccountExternalID
+	AccountOriginName            string
 	AccountDestinationID         types.InternalID
 	AccountDestinationExternalID types.AccountExternalID
+	AccountDestinationName       string
 	Amount                       types.Money
 	CreatedAt                    time.Time
 }
