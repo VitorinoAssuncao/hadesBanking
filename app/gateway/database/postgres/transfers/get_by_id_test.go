@@ -42,6 +42,11 @@ func Test_GetByID(t *testing.T) {
 					CreatedAt: time.Now(),
 				}
 				created, err := transferRepository.Create(ctx, input)
+
+				if err != nil {
+					t.Errorf("Não foi possível inicializar os dados iniciais do teste")
+				}
+
 				return string(created.ExternalID)
 			},
 			want: transfer.Transfer{
