@@ -5,6 +5,7 @@ import (
 	"os"
 	"stoneBanking/app/common/utils"
 	"stoneBanking/app/domain/entities/account"
+	customError "stoneBanking/app/domain/errors"
 	"time"
 
 	"github.com/golang-jwt/jwt"
@@ -19,16 +20,16 @@ func (usecase *usecase) LoginUser(ctx context.Context, loginInput account.Accoun
 
 	tempAccount, err := usecase.accountRepository.GetByCPF(context.Background(), loginInput.CPF)
 	if err != nil {
-		return "", ErrorAccountLogin
+		return "", customError.ErrorAccountLogin
 	}
 
 	if !utils.ValidateHash(tempAccount.Secret, loginInput.Secret) {
-		return "", ErrorAccountLogin
+		return "", customError.ErrorAccountLogin
 	}
 
 	token, err := generetateToken(tempAccount)
 	if err != nil {
-		return "", ErrorAccountTokenGeneration
+		return "", customError.ErrorAccountTokenGeneration
 	}
 
 	return token, nil

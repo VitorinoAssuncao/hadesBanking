@@ -1,14 +1,17 @@
 package input
 
-import "stoneBanking/app/gateway/web/account/vo/input"
+import (
+	customError "stoneBanking/app/domain/errors"
+	"stoneBanking/app/gateway/web/account/vo/input"
+)
 
 func ValidateLoginInputData(input input.LoginVO) error {
 	if input.CPF == "" {
-		return ErrorAccountCPFRequired
+		return customError.ErrorAccountCPFRequired
 	}
 
 	if input.Secret == "" {
-		return ErrorAccountSecretRequired
+		return customError.ErrorAccountSecretRequired
 	}
 
 	return nil
