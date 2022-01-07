@@ -5,7 +5,9 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
-	"stoneBanking/app/application/vo/input"
+	"stoneBanking/app/gateway/web/transfer/vo/input"
+	validations "stoneBanking/app/gateway/web/transfer/vo/input/validations/transfer"
+	"stoneBanking/app/gateway/web/transfer/vo/output"
 )
 
 func (controller Controller) Create(w http.ResponseWriter, r *http.Request) {
@@ -18,11 +20,18 @@ func (controller Controller) Create(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(reqBody, &transferData)
 
-	transferOutput, err := controller.usecase.Create(context.Background(), transferData)
+	transferData, err = validations.ValidateTransferData(transferData)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	}
+
+	transfer := input.GenerateTransfer(transferData)
+	newTransfer, err := controller.usecase.Create(context.Background(), transfer)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
+	transferOutput := output.TransferToTransferOutput(newTransfer)
 	json.NewEncoder(w).Encode(transferOutput)
 }

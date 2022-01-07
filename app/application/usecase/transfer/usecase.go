@@ -2,16 +2,14 @@ package transfer
 
 import (
 	"context"
-	"stoneBanking/app/application/vo/input"
-	"stoneBanking/app/application/vo/output"
 	"stoneBanking/app/domain/entities/account"
 	"stoneBanking/app/domain/entities/transfer"
 	"stoneBanking/app/domain/types"
 )
 
 type Usecase interface {
-	Create(ctx context.Context, transferData input.CreateTransferVO) (*output.TransferOutputVO, error)
-	GetAllByAccountID(ctx context.Context, accountID types.ExternalID) ([]output.TransferOutputVO, error)
+	Create(ctx context.Context, transferData transfer.Transfer) (transfer.Transfer, error)
+	GetAllByAccountID(ctx context.Context, accountID types.ExternalID) ([]transfer.Transfer, error)
 }
 
 type usecase struct {

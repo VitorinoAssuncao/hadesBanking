@@ -2,12 +2,12 @@ package transfer
 
 import (
 	"context"
-	"stoneBanking/app/application/vo/output"
+	"stoneBanking/app/domain/entities/transfer"
 	"stoneBanking/app/domain/types"
 )
 
-func (usecase *usecase) GetAllByAccountID(ctx context.Context, accountID types.ExternalID) ([]output.TransferOutputVO, error) {
-	var resultTransfers = make([]output.TransferOutputVO, 0)
+func (usecase *usecase) GetAllByAccountID(ctx context.Context, accountID types.ExternalID) ([]transfer.Transfer, error) {
+	var resultTransfers = make([]transfer.Transfer, 0)
 
 	account, err := usecase.accountRepository.GetByID(ctx, accountID)
 	if err != nil {
@@ -19,10 +19,5 @@ func (usecase *usecase) GetAllByAccountID(ctx context.Context, accountID types.E
 		return resultTransfers, err
 	}
 
-	for _, transfer := range transfers {
-		transferOutput := output.TransferToTransferOutput(transfer)
-		resultTransfers = append(resultTransfers, transferOutput)
-	}
-
-	return resultTransfers, nil
+	return transfers, nil
 }

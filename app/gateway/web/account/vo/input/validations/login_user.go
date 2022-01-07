@@ -1,8 +1,6 @@
-package validations
+package input
 
-import (
-	"stoneBanking/app/application/vo/input"
-)
+import "stoneBanking/app/gateway/web/account/vo/input"
 
 func ValidateLoginInputData(input input.LoginVO) error {
 	if input.CPF == "" {

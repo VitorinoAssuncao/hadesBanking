@@ -2,16 +2,14 @@ package account
 
 import (
 	"context"
-	"stoneBanking/app/application/vo/input"
-	"stoneBanking/app/application/vo/output"
 	"stoneBanking/app/domain/entities/account"
 )
 
 type Usecase interface {
-	Create(ctx context.Context, accountData input.CreateAccountVO) (*output.AccountOutputVO, error)
-	GetBalance(ctx context.Context, accountID string) (output.AccountBalanceVO, error)
-	GetAll(ctx context.Context) ([]output.AccountOutputVO, error)
-	LoginUser(ctx context.Context, loginInput input.LoginVO) (output.LoginOutputVO, error)
+	Create(ctx context.Context, accountData account.Account) (account.Account, error)
+	GetBalance(ctx context.Context, accountID string) (float64, error)
+	GetAll(ctx context.Context) ([]account.Account, error)
+	LoginUser(ctx context.Context, loginInput account.Account) (string, error)
 }
 
 type usecase struct {

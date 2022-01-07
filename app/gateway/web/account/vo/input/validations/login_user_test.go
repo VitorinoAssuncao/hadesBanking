@@ -1,7 +1,7 @@
-package validations
+package input
 
 import (
-	"stoneBanking/app/application/vo/input"
+	"stoneBanking/app/gateway/web/account/vo/input"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
