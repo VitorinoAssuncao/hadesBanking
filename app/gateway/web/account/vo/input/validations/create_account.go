@@ -11,12 +11,12 @@ func ValidateAccountInput(accountData input.CreateAccountVO) (input.CreateAccoun
 		return input.CreateAccountVO{}, err
 	}
 
-	_, err = validateCPF(accountData.CPF)
+	_, err = validateCPF(accountData.CPF.ToString())
 	if err != nil {
 		return input.CreateAccountVO{}, err
 	}
 
-	_, err = validateSecret(accountData.Secret)
+	_, err = validateSecret(accountData.Secret.ToString())
 	if err != nil {
 		return input.CreateAccountVO{}, err
 	}

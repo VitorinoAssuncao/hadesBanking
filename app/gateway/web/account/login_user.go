@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"stoneBanking/app/domain/entities/account"
+	"stoneBanking/app/domain/types"
 	"stoneBanking/app/gateway/web/account/vo/input"
 	validations "stoneBanking/app/gateway/web/account/vo/input/validations"
 	"stoneBanking/app/gateway/web/account/vo/output"
@@ -27,8 +28,8 @@ func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) 
 	}
 
 	account := account.Account{
-		CPF:    loginData.CPF,
-		Secret: loginData.Secret,
+		CPF:    types.Document(types.Document(loginData.CPF).TrimCPF()),
+		Secret: types.Password(loginData.Secret),
 	}
 
 	token, err := controller.usecase.LoginUser(context.Background(), account)

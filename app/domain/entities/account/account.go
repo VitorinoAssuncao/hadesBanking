@@ -9,8 +9,8 @@ type Account struct {
 	ID         int
 	ExternalID types.ExternalID
 	Name       string
-	CPF        string
-	Secret     string
+	CPF        types.Document
+	Secret     types.Password
 	Balance    types.Money
 	CreatedAt  time.Time
 }

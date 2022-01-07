@@ -8,13 +8,13 @@ import (
 )
 
 func (usecase *usecase) LoginUser(ctx context.Context, loginInput account.Account) (string, error) {
-
-	tempAccount, err := usecase.accountRepository.GetByCPF(context.Background(), loginInput.CPF)
+	tempAccount, err := usecase.accountRepository.GetByCPF(context.Background(), loginInput.CPF.ToString())
 	if err != nil {
 		return "", customError.ErrorAccountLogin
 	}
 
-	if !utils.ValidateHash(tempAccount.Secret, loginInput.Secret) {
+	err = tempAccount.Secret.CompareSecret(string(loginInput.Secret.ToString()))
+	if err != nil {
 		return "", customError.ErrorAccountLogin
 	}
 

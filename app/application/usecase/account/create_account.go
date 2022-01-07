@@ -12,7 +12,7 @@ func (usecase *usecase) Create(ctx context.Context, accountData account.Account)
 	if err != nil {
 		return account.Account{}, err
 	}
-	_, err = usecase.accountRepository.GetByCPF(ctx, accountData.CPF)
+	_, err = usecase.accountRepository.GetByCPF(ctx, accountData.CPF.ToString())
 	//validate if account with that cpf exist, if not continue the creation of a new account
 	if err == nil {
 		return account.Account{}, customError.ErrorAccountCPFExists

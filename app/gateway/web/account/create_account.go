@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"stoneBanking/app/domain/types"
 	"stoneBanking/app/gateway/web/account/vo/input"
 	validations "stoneBanking/app/gateway/web/account/vo/input/validations"
 	"stoneBanking/app/gateway/web/account/vo/output"
@@ -21,11 +22,15 @@ func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(reqBody, &accountInput)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
+
+	accountInput.CPF = types.Document(accountInput.CPF.TrimCPF())
 
 	accountInput, err = validations.ValidateAccountInput(accountInput)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 
 	accountData := accountInput.GenerateAccount()
