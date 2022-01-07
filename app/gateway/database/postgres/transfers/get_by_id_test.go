@@ -38,15 +38,24 @@ func Test_GetByID(t *testing.T) {
 				}
 
 				input := transfer.Transfer{
-					Amount:    100,
-					CreatedAt: time.Now(),
+					Amount:               100,
+					AccountOriginID:      1,
+					AccountDestinationID: 1,
+					CreatedAt:            time.Now(),
 				}
 				created, err := transferRepository.Create(ctx, input)
+
+				if err != nil {
+					t.Errorf("Não foi possível inicializar os dados iniciais do teste")
+				}
+
 				return string(created.ExternalID)
 			},
 			want: transfer.Transfer{
-				Amount:    100,
-				CreatedAt: time.Now(),
+				Amount:               100,
+				AccountOriginID:      1,
+				AccountDestinationID: 1,
+				CreatedAt:            time.Now(),
 			},
 			wantErr: false,
 		},
@@ -65,7 +74,7 @@ func Test_GetByID(t *testing.T) {
 				test.input = test.runBefore(database)
 			}
 
-			got, err := transferRepository.GetByID(ctx, types.TransferExternalID(test.input))
+			got, err := transferRepository.GetByID(ctx, types.ExternalID(test.input))
 
 			if err == nil {
 				test.want.CreatedAt = got.CreatedAt

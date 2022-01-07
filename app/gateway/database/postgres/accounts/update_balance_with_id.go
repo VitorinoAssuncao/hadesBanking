@@ -5,7 +5,7 @@ import (
 	"stoneBanking/app/domain/types"
 )
 
-func (repository accountRepository) UpdateBalance(ctx context.Context, value int, external_id types.AccountExternalID) error {
+func (repository accountRepository) UpdateBalance(ctx context.Context, value int, external_id types.ExternalID) error {
 	const sqlQuery = `
 	UPDATE
 			accounts

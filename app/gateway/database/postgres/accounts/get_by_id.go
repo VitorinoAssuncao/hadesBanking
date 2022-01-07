@@ -6,7 +6,7 @@ import (
 	"stoneBanking/app/domain/types"
 )
 
-func (repository accountRepository) GetByID(ctx context.Context, accountExternalID types.AccountExternalID) (account.Account, error) {
+func (repository accountRepository) GetByID(ctx context.Context, accountExternalID types.ExternalID) (account.Account, error) {
 
 	const sqlQuery = `
 	SELECT 

@@ -42,6 +42,10 @@ func Test_GetAll(t *testing.T) {
 					CreatedAt:            time.Now(),
 				}
 				_, err = transferRepository.Create(ctx, input)
+
+				if err != nil {
+					t.Errorf("Não foi possível inicializar os dados iniciais do teste")
+				}
 			},
 			want:    1,
 			wantErr: false,

@@ -1,18 +1,17 @@
 package validations
 
 import (
-	"errors"
 	"stoneBanking/app/application/vo/input"
 )
 
-func ValidateLoginInputData(input input.LoginVO) (result bool, err error) {
+func ValidateLoginInputData(input input.LoginVO) error {
 	if input.CPF == "" {
-		return false, errors.New("cpf é um campo obrigatório")
+		return ErrorAccountCPFRequired
 	}
 
 	if input.Secret == "" {
-		return false, errors.New("senha é um campo obrigatório")
+		return ErrorAccountSecretRequired
 	}
 
-	return true, nil
+	return nil
 }

@@ -16,14 +16,14 @@ func Test_UpdateBalance(t *testing.T) {
 	testCases := []struct {
 		name       string
 		want       bool
-		runBefore  func() (value types.AccountExternalID)
+		runBefore  func() (value types.ExternalID)
 		inputID    string
 		inputValue int
 		wantErr    bool
 	}{
 		{
 			name: "faz a atualização do saldo com sucesso, em uma conta que existe",
-			runBefore: func() (value types.AccountExternalID) {
+			runBefore: func() (value types.ExternalID) {
 				input := account.Account{
 					Name:    "Joao da Silva",
 					CPF:     "38330499912",
@@ -56,7 +56,7 @@ func Test_UpdateBalance(t *testing.T) {
 			if test.runBefore != nil {
 				test.inputID = string(test.runBefore())
 			}
-			err := accountRepository.UpdateBalance(ctx, test.inputValue, types.AccountExternalID(test.inputID))
+			err := accountRepository.UpdateBalance(ctx, test.inputValue, types.ExternalID(test.inputID))
 			assert.Equal(t, (err != nil), test.wantErr)
 		})
 	}

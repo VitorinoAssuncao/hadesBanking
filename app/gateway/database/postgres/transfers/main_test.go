@@ -78,7 +78,7 @@ func dropTests(pool dockertest.Pool, resource *dockertest.Resource) {
 }
 
 func TruncateTable(db *sql.DB) error {
-	sqlQuery := `TRUNCATE transfers`
+	sqlQuery := `TRUNCATE transfers, accounts RESTART IDENTITY cascade`
 	_, err := db.Exec(sqlQuery)
 	if err != nil {
 		return err
