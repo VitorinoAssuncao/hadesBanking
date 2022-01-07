@@ -20,7 +20,7 @@ type ClaimStruct struct {
 
 func (usecase *usecase) LoginUser(ctx context.Context, loginInput input.LoginVO) (output.LoginOutputVO, error) {
 	loginInput.CPF = utils.TrimCPF(loginInput.CPF)
-	_, err := validations.ValidateLoginInputData(loginInput)
+	err := validations.ValidateLoginInputData(loginInput)
 	if err != nil {
 		return output.LoginOutputVO{}, err
 	}
