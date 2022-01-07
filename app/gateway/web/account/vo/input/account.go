@@ -14,7 +14,7 @@ type CreateAccountVO struct {
 	Balance int    `json:"balance" example:"1000"`
 }
 
-func GenerateAccount(inputAccount CreateAccountVO) account.Account {
+func (inputAccount CreateAccountVO) GenerateAccount() account.Account {
 	account := account.Account{
 		Name:      inputAccount.Name,
 		CPF:       utils.TrimCPF(inputAccount.CPF),

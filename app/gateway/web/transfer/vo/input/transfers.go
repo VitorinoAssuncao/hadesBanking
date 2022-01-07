@@ -11,11 +11,11 @@ type CreateTransferVO struct {
 	Amount           int    `json:"amount" example:"1000"`
 }
 
-func GenerateTransfer(input CreateTransferVO) transfer.Transfer {
+func (inputTransfer CreateTransferVO) GenerateTransfer() transfer.Transfer {
 	transfer := transfer.Transfer{
-		AccountOriginExternalID:      types.ExternalID(input.AccountOriginID),
-		AccountDestinationExternalID: types.ExternalID(input.AccountDestinyID),
-		Amount:                       types.Money(input.Amount),
+		AccountOriginExternalID:      types.ExternalID(inputTransfer.AccountOriginID),
+		AccountDestinationExternalID: types.ExternalID(inputTransfer.AccountDestinyID),
+		Amount:                       types.Money(inputTransfer.Amount),
 	}
 	return transfer
 }

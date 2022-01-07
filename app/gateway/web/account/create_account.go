@@ -31,7 +31,7 @@ func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
 
-	accountData := input.GenerateAccount(accountInput)
+	accountData := accountInput.GenerateAccount()
 	account, err := controller.usecase.Create(r.Context(), accountData)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)

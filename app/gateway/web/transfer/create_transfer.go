@@ -25,7 +25,7 @@ func (controller Controller) Create(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
 
-	transfer := input.GenerateTransfer(transferData)
+	transfer := transferData.GenerateTransfer()
 	newTransfer, err := controller.usecase.Create(context.Background(), transfer)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
