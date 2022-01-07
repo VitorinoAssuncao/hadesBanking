@@ -1,6 +1,7 @@
 package input
 
 import (
+	"regexp"
 	"stoneBanking/app/common/utils"
 	"stoneBanking/app/domain/entities/account"
 	"stoneBanking/app/domain/types"
@@ -17,10 +18,15 @@ type CreateAccountVO struct {
 func (inputAccount CreateAccountVO) GenerateAccount() account.Account {
 	account := account.Account{
 		Name:      inputAccount.Name,
-		CPF:       utils.TrimCPF(inputAccount.CPF),
+		CPF:       trimCPF(inputAccount.CPF),
 		Secret:    utils.HashPassword(inputAccount.Secret),
 		Balance:   types.Money(inputAccount.Balance),
 		CreatedAt: time.Now(),
 	}
 	return account
+}
+func trimCPF(cpf string) (result string) {
+	regex := regexp.MustCompile("[^0-9]+")
+	result = regex.ReplaceAllString(cpf, "")
+	return result
 }

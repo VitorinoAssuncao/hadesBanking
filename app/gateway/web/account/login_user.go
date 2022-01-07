@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
-	"stoneBanking/app/common/utils"
 	"stoneBanking/app/domain/entities/account"
 	"stoneBanking/app/gateway/web/account/vo/input"
 	validations "stoneBanking/app/gateway/web/account/vo/input/validations"
@@ -22,11 +21,11 @@ func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) 
 
 	json.Unmarshal(reqBody, &loginData)
 
-	loginData.CPF = utils.TrimCPF(loginData.CPF)
 	err = validations.ValidateLoginInputData(loginData)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
+
 	account := account.Account{
 		CPF:    loginData.CPF,
 		Secret: loginData.Secret,

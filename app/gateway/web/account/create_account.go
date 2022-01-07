@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
-	"stoneBanking/app/common/utils"
 	"stoneBanking/app/gateway/web/account/vo/input"
 	validations "stoneBanking/app/gateway/web/account/vo/input/validations"
 	"stoneBanking/app/gateway/web/account/vo/output"
@@ -23,8 +22,6 @@ func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
-
-	accountInput.CPF = utils.TrimCPF(accountInput.CPF)
 
 	accountInput, err = validations.ValidateAccountInput(accountInput)
 	if err != nil {
