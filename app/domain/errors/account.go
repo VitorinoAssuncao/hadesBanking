@@ -16,4 +16,7 @@ var (
 	ErrorAccountNameRequired    = errors.New("campo Nome é obrigatório no cadastro de nova conta")
 	ErrorAccountSecretRequired  = errors.New("campo Senha é obrigatorio no cadastro de novas contas")
 	ErrorAccountBalanceInvalid  = errors.New("campo Saldo, deve ser igual ou maior que zero (0)")
+
+	ErrorServerTokenNotFound = errors.New("não foi possível localizar o token de autenticação, favor logar no sistema novamente")
+	ErrorServerExtractToken  = errors.New("não foi possível extrair os dados do token")
 )
