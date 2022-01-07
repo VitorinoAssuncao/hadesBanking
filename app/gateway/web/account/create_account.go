@@ -19,7 +19,10 @@ func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	json.Unmarshal(reqBody, &accountInput)
+	err = json.Unmarshal(reqBody, &accountInput)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	}
 
 	accountInput.CPF = utils.TrimCPF(accountInput.CPF)
 

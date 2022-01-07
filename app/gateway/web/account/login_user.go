@@ -33,12 +33,13 @@ func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) 
 	}
 
 	token, err := controller.usecase.LoginUser(context.Background(), account)
-	loginOutput := output.LoginOutputVO{
-		Token: token,
-	}
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
+	}
+
+	loginOutput := output.LoginOutputVO{
+		Token: token,
 	}
 
 	json.NewEncoder(w).Encode(loginOutput)
