@@ -2,39 +2,27 @@ package account
 
 import (
 	"context"
-	validations "stoneBanking/app/application/validations/account"
-	"stoneBanking/app/application/vo/input"
-	"stoneBanking/app/application/vo/output"
-	"stoneBanking/app/common/utils"
+	validations "stoneBanking/app/application/usecase/account/validations"
+	"stoneBanking/app/domain/entities/account"
+	customError "stoneBanking/app/domain/errors"
 )
 
-func (usecase *usecase) Create(ctx context.Context, accountData input.CreateAccountVO) (*output.AccountOutputVO, error) {
-	var accountOutput output.AccountOutputVO
-	var err error
-
-	accountData.CPF = utils.TrimCPF(accountData.CPF)
-	accountData, err = validations.ValidateAccountInput(accountData)
-
+func (usecase *usecase) Create(ctx context.Context, accountData account.Account) (account.Account, error) {
+	err := validations.ValidateAccountData(accountData)
 	if err != nil {
-		return &accountOutput, err
+		return account.Account{}, err
 	}
-
-	tempAccount, err := usecase.accountRepository.GetByCPF(ctx, accountData.CPF)
+	_, err = usecase.accountRepository.GetByCPF(ctx, accountData.CPF)
 	//validate if account with that cpf exist, if not continue the creation of a new account
 	if err == nil {
-		accountOutput = output.AccountToOutput(tempAccount)
-		return &output.AccountOutputVO{}, ErrorAccountCPFExists
+		return account.Account{}, customError.ErrorAccountCPFExists
 	}
 
-	account := input.GenerateAccount(accountData)
-
-	accountResult, err := usecase.accountRepository.Create(ctx, account)
+	accountResult, err := usecase.accountRepository.Create(ctx, accountData)
 
 	if err != nil {
-		return &output.AccountOutputVO{}, ErrorCreateAccount
+		return account.Account{}, customError.ErrorCreateAccount
 	}
 
-	accountOutput = output.AccountToOutput(accountResult)
-
-	return &accountOutput, nil
+	return accountResult, nil
 }

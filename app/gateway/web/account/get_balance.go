@@ -3,6 +3,7 @@ package accounts
 import (
 	"encoding/json"
 	"net/http"
+	"stoneBanking/app/gateway/web/account/vo/output"
 
 	"github.com/gorilla/mux"
 )
@@ -10,12 +11,14 @@ import (
 func (controller *Controller) GetBalance(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	accountId := vars["user_id"]
-	balance_output, err := controller.usecase.GetBalance(r.Context(), accountId)
-
+	balance, err := controller.usecase.GetBalance(r.Context(), accountId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
-	json.NewEncoder(w).Encode(balance_output)
+	balanceOutput := output.AccountBalanceVO{
+		Balance: balance,
+	}
 
+	json.NewEncoder(w).Encode(balanceOutput)
 }

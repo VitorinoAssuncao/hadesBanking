@@ -1,7 +1,8 @@
-package validations
+package input
 
 import (
-	"stoneBanking/app/application/vo/input"
+	customError "stoneBanking/app/domain/errors"
+	"stoneBanking/app/gateway/web/account/vo/input"
 )
 
 func ValidateAccountInput(accountData input.CreateAccountVO) (input.CreateAccountVO, error) {
@@ -30,7 +31,7 @@ func ValidateAccountInput(accountData input.CreateAccountVO) (input.CreateAccoun
 
 func validateName(name string) (bool, error) {
 	if name == "" {
-		return false, ErrorAccountNameRequired
+		return false, customError.ErrorAccountNameRequired
 	}
 
 	return true, nil
@@ -38,26 +39,26 @@ func validateName(name string) (bool, error) {
 
 func validateCPF(cpf string) (bool, error) {
 	if cpf == "" {
-		return false, ErrorAccountCPFRequired
+		return false, customError.ErrorAccountCPFRequired
 	}
 
 	if len(cpf) != 11 {
-		return false, ErrorAccountCPFWrongSize
+		return false, customError.ErrorAccountCPFWrongSize
 	}
 
 	if !cpfIsValid(cpf) {
-		return false, ErrorAccountCPFInvalid
+		return false, customError.ErrorAccountCPFInvalid
 	}
 
 	if !cpfIsNotATestValue(cpf) {
-		return false, ErrorAccountCPFTestNumber
+		return false, customError.ErrorAccountCPFTestNumber
 	}
 	return true, nil
 }
 
 func validateSecret(secret string) (bool, error) {
 	if secret == "" {
-		return false, ErrorAccountSecretRequired
+		return false, customError.ErrorAccountSecretRequired
 	}
 
 	return true, nil
@@ -65,7 +66,7 @@ func validateSecret(secret string) (bool, error) {
 
 func validateBalance(balance int) (bool, error) {
 	if balance < 0 {
-		return false, ErrorAccountBalanceInvalid
+		return false, customError.ErrorAccountBalanceInvalid
 	}
 
 	return true, nil

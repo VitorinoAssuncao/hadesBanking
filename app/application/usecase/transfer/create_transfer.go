@@ -2,35 +2,27 @@ package transfer
 
 import (
 	"context"
-	validations "stoneBanking/app/application/validations/transfer"
-	"stoneBanking/app/application/vo/input"
-	"stoneBanking/app/application/vo/output"
 	"stoneBanking/app/domain/entities/transfer"
 	"stoneBanking/app/domain/types"
 )
 
-func (usecase *usecase) Create(ctx context.Context, transferData input.CreateTransferVO) (*output.TransferOutputVO, error) {
-	transferData, err := validations.ValidateTransferData(transferData)
+func (usecase *usecase) Create(ctx context.Context, transferData transfer.Transfer) (transfer.Transfer, error) {
 
+	accountOrigin, err := usecase.accountRepository.GetByID(ctx, types.ExternalID(transferData.AccountOriginExternalID))
 	if err != nil {
-		return &output.TransferOutputVO{}, err
+		return transfer.Transfer{}, ErrorTransferCreateOriginError
 	}
 
-	accountOrigin, err := usecase.accountRepository.GetByID(ctx, types.ExternalID(transferData.AccountOriginID))
+	accountDestiny, err := usecase.accountRepository.GetByID(ctx, types.ExternalID(transferData.AccountDestinationExternalID))
 	if err != nil {
-		return &output.TransferOutputVO{}, ErrorTransferCreateOriginError
-	}
-
-	accountDestiny, err := usecase.accountRepository.GetByID(ctx, types.ExternalID(transferData.AccountDestinyID))
-	if err != nil {
-		return &output.TransferOutputVO{}, ErrorTransferCreateOriginError
+		return transfer.Transfer{}, ErrorTransferCreateOriginError
 	}
 
 	if accountOrigin.Balance < types.Money(transferData.Amount) {
-		return &output.TransferOutputVO{}, ErrorTransferCreateInsufficientFunds
+		return transfer.Transfer{}, ErrorTransferCreateInsufficientFunds
 	}
 
-	transfer := transfer.Transfer{
+	newTransfer := transfer.Transfer{
 		AccountOriginID:              types.InternalID(accountOrigin.ID),
 		AccountOriginExternalID:      types.ExternalID(accountOrigin.ExternalID),
 		AccountDestinationID:         types.InternalID(accountDestiny.ID),
@@ -38,12 +30,10 @@ func (usecase *usecase) Create(ctx context.Context, transferData input.CreateTra
 		Amount:                       types.Money(transferData.Amount),
 	}
 
-	transfer, err = usecase.transferRepository.Create(ctx, transfer)
+	newTransfer, err = usecase.transferRepository.Create(ctx, newTransfer)
 	if err != nil {
-		return &output.TransferOutputVO{}, err
+		return transfer.Transfer{}, err
 	}
 
-	transferOutput := output.TransferToTransferOutput(transfer)
-
-	return &transferOutput, nil
+	return newTransfer, nil
 }

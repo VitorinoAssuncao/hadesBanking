@@ -1,7 +1,8 @@
-package validations
+package input
 
 import (
-	"stoneBanking/app/application/vo/input"
+	customError "stoneBanking/app/domain/errors"
+	"stoneBanking/app/gateway/web/account/vo/input"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -27,14 +28,14 @@ func Test_ValidateLoginInputData(t *testing.T) {
 			input: input.LoginVO{
 				Secret: "123456789",
 			},
-			wantErr: ErrorAccountCPFRequired,
+			wantErr: customError.ErrorAccountCPFRequired,
 		},
 		{
 			name: "dados de entrada com secret vazio, deverá retornar erro",
 			input: input.LoginVO{
 				CPF: "12345678912",
 			},
-			wantErr: ErrorAccountSecretRequired,
+			wantErr: customError.ErrorAccountSecretRequired,
 		},
 	}
 	for _, test := range testCases {

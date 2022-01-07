@@ -1,7 +1,7 @@
-package validations
+package transfer
 
 import (
-	"stoneBanking/app/application/vo/input"
+	"stoneBanking/app/gateway/web/transfer/vo/input"
 )
 
 func ValidateTransferData(transferData input.CreateTransferVO) (input.CreateTransferVO, error) {
