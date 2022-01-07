@@ -10,7 +10,7 @@ func (r transferRepository) GetAllByAccountID(ctx context.Context, acccountID ty
 	var transfers = make([]transfer.Transfer, 0)
 	const sqlQuery = `
 	SELECT
-		t.id, t.external_id, t.account_origin_id, t.account_destiny_id, t.amount, t.created_at,o.external_id, o.name ,d.external_id, d.name
+		t.id, t.external_id, t.account_origin_id, t.account_destiny_id, t.amount, t.created_at,o.external_id ,d.external_id,
 	FROM
 		transfers t
 	INNER JOIN
@@ -36,9 +36,8 @@ func (r transferRepository) GetAllByAccountID(ctx context.Context, acccountID ty
 			&tempTransfer.Amount,
 			&tempTransfer.CreatedAt,
 			&tempTransfer.AccountOriginExternalID,
-			&tempTransfer.AccountOriginName,
 			&tempTransfer.AccountDestinationExternalID,
-			&tempTransfer.AccountDestinationName)
+		)
 		if err != nil {
 			return transfers, err
 		}
