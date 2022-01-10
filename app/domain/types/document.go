@@ -4,9 +4,10 @@ import "regexp"
 
 type Document string
 
-func (cpf Document) TrimCPF() (result string) {
+func (cpf Document) TrimCPF() (result Document) {
 	regex := regexp.MustCompile("[^0-9]+")
-	result = regex.ReplaceAllString(string(cpf), "")
+	value := regex.ReplaceAllString(string(cpf), "")
+	result = Document(value)
 	return result
 }
 

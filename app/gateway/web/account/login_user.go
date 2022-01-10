@@ -28,7 +28,7 @@ func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) 
 	}
 
 	account := account.Account{
-		CPF:    types.Document(types.Document(loginData.CPF).TrimCPF()),
+		CPF:    types.Document(loginData.CPF).TrimCPF(),
 		Secret: types.Password(loginData.Secret),
 	}
 
