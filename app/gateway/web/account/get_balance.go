@@ -8,7 +8,7 @@ import (
 )
 
 func (controller *Controller) GetBalance(w http.ResponseWriter, r *http.Request) {
-	tokenID, err := middleware.GetToken(r)
+	tokenID, err := middleware.GetAccountIDFromToken(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
