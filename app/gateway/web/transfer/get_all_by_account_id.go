@@ -11,7 +11,7 @@ import (
 )
 
 func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Request) {
-	headerToken := r.Header.Get("Token")
+	headerToken := r.Header.Get("Authorization")
 	if headerToken == "" {
 		http.Error(w, customError.ErrorServerTokenNotFound.Error(), http.StatusBadRequest)
 		return
