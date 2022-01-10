@@ -3,15 +3,25 @@ package accounts
 import (
 	"encoding/json"
 	"net/http"
+	"stoneBanking/app/common/utils"
+	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/gateway/web/account/vo/output"
-
-	"github.com/gorilla/mux"
 )
 
 func (controller *Controller) GetBalance(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	accountId := vars["user_id"]
-	balance, err := controller.usecase.GetBalance(r.Context(), accountId)
+	headerToken := r.Header.Get("Token")
+	if headerToken == "" {
+		http.Error(w, customError.ErrorServerTokenNotFound.Error(), http.StatusBadRequest)
+		return
+	}
+
+	tokenID, err := utils.ExtractClaims(headerToken)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	balance, err := controller.usecase.GetBalance(r.Context(), tokenID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
