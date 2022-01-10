@@ -13,7 +13,7 @@ import (
 
 func (controller Controller) Create(w http.ResponseWriter, r *http.Request) {
 
-	tokenID, err := middleware.GetToken(r)
+	accountID, err := middleware.GetAccountIDFromToken(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
@@ -27,7 +27,7 @@ func (controller Controller) Create(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(reqBody, &transferData)
 
-	transferData.AccountOriginID = tokenID
+	transferData.AccountOriginID = accountID
 
 	transferData, err = validations.ValidateTransferData(transferData)
 	if err != nil {

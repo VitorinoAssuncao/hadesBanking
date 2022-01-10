@@ -10,12 +10,12 @@ import (
 )
 
 func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Request) {
-	tokenID, err := middleware.GetToken(r)
+	accountID, err := middleware.GetAccountIDFromToken(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
 
-	transfers, err := controller.usecase.GetAllByAccountID(context.Background(), types.ExternalID(tokenID))
+	transfers, err := controller.usecase.GetAllByAccountID(context.Background(), types.ExternalID(accountID))
 
 	var transfersOutput = make([]output.TransferOutputVO, 0)
 	for _, transfer := range transfers {
