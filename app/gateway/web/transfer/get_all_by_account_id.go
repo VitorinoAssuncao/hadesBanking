@@ -4,23 +4,15 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
-	"stoneBanking/app/common/utils"
-	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
+	"stoneBanking/app/gateway/web/middleware"
 	"stoneBanking/app/gateway/web/transfer/vo/output"
 )
 
 func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Request) {
-	headerToken := r.Header.Get("Authorization")
-	if headerToken == "" {
-		http.Error(w, customError.ErrorServerTokenNotFound.Error(), http.StatusBadRequest)
-		return
-	}
-
-	tokenID, err := utils.ExtractClaims(headerToken)
+	tokenID, err := middleware.GetToken(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
 	}
 
 	transfers, err := controller.usecase.GetAllByAccountID(context.Background(), types.ExternalID(tokenID))

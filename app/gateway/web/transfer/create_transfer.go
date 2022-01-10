@@ -5,24 +5,17 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
-	"stoneBanking/app/common/utils"
-	customError "stoneBanking/app/domain/errors"
+	"stoneBanking/app/gateway/web/middleware"
 	"stoneBanking/app/gateway/web/transfer/vo/input"
 	validations "stoneBanking/app/gateway/web/transfer/vo/input/validations/transfer"
 	"stoneBanking/app/gateway/web/transfer/vo/output"
 )
 
 func (controller Controller) Create(w http.ResponseWriter, r *http.Request) {
-	headerToken := r.Header.Get("Authorization")
-	if headerToken == "" {
-		http.Error(w, customError.ErrorServerTokenNotFound.Error(), http.StatusBadRequest)
-		return
-	}
 
-	tokenID, err := utils.ExtractClaims(headerToken)
+	tokenID, err := middleware.GetToken(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
 	}
 
 	var transferData = input.CreateTransferVO{}
