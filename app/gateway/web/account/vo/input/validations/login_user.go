@@ -5,7 +5,7 @@ import (
 	"stoneBanking/app/gateway/web/account/vo/input"
 )
 
-func ValidateLoginInputData(input input.LoginVO) error {
+func ValidateLoginInputData(input input.CreateAccountVO) error {
 	if input.CPF == "" {
 		return customError.ErrorAccountCPFRequired
 	}

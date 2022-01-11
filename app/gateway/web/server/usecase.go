@@ -3,7 +3,6 @@ package server
 import (
 	"stoneBanking/app/application/usecase/account"
 	"stoneBanking/app/application/usecase/transfer"
-	"stoneBanking/app/common/utils/config"
 )
 
 type UseCaseWrapper struct {
@@ -11,9 +10,9 @@ type UseCaseWrapper struct {
 	Transfer transfer.Usecase
 }
 
-func NewUseCaseWrapper(wrapper *RepositorieWrapper, cfg config.Config) *UseCaseWrapper {
+func NewUseCaseWrapper(wrapper *RepositorieWrapper) *UseCaseWrapper {
 	return &UseCaseWrapper{
-		Accounts: account.New(wrapper.Account, cfg.SigningKey),
+		Accounts: account.New(wrapper.Account, wrapper.Token),
 		Transfer: transfer.New(wrapper.Transfer, wrapper.Account),
 	}
 }

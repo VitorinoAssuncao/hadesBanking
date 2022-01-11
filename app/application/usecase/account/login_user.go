@@ -2,7 +2,6 @@ package account
 
 import (
 	"context"
-	"stoneBanking/app/common/utils"
 	"stoneBanking/app/domain/entities/account"
 	customError "stoneBanking/app/domain/errors"
 )
@@ -18,7 +17,7 @@ func (usecase *usecase) LoginUser(ctx context.Context, loginInput account.Accoun
 		return "", customError.ErrorAccountLogin
 	}
 
-	token, err := utils.GenerateToken(string(tempAccount.ExternalID), usecase.signingKey)
+	token, err := usecase.tokenRepository.GenerateToken(string(tempAccount.ExternalID))
 	if err != nil {
 		return "", customError.ErrorAccountTokenGeneration
 	}

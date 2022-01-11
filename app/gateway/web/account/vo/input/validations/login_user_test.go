@@ -11,13 +11,13 @@ import (
 func Test_ValidateLoginInputData(t *testing.T) {
 	testCases := []struct {
 		name    string
-		input   input.LoginVO
+		input   input.CreateAccountVO
 		want    bool
 		wantErr error
 	}{
 		{
 			name: "com os dados corretos, deverá validar dados de login com sucesso e retornar sem erros",
-			input: input.LoginVO{
+			input: input.CreateAccountVO{
 				CPF:    "38343335812",
 				Secret: "123456789",
 			},
@@ -25,14 +25,14 @@ func Test_ValidateLoginInputData(t *testing.T) {
 		},
 		{
 			name: "dados de entrada com cpf vazio ou ausente, deverá retornar erro",
-			input: input.LoginVO{
+			input: input.CreateAccountVO{
 				Secret: "123456789",
 			},
 			wantErr: customError.ErrorAccountCPFRequired,
 		},
 		{
 			name: "dados de entrada com secret vazio, deverá retornar erro",
-			input: input.LoginVO{
+			input: input.CreateAccountVO{
 				CPF: "12345678912",
 			},
 			wantErr: customError.ErrorAccountSecretRequired,

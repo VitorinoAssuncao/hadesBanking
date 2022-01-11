@@ -5,8 +5,6 @@ import (
 	"database/sql"
 	"stoneBanking/app/domain/entities/account"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
 func (usecase *usecase) Test_Create(t *testing.T) {
@@ -31,10 +29,6 @@ func (usecase *usecase) Test_Create(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			usecase := New(test.input, "")
-
-			assert.Equal(t, (err != nil), test.wantErr)
-			assert.Equal(t, test.want, got)
 		})
 	}
 
