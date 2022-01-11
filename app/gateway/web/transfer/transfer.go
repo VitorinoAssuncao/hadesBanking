@@ -3,11 +3,13 @@ package transfer
 import "stoneBanking/app/application/usecase/transfer"
 
 type Controller struct {
-	usecase transfer.Usecase
+	usecase    transfer.Usecase
+	signingKey string
 }
 
-func New(u transfer.Usecase) Controller {
+func New(u transfer.Usecase, key string) Controller {
 	return Controller{
-		usecase: u,
+		usecase:    u,
+		signingKey: key,
 	}
 }

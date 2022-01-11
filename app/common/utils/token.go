@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"os"
 	customError "stoneBanking/app/domain/errors"
 
 	"github.com/golang-jwt/jwt"
@@ -12,8 +11,8 @@ type ClaimStruct struct {
 	UserID string
 }
 
-func GenerateToken(accountExternalID string) (signedToken string, err error) {
-	mySigningKey := []byte(os.Getenv("SIGN_KEY"))
+func GenerateToken(accountExternalID, signingKey string) (signedToken string, err error) {
+	mySigningKey := []byte(signingKey)
 	claims := &ClaimStruct{
 		UserID:         accountExternalID,
 		StandardClaims: jwt.StandardClaims{},
@@ -28,8 +27,8 @@ func GenerateToken(accountExternalID string) (signedToken string, err error) {
 	return signedToken, nil
 }
 
-func ExtractClaims(tokenStr string) (string, error) {
-	mySigningKey := []byte(os.Getenv("SIGN_KEY"))
+func ExtractClaims(tokenStr, signingKey string) (string, error) {
+	mySigningKey := []byte(signingKey)
 	token, err := jwt.ParseWithClaims(tokenStr, &ClaimStruct{}, func(token *jwt.Token) (interface{}, error) {
 		return mySigningKey, nil
 	})

@@ -15,6 +15,7 @@ type Usecase interface {
 type usecase struct {
 	transferRepository transfer.Repository
 	accountRepository  account.Repository
+	signingKey         string
 }
 
 func New(transfer transfer.Repository, account account.Repository) *usecase {

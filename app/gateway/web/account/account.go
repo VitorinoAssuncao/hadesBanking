@@ -5,11 +5,13 @@ import (
 )
 
 type Controller struct {
-	usecase account_usecase.Usecase
+	usecase    account_usecase.Usecase
+	signingKey string
 }
 
-func New(useCase account_usecase.Usecase) Controller {
+func New(useCase account_usecase.Usecase, key string) Controller {
 	return Controller{
-		usecase: useCase,
+		usecase:    useCase,
+		signingKey: key,
 	}
 }

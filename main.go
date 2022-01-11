@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"stoneBanking/app/common/utils/config"
 	"stoneBanking/app/gateway/database/postgres"
 	"stoneBanking/app/gateway/web/server"
 
@@ -16,11 +17,13 @@ func main() {
 		fmt.Println("Não foi possível carregar as varíaveis de ambiente")
 	}
 
-	postgres.InitiliazeDatabase()
+	cfg := config.LoadConfig()
+	postgres.InitiliazeDatabase(cfg)
+
 	db := postgres.RetrieveConnection()
 	repository := server.NewPostgresRepositoryWrapper(db)
 
-	workspaces := server.NewUseCaseWrapper(repository)
+	workspaces := server.NewUseCaseWrapper(repository, cfg)
 
-	server.New(workspaces)
+	server.New(workspaces, cfg)
 }

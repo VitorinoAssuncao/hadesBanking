@@ -14,10 +14,12 @@ type Usecase interface {
 
 type usecase struct {
 	accountRepository account.Repository
+	signingKey        string
 }
 
-func New(account account.Repository) *usecase {
+func New(account account.Repository, key string) *usecase {
 	return &usecase{
 		accountRepository: account,
+		signingKey:        key,
 	}
 }

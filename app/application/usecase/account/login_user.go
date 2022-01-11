@@ -18,7 +18,7 @@ func (usecase *usecase) LoginUser(ctx context.Context, loginInput account.Accoun
 		return "", customError.ErrorAccountLogin
 	}
 
-	token, err := utils.GenerateToken(string(tempAccount.ExternalID))
+	token, err := utils.GenerateToken(string(tempAccount.ExternalID), usecase.signingKey)
 	if err != nil {
 		return "", customError.ErrorAccountTokenGeneration
 	}
