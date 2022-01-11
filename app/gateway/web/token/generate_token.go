@@ -2,7 +2,7 @@ package token
 
 import "github.com/golang-jwt/jwt"
 
-func (r tokenRepository) GenerateToken(accountExternalID string) (signedToken string, err error) {
+func (r TokenRepository) GenerateToken(accountExternalID string) (signedToken string, err error) {
 	type ClaimStruct struct {
 		jwt.StandardClaims
 		UserID string

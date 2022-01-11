@@ -15,10 +15,10 @@ type Usecase interface {
 
 type usecase struct {
 	accountRepository account.Repository
-	tokenRepository   token.TokenInterface
+	tokenRepository   token.Repository
 }
 
-func New(account account.Repository, token token.TokenInterface) *usecase {
+func New(account account.Repository, token token.Repository) *usecase {
 	return &usecase{
 		accountRepository: account,
 		tokenRepository:   token,

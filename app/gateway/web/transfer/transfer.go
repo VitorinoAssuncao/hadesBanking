@@ -7,12 +7,12 @@ import (
 
 type Controller struct {
 	usecase   transfer.Usecase
-	tokenRepo token.TokenInterface
+	tokenRepo token.Repository
 }
 
-func New(u transfer.Usecase, tokenRepository token.TokenInterface) Controller {
+func New(useCase transfer.Usecase, token token.Repository) Controller {
 	return Controller{
-		usecase:   u,
-		tokenRepo: tokenRepository,
+		usecase:   useCase,
+		tokenRepo: token,
 	}
 }

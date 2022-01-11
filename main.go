@@ -5,7 +5,6 @@ import (
 	"stoneBanking/app/common/utils/config"
 	"stoneBanking/app/gateway/database/postgres"
 	"stoneBanking/app/gateway/web/server"
-	"stoneBanking/app/gateway/web/token"
 
 	"github.com/joho/godotenv"
 )
@@ -19,14 +18,12 @@ func main() {
 	}
 
 	cfg := config.LoadConfig()
-	tokenRepo := token.NewTokenRepository(cfg.SigningKey)
 
 	postgres.InitiliazeDatabase(cfg)
 	db := postgres.RetrieveConnection()
 
-	repository := server.NewPostgresRepositoryWrapper(db, tokenRepo)
+	repository := server.NewPostgresRepositoryWrapper(db, cfg.SigningKey)
 
 	workspaces := server.NewUseCaseWrapper(repository)
-
-	server.New(workspaces, tokenRepo)
+	server.New(workspaces, repository.Token)
 }

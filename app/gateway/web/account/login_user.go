@@ -25,6 +25,7 @@ func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) 
 	err = validations.ValidateLoginInputData(loginData)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 
 	account := account.Account{

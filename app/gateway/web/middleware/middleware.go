@@ -6,7 +6,8 @@ import (
 	customError "stoneBanking/app/domain/errors"
 )
 
-func GetAccountIDFromToken(r *http.Request, t token.TokenInterface) (string, error) {
+func GetAccountIDFromToken(r *http.Request, t token.Repository) (string, error) {
+
 	headerToken := r.Header.Get("Authorization")
 	if headerToken == "" {
 		return "", customError.ErrorServerTokenNotFound

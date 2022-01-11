@@ -2,7 +2,7 @@ package token
 
 import "github.com/golang-jwt/jwt"
 
-func (r tokenRepository) ExtractAccountIDFromToken(tokenStr string) (accountExternalID string, err error) {
+func (r TokenRepository) ExtractAccountIDFromToken(tokenStr string) (accountExternalID string, err error) {
 	type ClaimStruct struct {
 		jwt.StandardClaims
 		UserID string

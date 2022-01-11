@@ -4,12 +4,12 @@ import (
 	"stoneBanking/app/domain/entities/token"
 )
 
-type tokenRepository struct {
+type TokenRepository struct {
 	signKey string
 }
 
-func NewTokenRepository(signKey string) token.TokenInterface {
-	return &tokenRepository{
+func NewTokenRepository(signKey string) token.Repository {
+	return &TokenRepository{
 		signKey: signKey,
 	}
 }

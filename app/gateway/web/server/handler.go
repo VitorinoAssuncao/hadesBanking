@@ -14,7 +14,7 @@ type Server struct {
 	Router mux.Router
 }
 
-func New(usecase *UseCaseWrapper, tokenRepository token.TokenInterface) *Server {
+func New(usecase *UseCaseWrapper, tokenRepository token.Repository) *Server {
 	router := mux.NewRouter().StrictSlash(true)
 	controller_account := accounts.New(usecase.Accounts, tokenRepository)
 	controller_transfer := transfers.New(usecase.Transfer, tokenRepository)
