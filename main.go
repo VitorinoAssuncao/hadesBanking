@@ -18,12 +18,12 @@ func main() {
 	}
 
 	cfg := config.LoadConfig()
+
 	postgres.InitiliazeDatabase(cfg)
-
 	db := postgres.RetrieveConnection()
-	repository := server.NewPostgresRepositoryWrapper(db)
 
-	workspaces := server.NewUseCaseWrapper(repository, cfg)
+	repository := server.NewPostgresRepositoryWrapper(db, cfg.SigningKey)
 
-	server.New(workspaces, cfg)
+	workspaces := server.NewUseCaseWrapper(repository)
+	server.New(workspaces, repository.Token)
 }

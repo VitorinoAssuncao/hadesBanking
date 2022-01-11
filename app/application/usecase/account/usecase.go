@@ -3,6 +3,7 @@ package account
 import (
 	"context"
 	"stoneBanking/app/domain/entities/account"
+	"stoneBanking/app/domain/entities/token"
 )
 
 type Usecase interface {
@@ -14,12 +15,12 @@ type Usecase interface {
 
 type usecase struct {
 	accountRepository account.Repository
-	signingKey        string
+	tokenRepository   token.Repository
 }
 
-func New(account account.Repository, key string) *usecase {
+func New(account account.Repository, token token.Repository) *usecase {
 	return &usecase{
 		accountRepository: account,
-		signingKey:        key,
+		tokenRepository:   token,
 	}
 }

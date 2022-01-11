@@ -13,7 +13,7 @@ import (
 )
 
 func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) {
-	var loginData input.LoginVO
+	var loginData input.CreateAccountVO
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -25,6 +25,7 @@ func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) 
 	err = validations.ValidateLoginInputData(loginData)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 
 	account := account.Account{

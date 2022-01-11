@@ -1,15 +1,18 @@
 package transfer
 
-import "stoneBanking/app/application/usecase/transfer"
+import (
+	"stoneBanking/app/application/usecase/transfer"
+	"stoneBanking/app/domain/entities/token"
+)
 
 type Controller struct {
-	usecase    transfer.Usecase
-	signingKey string
+	usecase   transfer.Usecase
+	tokenRepo token.Repository
 }
 
-func New(u transfer.Usecase, key string) Controller {
+func New(useCase transfer.Usecase, token token.Repository) Controller {
 	return Controller{
-		usecase:    u,
-		signingKey: key,
+		usecase:   useCase,
+		tokenRepo: token,
 	}
 }
