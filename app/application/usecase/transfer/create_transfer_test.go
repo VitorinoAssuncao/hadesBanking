@@ -83,26 +83,6 @@ func Test_Create(t *testing.T) {
 			wantErr: customError.ErrorTransferCreateOriginError,
 		},
 		{
-			name: "with wrong destination account, return error",
-			accountMock: &account.RepositoryMock{
-				GetByIDFunc: func(ctx context.Context, accountID types.ExternalID) (account.Account, error) {
-					return account.Account{}, customError.ErrorTransferCreateDestinyError
-				},
-			},
-			transferMock: &transfer.RepositoryMock{
-				CreateFunc: func(ctx context.Context, transferData transfer.Transfer) (transfer.Transfer, error) {
-					return transfer.Transfer{}, nil
-				},
-			},
-			input: transfer.Transfer{
-				AccountOriginID:      1,
-				AccountDestinationID: 2,
-				Amount:               1,
-			},
-			want:    transfer.Transfer{},
-			wantErr: customError.ErrorTransferCreateDestinyError,
-		},
-		{
 			name: "with right data, but the fund is insufficient, and return a error",
 			accountMock: &account.RepositoryMock{
 				GetByIDFunc: func(ctx context.Context, accountID types.ExternalID) (account.Account, error) {
@@ -149,7 +129,7 @@ func Test_Create(t *testing.T) {
 			input: transfer.Transfer{
 				AccountOriginID:      1,
 				AccountDestinationID: 2,
-				Amount:               101,
+				Amount:               1,
 			},
 			want:    transfer.Transfer{},
 			wantErr: customError.ErrorTransferCreate,
