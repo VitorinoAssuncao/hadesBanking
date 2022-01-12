@@ -22,7 +22,7 @@ func Test_Create(t *testing.T) {
 		wantErr   bool
 	}{
 		{
-			name: "conta cadastrada com sucesso, quando dados corretos",
+			name: "with right data, account is created sucessfully",
 			input: account.Account{
 				Name:      "Joao da Silva",
 				CPF:       "38330499912",
@@ -37,7 +37,7 @@ func Test_Create(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "ao tentar criar a conta apresenta que já existe conta cadastrada com este cpf",
+			name: "when trying to create a account duplicated, return a error",
 			input: account.Account{
 				Name:      "Joao da Silva",
 				CPF:       "38330499912",

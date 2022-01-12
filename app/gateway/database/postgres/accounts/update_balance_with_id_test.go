@@ -22,7 +22,7 @@ func Test_UpdateBalance(t *testing.T) {
 		wantErr    bool
 	}{
 		{
-			name: "faz a atualização do saldo com sucesso, em uma conta que existe",
+			name: "with a input data from a account that exist, update the balance and return withouth errors",
 			runBefore: func() (value types.ExternalID) {
 				input := account.Account{
 					Name:    "Joao da Silva",
@@ -42,7 +42,7 @@ func Test_UpdateBalance(t *testing.T) {
 			wantErr:    false,
 		},
 		{
-			name:       "gera erro, pois ao tentar atualizar o saldo, a conta de destino não existe",
+			name:       "when trying to update a account with a id that not exist, return a error",
 			want:       false,
 			inputID:    "",
 			inputValue: 100,
