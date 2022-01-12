@@ -3,6 +3,7 @@ package account
 import (
 	"database/sql"
 	"stoneBanking/app/domain/entities/account"
+	customError "stoneBanking/app/domain/errors"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -14,7 +15,7 @@ func Test_ValidateAccountData(t *testing.T) {
 		input     account.Account
 		runBefore func(db *sql.DB)
 		want      account.Account
-		wantErr   bool
+		wantErr   error
 	}{
 		{
 			name: "dados de conta corretos, deve passar pela validação",
@@ -26,7 +27,7 @@ func Test_ValidateAccountData(t *testing.T) {
 				Secret:     "J0@0doR10",
 				Balance:    0,
 			},
-			wantErr: false,
+			wantErr: nil,
 		},
 		{
 			name: "dados de conta faltando nome, deve apresentar erro",
@@ -36,7 +37,7 @@ func Test_ValidateAccountData(t *testing.T) {
 				Secret:  "J0@0doR10",
 				Balance: 0,
 			},
-			wantErr: true,
+			wantErr: customError.ErrorAccountNameRequired,
 		},
 		{
 			name: "dados de conta faltando cpf, deve apresentar erro",
@@ -46,7 +47,7 @@ func Test_ValidateAccountData(t *testing.T) {
 				Secret:  "J0@0doR10",
 				Balance: 0,
 			},
-			wantErr: true,
+			wantErr: customError.ErrorAccountCPFRequired,
 		},
 		{
 			name: "dados de conta faltando a senha, deve apresentar erro",
@@ -56,7 +57,7 @@ func Test_ValidateAccountData(t *testing.T) {
 				Secret:  "",
 				Balance: 0,
 			},
-			wantErr: true,
+			wantErr: customError.ErrorAccountSecretRequired,
 		},
 		{
 			name: "dados de conta apresentam saldo negativo, deve apresentar erro",
@@ -68,13 +69,13 @@ func Test_ValidateAccountData(t *testing.T) {
 				Secret:     "J0@0doR10",
 				Balance:    -5,
 			},
-			wantErr: true,
+			wantErr: customError.ErrorAccountBalanceInvalid,
 		},
 	}
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
 			err := ValidateAccountData(test.input)
-			assert.Equal(t, (err != nil), test.wantErr)
+			assert.Equal(t, err, test.wantErr)
 		})
 	}
 
