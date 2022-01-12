@@ -5,15 +5,17 @@ import (
 	"encoding/json"
 	"net/http"
 	"stoneBanking/app/domain/types"
+	"stoneBanking/app/gateway/web/middleware"
 	"stoneBanking/app/gateway/web/transfer/vo/output"
-
-	"github.com/gorilla/mux"
 )
 
 func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	accountId := vars["account_id"]
-	transfers, err := controller.usecase.GetAllByAccountID(context.Background(), types.ExternalID(accountId))
+	accountID, err := middleware.GetAccountIDFromToken(r, controller.tokenRepo)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	}
+
+	transfers, err := controller.usecase.GetAllByAccountID(context.Background(), types.ExternalID(accountID))
 
 	var transfersOutput = make([]output.TransferOutputVO, 0)
 	for _, transfer := range transfers {

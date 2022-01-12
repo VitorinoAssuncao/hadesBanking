@@ -20,7 +20,7 @@ func AccountToOutput(account account.Account) AccountOutputVO {
 	accountOutput := AccountOutputVO{
 		ID:         string(account.ExternalID),
 		Name:       account.Name,
-		CPF:        account.CPF,
+		CPF:        account.CPF.ToString(),
 		Balance:    account.Balance.ToFloat(),
 		Created_At: account.CreatedAt.Format("2006-01-02T15:04:05Z07:00"),
 	}

@@ -11,12 +11,12 @@ func ValidateAccountInput(accountData input.CreateAccountVO) (input.CreateAccoun
 		return input.CreateAccountVO{}, err
 	}
 
-	_, err = validateCPF(accountData.CPF)
+	_, err = validateCPF(accountData.CPF.ToString())
 	if err != nil {
 		return input.CreateAccountVO{}, err
 	}
 
-	_, err = validateSecret(accountData.Secret)
+	_, err = validateSecret(accountData.Secret.ToString())
 	if err != nil {
 		return input.CreateAccountVO{}, err
 	}
@@ -90,9 +90,11 @@ func calculateFirstVerifyingDigit(values []int) int {
 	for index, value := range values {
 		total += ((index + 1) * value)
 	}
-	result := total % 11
+	const divisionFactor = 11
+	result := total % divisionFactor
 
-	if result == 10 {
+	const decimalConversion = 10
+	if result == decimalConversion {
 		return 0
 	}
 
@@ -104,9 +106,11 @@ func calculateSecondVerifyingDigit(values []int) int {
 	for index, value := range values {
 		total += ((index) * value)
 	}
-	result := total % 11
+	const divisionFactor = 11
+	result := total % divisionFactor
 
-	if result == 10 {
+	const decimalConversion = 10
+	if result == decimalConversion {
 		return 0
 	}
 
@@ -115,7 +119,8 @@ func calculateSecondVerifyingDigit(values []int) int {
 
 func cpfIsNotATestValue(cpf string) bool {
 	// Validação leva em conta se CPF apresenta dados inválidos de teste (todos os números iguais ou padrão sequencial 12345678901)
-	if cpf == "12345678901" || cpf[0:5] == cpf[5:10] {
+	const cpfTestExample = "12345678901"
+	if cpf == cpfTestExample || cpf[0:5] == cpf[5:10] {
 		return false
 	}
 

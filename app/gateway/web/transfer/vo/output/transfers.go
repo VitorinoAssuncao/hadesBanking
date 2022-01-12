@@ -3,9 +3,9 @@ package output
 import "stoneBanking/app/domain/entities/transfer"
 
 type TransferOutputVO struct {
-	ID                       string  `json:"id" example:"1"`
-	AccountOriginExternalID  string  `json:"account_origin_name" example:"1"`
-	AccountDestinyExternalID string  `json:"account_destiny_name" example:"3"`
+	ID                       string  `json:"id" example:"bf89f445-70d3-442f-9821-55699a868704"`
+	AccountOriginExternalID  string  `json:"account_origin_id" example:"bf89f445-70d3-442f-9821-55699a868704"`
+	AccountDestinyExternalID string  `json:"account_destiny_id" example:"bf89f445-70d3-442f-9821-55699a868704"`
 	Amount                   float64 `json:"value" example:"123.32"`
 	Created_At               string  `json:"created_at" example:"12/05/2021 00:01:01" `
 }

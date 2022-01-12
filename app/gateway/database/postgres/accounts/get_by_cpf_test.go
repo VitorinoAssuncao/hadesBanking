@@ -30,7 +30,7 @@ func Test_GetByCPF(t *testing.T) {
 				created, err := accountRepository.Create(ctx, input)
 
 				if err == nil {
-					value = created.CPF
+					value = string(created.CPF)
 				}
 
 				return value

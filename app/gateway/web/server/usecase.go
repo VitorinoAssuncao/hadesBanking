@@ -12,7 +12,7 @@ type UseCaseWrapper struct {
 
 func NewUseCaseWrapper(wrapper *RepositorieWrapper) *UseCaseWrapper {
 	return &UseCaseWrapper{
-		Accounts: account.New(wrapper.Account),
+		Accounts: account.New(wrapper.Account, wrapper.Token),
 		Transfer: transfer.New(wrapper.Transfer, wrapper.Account),
 	}
 }

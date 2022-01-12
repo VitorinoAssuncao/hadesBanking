@@ -10,7 +10,7 @@ func (r transferRepository) GetAllByAccountID(ctx context.Context, acccountID ty
 	var transfers = make([]transfer.Transfer, 0)
 	const sqlQuery = `
 	SELECT
-		t.id, t.external_id, t.account_origin_id, t.account_destiny_id, t.amount, t.created_at,o.external_id ,d.external_id,
+		t.id, t.external_id, t.account_origin_id, t.account_destiny_id, t.amount, t.created_at,o.external_id ,d.external_id
 	FROM
 		transfers t
 	INNER JOIN
@@ -18,7 +18,7 @@ func (r transferRepository) GetAllByAccountID(ctx context.Context, acccountID ty
 	INNER JOIN
 		accounts d on (d.id = t.account_destiny_id)
 	WHERE
-		(account_origin_id = $1 or account_destiny_id = $1)`
+		(t.account_origin_id = $1 or t.account_destiny_id = $1)`
 
 	result, err := r.db.Query(sqlQuery, acccountID)
 	if err != nil {
