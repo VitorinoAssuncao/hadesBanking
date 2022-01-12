@@ -3,9 +3,9 @@ package account
 import (
 	"context"
 	"database/sql"
-	"errors"
 	"stoneBanking/app/domain/entities/account"
 	"stoneBanking/app/domain/entities/token"
+	customError "stoneBanking/app/domain/errors"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -18,7 +18,7 @@ func Test_Create(t *testing.T) {
 		tokenMock   token.Repository
 		input       account.Account
 		want        account.Account
-		wantErr     bool
+		wantErr     error
 	}{
 		{
 			name: "conta cadastrada com sucesso, quando dados corretos",
@@ -46,7 +46,7 @@ func Test_Create(t *testing.T) {
 				Secret:     "J0@0doR10",
 				Balance:    0,
 			},
-			wantErr: false,
+			wantErr: nil,
 		},
 		{
 			name: "não é possível cadastrar a conta pois nome está vazio",
@@ -67,7 +67,7 @@ func Test_Create(t *testing.T) {
 				Balance:    0,
 			},
 			want:    account.Account{},
-			wantErr: true,
+			wantErr: customError.ErrorAccountNameRequired,
 		},
 		{
 			name: "não é possível criar a conta, pois cpf já existe",
@@ -95,10 +95,10 @@ func Test_Create(t *testing.T) {
 				Balance:    0,
 			},
 			want:    account.Account{},
-			wantErr: true,
+			wantErr: customError.ErrorAccountCPFExists,
 		},
 		{
-			name: "não é possível criar a conta, pois ocorre um erro na criação da mesma no repositorio",
+			name: "não é possível criar a conta, pois ocorre um erro na validação do cpf",
 			accountMock: &account.RepositoryMock{
 				CreateFunc: func(ctx context.Context, account account.Account) (account.Account, error) {
 					return account, nil
@@ -116,13 +116,13 @@ func Test_Create(t *testing.T) {
 				Balance:    0,
 			},
 			want:    account.Account{},
-			wantErr: true,
+			wantErr: customError.ErrorCreateAccount,
 		},
 		{
-			name: "não é possível criar a conta, pois cpf já existe",
+			name: "não é possível criar a conta, pois ocorre um erro no momento de criação da conta",
 			accountMock: &account.RepositoryMock{
 				CreateFunc: func(ctx context.Context, account account.Account) (account.Account, error) {
-					return account, errors.New("test error")
+					return account, customError.ErrorCreateAccount
 				},
 				GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 					return account.Account{}, sql.ErrNoRows
@@ -137,7 +137,7 @@ func Test_Create(t *testing.T) {
 				Balance:    0,
 			},
 			want:    account.Account{},
-			wantErr: true,
+			wantErr: customError.ErrorCreateAccount,
 		},
 	}
 
@@ -145,7 +145,7 @@ func Test_Create(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			u := New(test.accountMock, test.tokenMock)
 			got, err := u.Create(context.Background(), test.input)
-			assert.Equal(t, (err != nil), test.wantErr)
+			assert.Equal(t, err, test.wantErr)
 			assert.Equal(t, test.want, got)
 		})
 	}
