@@ -2,7 +2,6 @@ package account
 
 import (
 	"context"
-	"database/sql"
 	"errors"
 	"stoneBanking/app/domain/entities/account"
 	"stoneBanking/app/domain/entities/token"
@@ -19,7 +18,6 @@ func Test_LoginUser(t *testing.T) {
 		accountMock account.Repository
 		tokenMock   token.Repository
 		input       account.Account
-		runBefore   func(db *sql.DB)
 		want        string
 		wantErr     error
 	}{

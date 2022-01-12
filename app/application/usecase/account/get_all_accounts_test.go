@@ -2,7 +2,6 @@ package account
 
 import (
 	"context"
-	"database/sql"
 	"stoneBanking/app/domain/entities/account"
 	"stoneBanking/app/domain/entities/token"
 	customError "stoneBanking/app/domain/errors"
@@ -16,7 +15,6 @@ func Test_GetAll(t *testing.T) {
 		name        string
 		accountMock account.Repository
 		tokenMock   token.Repository
-		runBefore   func(db *sql.DB)
 		want        int
 		wantErr     error
 	}{
