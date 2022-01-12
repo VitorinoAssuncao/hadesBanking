@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetBalance(t *testing.T) {
+func Test_GetBalance(t *testing.T) {
 	testCases := []struct {
 		name        string
 		accountMock account.Repository
