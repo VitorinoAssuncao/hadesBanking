@@ -13,6 +13,7 @@ func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Re
 	accountID, err := middleware.GetAccountIDFromToken(r, controller.tokenRepo)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 
 	transfers, err := controller.usecase.GetAllByAccountID(context.Background(), types.ExternalID(accountID))

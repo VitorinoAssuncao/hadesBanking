@@ -16,6 +16,7 @@ func (controller Controller) Create(w http.ResponseWriter, r *http.Request) {
 	accountID, err := middleware.GetAccountIDFromToken(r, controller.tokenRepo)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 
 	var transferData = input.CreateTransferVO{}
@@ -32,6 +33,7 @@ func (controller Controller) Create(w http.ResponseWriter, r *http.Request) {
 	transferData, err = validations.ValidateTransferData(transferData)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 
 	transfer := transferData.GenerateTransfer()
