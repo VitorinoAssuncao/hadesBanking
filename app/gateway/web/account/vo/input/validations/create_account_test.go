@@ -15,7 +15,7 @@ func Test_ValidateAccountInput(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "dados de entrada corretos, irá passar por todas as validações",
+			name: "right input data, gonna pass all the validations",
 			input: input.CreateAccountVO{
 				Name:    "Joao da Silva",
 				CPF:     "10545395020",
@@ -31,7 +31,7 @@ func Test_ValidateAccountInput(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "dados de entrada com nome vazio, irá retornar dados de input vazios, e erro",
+			name: "input data as cpf field void, in this case causing a error in return",
 			input: input.CreateAccountVO{
 				Name:    "",
 				CPF:     "10545395020",
@@ -42,7 +42,7 @@ func Test_ValidateAccountInput(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "dados de entrada com cpf vazio, irá retornar dados de input vazios, e erro",
+			name: "input data as cpf field void, in this case causing a error in return",
 			input: input.CreateAccountVO{
 				Name:    "Joao da Silva",
 				CPF:     "",
@@ -53,7 +53,7 @@ func Test_ValidateAccountInput(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "dados de entrada com cpf incorreto, irá retornar dados de input vazios, e erro",
+			name: "input data as cpf field is not valid, in this case causing a error in return",
 			input: input.CreateAccountVO{
 				Name:    "Joao da Silva",
 				CPF:     "10545395021",
@@ -64,7 +64,7 @@ func Test_ValidateAccountInput(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "dados de entrada com cpf de tamanho incorreto, irá retornar dados de input vazios, e erro",
+			name: "input data as cpf as the wrong size, in this case causing a error in return",
 			input: input.CreateAccountVO{
 				Name:    "Joao da Silva",
 				CPF:     "105453950",
@@ -75,7 +75,7 @@ func Test_ValidateAccountInput(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "dados de entrada com cpf de teste, irá retornar dados de input vazios, e erro",
+			name: "input data as test cpf value, in this case causing a error in return",
 			input: input.CreateAccountVO{
 				Name:    "Joao da Silva",
 				CPF:     "11111111111",
@@ -86,7 +86,7 @@ func Test_ValidateAccountInput(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "dados de entrada com senha vazia, irá retornar dados de input vazios, e erro",
+			name: "input data as secret field void, in this case causing a error in return",
 			input: input.CreateAccountVO{
 				Name:    "Joao da Silva",
 				CPF:     "10545395020",
@@ -97,7 +97,7 @@ func Test_ValidateAccountInput(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "dados de entrada com saldo negativo, irá retornar dados de input vazios, e erro",
+			name: "input data as a negative balance, in this case causing a error in return",
 			input: input.CreateAccountVO{
 				Name:    "Joao da Silva",
 				CPF:     "10545395020",
