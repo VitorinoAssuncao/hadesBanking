@@ -17,7 +17,6 @@ func Test_Create(t *testing.T) {
 		accountMock account.Repository
 		tokenMock   token.Repository
 		input       account.Account
-		runBefore   func(db *sql.DB)
 		want        account.Account
 		wantErr     bool
 	}{
