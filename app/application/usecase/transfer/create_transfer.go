@@ -33,7 +33,7 @@ func (usecase *usecase) Create(ctx context.Context, transferData transfer.Transf
 
 	newTransfer, err = usecase.transferRepository.Create(ctx, newTransfer)
 	if err != nil {
-		return transfer.Transfer{}, err
+		return transfer.Transfer{}, customError.ErrorTransferCreate
 	}
 
 	return newTransfer, nil
