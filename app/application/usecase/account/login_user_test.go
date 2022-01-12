@@ -6,6 +6,7 @@ import (
 	"errors"
 	"stoneBanking/app/domain/entities/account"
 	"stoneBanking/app/domain/entities/token"
+	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
 	"testing"
 
@@ -20,7 +21,7 @@ func Test_LoginUser(t *testing.T) {
 		input       account.Account
 		runBefore   func(db *sql.DB)
 		want        string
-		wantErr     bool
+		wantErr     error
 	}{
 		{
 			name: "dados que dados de login estejam corretos, retorna token de autenticação",
@@ -47,7 +48,7 @@ func Test_LoginUser(t *testing.T) {
 				Secret: "J0@0doR10",
 			},
 			want:    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI",
-			wantErr: false,
+			wantErr: nil,
 		},
 		{
 			name: "retornará com erro ao informar conta incorretamente",
@@ -67,7 +68,7 @@ func Test_LoginUser(t *testing.T) {
 				Secret: "J0@0doR10",
 			},
 			want:    "",
-			wantErr: true,
+			wantErr: customError.ErrorAccountLogin,
 		},
 		{
 			name: "dados senha incorreta, deve retornar sem o token e apresentando erro",
@@ -94,7 +95,7 @@ func Test_LoginUser(t *testing.T) {
 				Secret: "J0@0doR10",
 			},
 			want:    "",
-			wantErr: true,
+			wantErr: customError.ErrorAccountLogin,
 		},
 		{
 			name: "deverá apresentar ao erro, ao ocorrer falha na geração do token",
@@ -120,14 +121,14 @@ func Test_LoginUser(t *testing.T) {
 				Secret: "J0@0doR10",
 			},
 			want:    "",
-			wantErr: true,
+			wantErr: customError.ErrorAccountTokenGeneration,
 		},
 	}
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
 			u := New(test.accountMock, test.tokenMock)
 			got, err := u.LoginUser(context.Background(), test.input)
-			assert.Equal(t, (err != nil), test.wantErr)
+			assert.Equal(t, err, test.wantErr)
 			assert.Equal(t, test.want, got)
 		})
 	}

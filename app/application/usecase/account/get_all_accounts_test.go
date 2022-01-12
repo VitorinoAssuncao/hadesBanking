@@ -18,7 +18,7 @@ func Test_GetAll(t *testing.T) {
 		tokenMock   token.Repository
 		runBefore   func(db *sql.DB)
 		want        int
-		wantErr     bool
+		wantErr     error
 	}{
 		{
 			name: "retorna uma conta cadastrada com sucesso",
@@ -38,7 +38,7 @@ func Test_GetAll(t *testing.T) {
 				},
 			},
 			want:    1,
-			wantErr: false,
+			wantErr: nil,
 		},
 		{
 			name: "erro ao tentar buscar as contas no banco",
@@ -48,14 +48,14 @@ func Test_GetAll(t *testing.T) {
 				},
 			},
 			want:    0,
-			wantErr: true,
+			wantErr: customError.ErrorAccountsListing,
 		},
 	}
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
 			u := New(test.accountMock, test.tokenMock)
 			got, err := u.GetAll(context.Background())
-			assert.Equal(t, (err != nil), test.wantErr)
+			assert.Equal(t, err, test.wantErr)
 			assert.Equal(t, test.want, len(got))
 		})
 	}
