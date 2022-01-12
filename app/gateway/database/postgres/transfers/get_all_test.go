@@ -21,7 +21,7 @@ func Test_GetAll(t *testing.T) {
 		wantErr   bool
 	}{
 		{
-			name: "localizados todas as transferencias para conta existente",
+			name: "with a valid id, locate all the transfers and return withouth error",
 			runBefore: func(db *sql.DB) {
 				sqlQuery :=
 					`
@@ -51,7 +51,7 @@ func Test_GetAll(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name:    "teste com o banco vazio, deve retornar lista vazia",
+			name:    "try to find a transfer from a account when none exist, and return error",
 			want:    0,
 			wantErr: false,
 		},
