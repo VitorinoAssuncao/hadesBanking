@@ -22,7 +22,7 @@ func Test_LoginUser(t *testing.T) {
 		wantErr     error
 	}{
 		{
-			name: "dados que dados de login estejam corretos, retorna token de autenticação",
+			name: "with the right login and secret, return a authorization token",
 			accountMock: &account.RepositoryMock{
 				GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 					return account.Account{
@@ -49,7 +49,7 @@ func Test_LoginUser(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "retornará com erro ao informar conta incorretamente",
+			name: "with a invalid cpf return a error for trying to login",
 			accountMock: &account.RepositoryMock{
 				GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 					return account.Account{}, errors.New("test error")
@@ -69,7 +69,7 @@ func Test_LoginUser(t *testing.T) {
 			wantErr: customError.ErrorAccountLogin,
 		},
 		{
-			name: "dados senha incorreta, deve retornar sem o token e apresentando erro",
+			name: "with a invalid secret, return a error when trying to login",
 			accountMock: &account.RepositoryMock{
 				GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 					return account.Account{
@@ -96,7 +96,7 @@ func Test_LoginUser(t *testing.T) {
 			wantErr: customError.ErrorAccountLogin,
 		},
 		{
-			name: "deverá apresentar ao erro, ao ocorrer falha na geração do token",
+			name: "with the right login data, return a error when generating the authorization token",
 			accountMock: &account.RepositoryMock{
 				GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 					return account.Account{

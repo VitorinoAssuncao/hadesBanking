@@ -19,7 +19,7 @@ func Test_GetAll(t *testing.T) {
 		wantErr     error
 	}{
 		{
-			name: "retorna uma conta cadastrada com sucesso",
+			name: "return all accounts that exist in the database",
 			accountMock: &account.RepositoryMock{
 				GetAllFunc: func(ctx context.Context) ([]account.Account, error) {
 					tempAccount := account.Account{
@@ -39,7 +39,7 @@ func Test_GetAll(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "erro ao tentar buscar as contas no banco",
+			name: "when trying to list all the accounts in the database, as a error in the querry",
 			accountMock: &account.RepositoryMock{
 				GetAllFunc: func(ctx context.Context) ([]account.Account, error) {
 					return []account.Account{}, customError.ErrorAccountsListing

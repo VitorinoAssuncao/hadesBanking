@@ -21,7 +21,7 @@ func Test_Create(t *testing.T) {
 		wantErr     error
 	}{
 		{
-			name: "conta cadastrada com sucesso, quando dados corretos",
+			name: "with the right data, create account sucessfully",
 			accountMock: &account.RepositoryMock{
 				CreateFunc: func(ctx context.Context, account account.Account) (account.Account, error) {
 					return account, nil
@@ -49,7 +49,7 @@ func Test_Create(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "não é possível cadastrar a conta pois nome está vazio",
+			name: "with data missing the Name, as not possible to create account, and return a error",
 			accountMock: &account.RepositoryMock{
 				CreateFunc: func(ctx context.Context, account account.Account) (account.Account, error) {
 					return account, nil
@@ -70,7 +70,7 @@ func Test_Create(t *testing.T) {
 			wantErr: customError.ErrorAccountNameRequired,
 		},
 		{
-			name: "não é possível criar a conta, pois cpf já existe",
+			name: "with right input data, try to create a account, but is duplicated from one that exist, and return error",
 			accountMock: &account.RepositoryMock{
 				CreateFunc: func(ctx context.Context, account account.Account) (account.Account, error) {
 					return account, nil
@@ -98,7 +98,7 @@ func Test_Create(t *testing.T) {
 			wantErr: customError.ErrorAccountCPFExists,
 		},
 		{
-			name: "não é possível criar a conta, pois ocorre um erro na validação do cpf",
+			name: "with right data, try to create a account, but has a error when validating if a account with that cpf exist",
 			accountMock: &account.RepositoryMock{
 				CreateFunc: func(ctx context.Context, account account.Account) (account.Account, error) {
 					return account, nil
@@ -119,7 +119,7 @@ func Test_Create(t *testing.T) {
 			wantErr: customError.ErrorCreateAccount,
 		},
 		{
-			name: "não é possível criar a conta, pois ocorre um erro no momento de criação da conta",
+			name: "with the right data, try to create a account but has a error when creating in the database",
 			accountMock: &account.RepositoryMock{
 				CreateFunc: func(ctx context.Context, account account.Account) (account.Account, error) {
 					return account, customError.ErrorCreateAccount

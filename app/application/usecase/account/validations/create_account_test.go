@@ -18,7 +18,7 @@ func Test_ValidateAccountData(t *testing.T) {
 		wantErr   error
 	}{
 		{
-			name: "dados de conta corretos, deve passar pela validação",
+			name: "with the right data, return nil",
 			input: account.Account{
 				ID:         1,
 				Name:       "Joao do Rio",
@@ -30,7 +30,7 @@ func Test_ValidateAccountData(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "dados de conta faltando nome, deve apresentar erro",
+			name: "with the data missing the value of field 'Name' return a error",
 			input: account.Account{
 				Name:    "",
 				CPF:     "761.647.810-78",
@@ -40,7 +40,7 @@ func Test_ValidateAccountData(t *testing.T) {
 			wantErr: customError.ErrorAccountNameRequired,
 		},
 		{
-			name: "dados de conta faltando cpf, deve apresentar erro",
+			name: "with the data missing the value of field 'CPF' return a error",
 			input: account.Account{
 				Name:    "Joao do Rio",
 				CPF:     "",
@@ -50,7 +50,7 @@ func Test_ValidateAccountData(t *testing.T) {
 			wantErr: customError.ErrorAccountCPFRequired,
 		},
 		{
-			name: "dados de conta faltando a senha, deve apresentar erro",
+			name: "with the data missing the value of field 'Name' return a error",
 			input: account.Account{
 				Name:    "Joao do Rio",
 				CPF:     "761.647.810-78",
@@ -60,7 +60,7 @@ func Test_ValidateAccountData(t *testing.T) {
 			wantErr: customError.ErrorAccountSecretRequired,
 		},
 		{
-			name: "dados de conta apresentam saldo negativo, deve apresentar erro",
+			name: "with the field 'Balance' having a value less than 0(zero), return a error",
 			input: account.Account{
 				ID:         1,
 				Name:       "Joao do Rio",
