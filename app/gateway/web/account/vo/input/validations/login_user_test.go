@@ -16,7 +16,7 @@ func Test_ValidateLoginInputData(t *testing.T) {
 		wantErr error
 	}{
 		{
-			name: "com os dados corretos, deverá validar dados de login com sucesso e retornar sem erros",
+			name: "with the right input data, gonna return a token, and no error",
 			input: input.CreateAccountVO{
 				CPF:    "38343335812",
 				Secret: "123456789",
@@ -24,14 +24,14 @@ func Test_ValidateLoginInputData(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "dados de entrada com cpf vazio ou ausente, deverá retornar erro",
+			name: "input data with cpf void, gonna return a error",
 			input: input.CreateAccountVO{
 				Secret: "123456789",
 			},
 			wantErr: customError.ErrorAccountCPFRequired,
 		},
 		{
-			name: "dados de entrada com secret vazio, deverá retornar erro",
+			name: "input data with secret void, gonna return a error",
 			input: input.CreateAccountVO{
 				CPF: "12345678912",
 			},

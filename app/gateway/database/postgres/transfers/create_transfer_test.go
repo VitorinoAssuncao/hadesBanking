@@ -21,7 +21,7 @@ func Test_Create(t *testing.T) {
 		wantErr   bool
 	}{
 		{
-			name: "conta cadastrada com sucesso, quando dados corretos",
+			name: "with the right input data, create the account sucessfully",
 			input: transfer.Transfer{
 				AccountOriginID:      1,
 				AccountDestinationID: 1,

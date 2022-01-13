@@ -19,7 +19,7 @@ func Test_GetAll(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "localiza todas as contas, quando existe ao menos uma cadastrada",
+			name: "find and return all the accounts, when at last one exist",
 			input: account.Account{
 				Name:    "Joao da Silva",
 				CPF:     "38330499912",
@@ -35,7 +35,7 @@ func Test_GetAll(t *testing.T) {
 			TruncateTable(database)
 			_, err := accountRepository.Create(ctx, test.input)
 			if err != nil {
-				t.Errorf("Não foi possível criar uma conta")
+				t.Errorf("error when creating account")
 			}
 			got, err := accountRepository.GetAll(ctx)
 			assert.Equal(t, (err != nil), test.wantErr)

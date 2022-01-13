@@ -21,7 +21,7 @@ func Test_GetByID(t *testing.T) {
 		wantErr   bool
 	}{
 		{
-			name: "localizado a conta usando o ID externo (uuid), e retorna os dados da mesma ",
+			name: "with the right input id, return the data from account",
 			runBefore: func() (value types.ExternalID) {
 				input := account.Account{
 					Name:    "Joao da Silva",
@@ -44,7 +44,7 @@ func Test_GetByID(t *testing.T) {
 			input:   "d3280f8c-570a-450d-89f7-3509bc84980d",
 			wantErr: false,
 		}, {
-			name:    "retorna dados vazios e erro, ao tentar localizar conta com ID inexistente",
+			name:    "when trying to find a account with the wrong id (or the account not exist), return a error and a void object",
 			want:    account.Account{},
 			input:   "d3280f8c-570a-450d-89f7-3509bc849899",
 			wantErr: true,

@@ -23,7 +23,7 @@ func Test_GetByID(t *testing.T) {
 		wantErr   bool
 	}{
 		{
-			name: "conta localizada com sucesso, retorna dados da conta",
+			name: "with the right id, locate the account and return withouth error",
 			runBefore: func(db *sql.DB) (value string) {
 				sqlQuery :=
 					`
@@ -46,7 +46,7 @@ func Test_GetByID(t *testing.T) {
 				created, err := transferRepository.Create(ctx, input)
 
 				if err != nil {
-					t.Errorf("Não foi possível inicializar os dados iniciais do teste")
+					t.Errorf("has not possible initialize the test data")
 				}
 
 				return string(created.ExternalID)
@@ -60,7 +60,7 @@ func Test_GetByID(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name:    "busca por conta inexistente, deve retornar erro e dados",
+			name:    "try to find a account with a id that not exist, returning a error",
 			input:   "d3280f8c-570a-450d-89f7-3509bc849899",
 			want:    transfer.Transfer{},
 			wantErr: true,

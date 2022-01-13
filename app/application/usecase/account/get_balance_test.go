@@ -2,7 +2,6 @@ package account
 
 import (
 	"context"
-	"database/sql"
 	"stoneBanking/app/domain/entities/account"
 	"stoneBanking/app/domain/entities/token"
 	customError "stoneBanking/app/domain/errors"
@@ -18,12 +17,11 @@ func Test_GetBalance(t *testing.T) {
 		accountMock account.Repository
 		tokenMock   token.Repository
 		input       string
-		runBefore   func(db *sql.DB)
 		want        float64
 		wantErr     error
 	}{
 		{
-			name: "dado id externo correto, retorna o valor da conta apropriadamente",
+			name: "with the right id, return the balance of account",
 			accountMock: &account.RepositoryMock{
 				GetByIDFunc: func(ctx context.Context, accountID types.ExternalID) (account.Account, error) {
 					account := account.Account{
@@ -42,7 +40,7 @@ func Test_GetBalance(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "dado id incorreto, retorna valor negativo e erro",
+			name: "with a invalid id, return a error of account not found",
 			accountMock: &account.RepositoryMock{
 				GetByIDFunc: func(ctx context.Context, accountID types.ExternalID) (account.Account, error) {
 					return account.Account{}, customError.ErrorAccountIDNotFound

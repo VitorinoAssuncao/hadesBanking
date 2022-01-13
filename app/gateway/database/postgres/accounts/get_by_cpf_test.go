@@ -20,7 +20,7 @@ func Test_GetByCPF(t *testing.T) {
 		wantErr   bool
 	}{
 		{
-			name: "localizada a conta utilizando-se do cpf, e retorna os dados da mesma",
+			name: "with the right cpf input, return the account data",
 			runBefore: func() (value string) {
 				input := account.Account{
 					Name:    "Joao da Silva",
@@ -44,7 +44,7 @@ func Test_GetByCPF(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name:    "retorna erro ao tentar localizar conta com cpf inexistente",
+			name:    "when trying to find a account that not exist, return a error",
 			input:   "38330499999",
 			want:    account.Account{},
 			wantErr: true,

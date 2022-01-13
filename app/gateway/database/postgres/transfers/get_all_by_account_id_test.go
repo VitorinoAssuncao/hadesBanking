@@ -24,7 +24,7 @@ func Test_GetAllByID(t *testing.T) {
 		wantErr   bool
 	}{
 		{
-			name: "conta localizada, quando usado o id correto",
+			name: "with a valid id in the input, find the account and return without errors",
 
 			runBefore: func(db *sql.DB) (value types.InternalID) {
 				sqlQuery :=
@@ -47,7 +47,7 @@ func Test_GetAllByID(t *testing.T) {
 				}
 				created, err := transferRepository.Create(ctx, input)
 				if err != nil {
-					t.Errorf("Não foi possível inicializar o teste")
+					t.Errorf("has not possible initialize the test data")
 				}
 				return created.ID
 			},
@@ -55,7 +55,7 @@ func Test_GetAllByID(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name:    "conta não localizada, pois id não existe",
+			name:    "with a id that not exist, return a error that the account not exist",
 			input:   91,
 			want:    0,
 			wantErr: false,
