@@ -25,7 +25,7 @@ func Test_GetAll(t *testing.T) {
 					tempAccount := account.Account{
 						ID:         1,
 						Name:       "Joao do Rio",
-						ExternalID: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI",
+						ExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
 						CPF:        "761.647.810-78",
 						Secret:     "J0@0doR10",
 						Balance:    0,

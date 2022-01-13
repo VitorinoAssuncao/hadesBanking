@@ -27,7 +27,7 @@ func Test_GetBalance(t *testing.T) {
 					account := account.Account{
 						ID:         1,
 						Name:       "Joao do Rio",
-						ExternalID: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI",
+						ExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
 						CPF:        "761.647.810-78",
 						Secret:     "J0@0doR10",
 						Balance:    100,
@@ -35,7 +35,7 @@ func Test_GetBalance(t *testing.T) {
 					return account, nil
 				},
 			},
-			input:   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI",
+			input:   "94b9c27e-2880-42e3-8988-62dceb6b6463",
 			want:    1,
 			wantErr: nil,
 		},
@@ -46,7 +46,7 @@ func Test_GetBalance(t *testing.T) {
 					return account.Account{}, customError.ErrorAccountIDNotFound
 				},
 			},
-			input:   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeXXX",
+			input:   "94b9c27e-2880-42e3-8988-62dceb6b6464",
 			want:    -1,
 			wantErr: customError.ErrorAccountIDNotFound,
 		},
