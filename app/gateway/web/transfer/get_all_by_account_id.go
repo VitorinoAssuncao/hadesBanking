@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
+	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
 	"stoneBanking/app/gateway/web/middleware"
 	"stoneBanking/app/gateway/web/transfer/vo/output"
@@ -26,8 +27,13 @@ func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Re
 	}
 
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
+		if err != customError.ErrorTransferListing {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode([]output.OutputError{{Error: err.Error()}})
+		}
+
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode([]output.OutputError{{Error: err.Error()}})
 		return
 	}
 
