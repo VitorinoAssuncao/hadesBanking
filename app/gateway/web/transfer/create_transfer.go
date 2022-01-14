@@ -43,7 +43,7 @@ func (controller Controller) Create(w http.ResponseWriter, r *http.Request) {
 	transfer := transferData.GenerateTransfer()
 	newTransfer, err := controller.usecase.Create(context.Background(), transfer)
 	if err != nil {
-		if err != customError.ErrorCreateAccount {
+		if err != customError.ErrorTransferCreate {
 			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
 			return
