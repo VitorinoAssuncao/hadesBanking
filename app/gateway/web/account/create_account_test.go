@@ -94,18 +94,11 @@ func Test_Create(t *testing.T) {
 			wantErr:  customError.ErrorAccountNameRequired,
 		},
 		{
-			name: "data from input without name, generating error in validation",
+			name: "data from input with a negative ammount in origin, generating error in validation",
 			accountUsecase: usecase.New(
 				&account.RepositoryMock{
 					CreateFunc: func(ctx context.Context, accountData account.Account) (account.Account, error) {
-						return account.Account{
-							ID:         1,
-							Name:       "Joao do Rio",
-							ExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
-							CPF:        "761.647.810-78",
-							Secret:     "J0@0doR10",
-							Balance:    0,
-						}, nil
+						return account.Account{}, nil
 					},
 					GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 						return account.Account{}, sql.ErrNoRows
@@ -117,10 +110,10 @@ func Test_Create(t *testing.T) {
 				Name:    "",
 				CPF:     "761.647.810-78",
 				Secret:  "J0@0doR10",
-				Balance: 100,
+				Balance: -100,
 			},
 			wantCode: 400,
-			wantErr:  customError.ErrorAccountNameRequired,
+			wantErr:  customError.ErrorAccountBalanceInvalid,
 		},
 		{
 			name: "with correct data, but have a error when creating the account in database",
