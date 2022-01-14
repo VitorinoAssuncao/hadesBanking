@@ -23,7 +23,6 @@ func Test_GetBalance(t *testing.T) {
 		runBefore       func(req http.Request)
 		wantCode        int
 		wantBody        map[string]interface{}
-		wantErr         error
 	}{
 		{
 			name: "with a token of login, return the correct value of the account",
@@ -53,7 +52,6 @@ func Test_GetBalance(t *testing.T) {
 			wantBody: map[string]interface{}{
 				"balance": 0,
 			},
-			wantErr: nil,
 		},
 		{
 			name: "without a token of login, return a error",
@@ -70,8 +68,9 @@ func Test_GetBalance(t *testing.T) {
 				},
 			},
 			wantCode: 400,
-			wantBody: nil,
-			wantErr:  customError.ErrorServerTokenNotFound,
+			wantBody: map[string]interface{}{
+				"error": customError.ErrorServerTokenNotFound.Error(),
+			},
 		},
 		{
 			name: "with a token of login, but a error happens when trying to find the account in the database, and return a error",
@@ -91,8 +90,9 @@ func Test_GetBalance(t *testing.T) {
 				req.Header.Set("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI")
 			},
 			wantCode: 500,
-			wantBody: nil,
-			wantErr:  customError.ErrorAccountIDNotFound,
+			wantBody: map[string]interface{}{
+				"error": customError.ErrorAccountIDNotFound.Error(),
+			},
 		},
 	}
 	for _, test := range testCases {
@@ -113,10 +113,6 @@ func Test_GetBalance(t *testing.T) {
 			if test.wantBody != nil {
 				wantBodyJson, _ := json.Marshal(test.wantBody)
 				assert.JSONEq(t, string(wantBodyJson), rec.Body.String())
-			}
-
-			if test.wantErr != nil {
-				assert.Equal(t, (test.wantErr.Error() + "\n"), rec.Body.String())
 			}
 		})
 	}
