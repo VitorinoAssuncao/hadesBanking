@@ -7,11 +7,11 @@ import (
 
 func ValidateLoginInputData(input input.CreateAccountVO) error {
 	if input.CPF == "" {
-		return customError.ErrorAccountCPFRequired
+		return customError.ErrorAccountLogin
 	}
 
 	if input.Secret == "" {
-		return customError.ErrorAccountSecretRequired
+		return customError.ErrorAccountLogin
 	}
 
 	return nil

@@ -1,4 +1,4 @@
-package accounts
+package account
 
 import (
 	account_usecase "stoneBanking/app/application/usecase/account"
