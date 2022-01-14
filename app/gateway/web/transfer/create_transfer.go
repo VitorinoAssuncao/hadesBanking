@@ -15,14 +15,16 @@ func (controller Controller) Create(w http.ResponseWriter, r *http.Request) {
 
 	accountID, err := middleware.GetAccountIDFromToken(r, controller.tokenRepo)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
 		return
 	}
 
 	var transferData = input.CreateTransferVO{}
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
 		return
 	}
 
@@ -32,14 +34,16 @@ func (controller Controller) Create(w http.ResponseWriter, r *http.Request) {
 
 	transferData, err = validations.ValidateTransferData(transferData)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
 		return
 	}
 
 	transfer := transferData.GenerateTransfer()
 	newTransfer, err := controller.usecase.Create(context.Background(), transfer)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
 		return
 	}
 

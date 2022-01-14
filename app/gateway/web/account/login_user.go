@@ -17,7 +17,8 @@ func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) 
 	var loginData input.CreateAccountVO
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
 		return
 	}
 
@@ -25,7 +26,8 @@ func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) 
 
 	err = validations.ValidateLoginInputData(loginData)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
 		return
 	}
 
@@ -37,11 +39,13 @@ func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) 
 	token, err := controller.usecase.LoginUser(context.Background(), account)
 	if err != nil {
 		if err == customError.ErrorAccountTokenGeneration {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
 			return
 		}
 
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
 		return
 	}
 

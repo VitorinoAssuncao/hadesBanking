@@ -10,13 +10,15 @@ import (
 func (controller *Controller) GetBalance(w http.ResponseWriter, r *http.Request) {
 	tokenID, err := middleware.GetAccountIDFromToken(r, controller.tokenRepo)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
 		return
 	}
 
 	balance, err := controller.usecase.GetBalance(r.Context(), tokenID)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
 		return
 	}
 
