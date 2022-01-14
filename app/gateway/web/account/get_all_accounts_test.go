@@ -21,7 +21,6 @@ func Test_GetAll(t *testing.T) {
 		tokenRepository token.Repository
 		wantCode        int
 		wantBody        []map[string]interface{}
-		wantErr         error
 	}{
 		{
 			name: "with at last one account existing, data from account is returned sucessfully",
@@ -48,7 +47,6 @@ func Test_GetAll(t *testing.T) {
 				"balance":    0,
 				"created_at": "0001-01-01T00:00:00Z",
 			}},
-			wantErr: nil,
 		},
 		{
 			name: "with one error when listing the accounts, return error for client",
@@ -61,7 +59,9 @@ func Test_GetAll(t *testing.T) {
 				&token.RepositoryMock{}),
 			tokenRepository: &token.RepositoryMock{},
 			wantCode:        500,
-			wantErr:         customError.ErrorAccountsListing,
+			wantBody: []map[string]interface{}{{
+				"error": customError.ErrorAccountsListing.Error(),
+			}},
 		},
 	}
 	for _, test := range testCases {
@@ -76,10 +76,6 @@ func Test_GetAll(t *testing.T) {
 			if test.wantBody != nil {
 				wantBodyJson, _ := json.Marshal(test.wantBody)
 				assert.JSONEq(t, string(wantBodyJson), rec.Body.String())
-			}
-
-			if test.wantErr != nil {
-				assert.Equal(t, (test.wantErr.Error() + "\n"), rec.Body.String())
 			}
 		})
 	}

@@ -26,7 +26,6 @@ func Test_Create(t *testing.T) {
 		input           input.CreateAccountVO
 		wantCode        int
 		wantBody        map[string]interface{}
-		wantErr         error
 	}{
 		{
 			name: "with the right data, account is created sucessfully",
@@ -62,7 +61,6 @@ func Test_Create(t *testing.T) {
 				"balance":    0,
 				"created_at": "0001-01-01T00:00:00Z",
 			},
-			wantErr: nil,
 		},
 		{
 			name: "data from input withouth name, generating error in validation",
@@ -91,7 +89,9 @@ func Test_Create(t *testing.T) {
 				Balance: 100,
 			},
 			wantCode: 400,
-			wantErr:  customError.ErrorAccountNameRequired,
+			wantBody: map[string]interface{}{
+				"error": customError.ErrorAccountNameRequired.Error(),
+			},
 		},
 		{
 			name: "data from input with a negative ammount in origin, generating error in validation",
@@ -107,13 +107,15 @@ func Test_Create(t *testing.T) {
 				&token.RepositoryMock{}),
 			tokenRepository: &token.RepositoryMock{},
 			input: input.CreateAccountVO{
-				Name:    "",
+				Name:    "Joao do Rio",
 				CPF:     "761.647.810-78",
 				Secret:  "J0@0doR10",
 				Balance: -100,
 			},
 			wantCode: 400,
-			wantErr:  customError.ErrorAccountBalanceInvalid,
+			wantBody: map[string]interface{}{
+				"error": customError.ErrorAccountBalanceInvalid.Error(),
+			},
 		},
 		{
 			name: "with correct data, but have a error when creating the account in database",
@@ -134,8 +136,10 @@ func Test_Create(t *testing.T) {
 				Secret:  "J0@0doR10",
 				Balance: 100,
 			},
-			wantCode: 400,
-			wantErr:  customError.ErrorCreateAccount,
+			wantCode: 500,
+			wantBody: map[string]interface{}{
+				"error": customError.ErrorCreateAccount.Error(),
+			},
 		},
 	}
 
@@ -153,10 +157,6 @@ func Test_Create(t *testing.T) {
 			if test.wantBody != nil {
 				wantBodyJson, _ := json.Marshal(test.wantBody)
 				assert.JSONEq(t, string(wantBodyJson), rec.Body.String())
-			}
-
-			if test.wantErr != nil {
-				assert.Equal(t, (test.wantErr.Error() + "\n"), rec.Body.String())
 			}
 		})
 	}
