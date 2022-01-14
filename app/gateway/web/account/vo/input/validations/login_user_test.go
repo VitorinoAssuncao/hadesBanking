@@ -28,14 +28,14 @@ func Test_ValidateLoginInputData(t *testing.T) {
 			input: input.CreateAccountVO{
 				Secret: "123456789",
 			},
-			wantErr: customError.ErrorAccountCPFRequired,
+			wantErr: customError.ErrorAccountLogin,
 		},
 		{
 			name: "input data with secret void, gonna return a error",
 			input: input.CreateAccountVO{
 				CPF: "12345678912",
 			},
-			wantErr: customError.ErrorAccountSecretRequired,
+			wantErr: customError.ErrorAccountLogin,
 		},
 	}
 	for _, test := range testCases {
