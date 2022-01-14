@@ -9,7 +9,8 @@ import (
 func (controller *Controller) GetAll(w http.ResponseWriter, r *http.Request) {
 	accounts, err := controller.usecase.GetAll(r.Context())
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode([]output.OutputError{{Error: err.Error()}})
 		return
 	}
 
