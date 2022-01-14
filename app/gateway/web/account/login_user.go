@@ -40,7 +40,7 @@ func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) 
 	}
 
 	loginOutput := output.LoginOutputVO{
-		Token: token,
+		Authorization: token,
 	}
 
 	json.NewEncoder(w).Encode(loginOutput)
