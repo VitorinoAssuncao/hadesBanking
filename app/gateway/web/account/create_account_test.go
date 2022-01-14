@@ -94,7 +94,7 @@ func Test_Create(t *testing.T) {
 			wantErr:  customError.ErrorAccountNameRequired,
 		},
 		{
-			name: "data from input withouth name, generating error in validation",
+			name: "data from input without name, generating error in validation",
 			accountUsecase: usecase.New(
 				&account.RepositoryMock{
 					CreateFunc: func(ctx context.Context, accountData account.Account) (account.Account, error) {
