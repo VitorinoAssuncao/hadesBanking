@@ -12,7 +12,8 @@ import (
 func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Request) {
 	accountID, err := middleware.GetAccountIDFromToken(r, controller.tokenRepo)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode([]output.OutputError{{Error: err.Error()}})
 		return
 	}
 
@@ -25,7 +26,8 @@ func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Re
 	}
 
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
 		return
 	}
 
