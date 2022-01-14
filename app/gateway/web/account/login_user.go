@@ -1,4 +1,4 @@
-package accounts
+package account
 
 import (
 	"context"
@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"stoneBanking/app/domain/entities/account"
+	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
 	"stoneBanking/app/gateway/web/account/vo/input"
 	validations "stoneBanking/app/gateway/web/account/vo/input/validations"
@@ -35,12 +36,17 @@ func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) 
 
 	token, err := controller.usecase.LoginUser(context.Background(), account)
 	if err != nil {
+		if err == customError.ErrorAccountTokenGeneration {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	loginOutput := output.LoginOutputVO{
-		Token: token,
+		Authorization: token,
 	}
 
 	json.NewEncoder(w).Encode(loginOutput)
