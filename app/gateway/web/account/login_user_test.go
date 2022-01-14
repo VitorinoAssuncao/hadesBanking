@@ -24,7 +24,6 @@ func Test_LoginUser(t *testing.T) {
 		input           input.CreateAccountVO
 		wantCode        int
 		wantBody        map[string]interface{}
-		wantErr         error
 	}{
 		{
 			name: "with the correct data, log the user and return the authorization token",
@@ -56,7 +55,6 @@ func Test_LoginUser(t *testing.T) {
 			wantBody: map[string]interface{}{
 				"authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI",
 			},
-			wantErr: nil,
 		},
 		{
 			name: "with the login data withouth cpf, when validating the data return a error",
@@ -85,8 +83,9 @@ func Test_LoginUser(t *testing.T) {
 				Secret: "12344",
 			},
 			wantCode: 400,
-			wantBody: nil,
-			wantErr:  customError.ErrorAccountLogin,
+			wantBody: map[string]interface{}{
+				"error": customError.ErrorAccountLogin.Error(),
+			},
 		},
 		{
 			name: "with the correct cpf but the wrong password, try to log, but return a error",
@@ -115,8 +114,9 @@ func Test_LoginUser(t *testing.T) {
 				Secret: "12345",
 			},
 			wantCode: 400,
-			wantBody: nil,
-			wantErr:  customError.ErrorAccountLogin,
+			wantBody: map[string]interface{}{
+				"error": customError.ErrorAccountLogin.Error(),
+			},
 		},
 		{
 			name: "with the correct data, but happens a error when generating the token, and return error",
@@ -144,8 +144,9 @@ func Test_LoginUser(t *testing.T) {
 				Secret: "12344",
 			},
 			wantCode: 500,
-			wantBody: nil,
-			wantErr:  customError.ErrorAccountTokenGeneration,
+			wantBody: map[string]interface{}{
+				"error": customError.ErrorAccountTokenGeneration.Error(),
+			},
 		},
 	}
 	for _, test := range testCases {
@@ -161,10 +162,6 @@ func Test_LoginUser(t *testing.T) {
 			if test.wantBody != nil {
 				wantBodyJson, _ := json.Marshal(test.wantBody)
 				assert.JSONEq(t, string(wantBodyJson), rec.Body.String())
-			}
-
-			if test.wantErr != nil {
-				assert.Equal(t, (test.wantErr.Error() + "\n"), rec.Body.String())
 			}
 		})
 	}
