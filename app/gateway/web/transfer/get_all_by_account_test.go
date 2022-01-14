@@ -82,6 +82,30 @@ func Test_GetAllByAccountID(t *testing.T) {
 				"error": customError.ErrorServerTokenNotFound.Error(),
 			}},
 		},
+		{
+			name: "try to get all transfers, but a error in database happens, and return a error to user",
+			transferUsecase: usecase.New(
+				&transfer.RepositoryMock{
+					GetAllByAccountIDFunc: func(ctx context.Context, accountID types.InternalID) ([]transfer.Transfer, error) {
+						return []transfer.Transfer{{}}, customError.ErrorTransferListing
+					}},
+				&account.RepositoryMock{
+					GetByIDFunc: func(ctx context.Context, accountID types.ExternalID) (account.Account, error) {
+						return account.Account{}, nil
+					}}),
+			tokenRepository: &token.RepositoryMock{
+				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
+					return "65d56316-39ad-4937-b41d-be2f103b0bd9", nil
+				}},
+			input: map[string]interface{}{},
+			runBefore: func(req http.Request) {
+				req.Header.Set("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI")
+			},
+			wantCode: 500,
+			wantBody: []map[string]interface{}{{
+				"error": customError.ErrorTransferListing.Error(),
+			}},
+		},
 	}
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
