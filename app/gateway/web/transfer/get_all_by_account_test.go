@@ -1,7 +1,6 @@
 package transfer
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"net/http"
@@ -22,7 +21,6 @@ func Test_GetAllByAccountID(t *testing.T) {
 		name            string
 		transferUsecase usecase.Usecase
 		tokenRepository token.Repository
-		input           map[string]interface{}
 		runBefore       func(http.Request)
 		wantCode        int
 		wantBody        []map[string]interface{}
@@ -48,7 +46,6 @@ func Test_GetAllByAccountID(t *testing.T) {
 				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
 					return "65d56316-39ad-4937-b41d-be2f103b0bd9", nil
 				}},
-			input: map[string]interface{}{},
 			runBefore: func(req http.Request) {
 				req.Header.Set("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI")
 			},
@@ -76,7 +73,6 @@ func Test_GetAllByAccountID(t *testing.T) {
 				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
 					return "", customError.ErrorServerTokenNotFound
 				}},
-			input:    map[string]interface{}{},
 			wantCode: 400,
 			wantBody: []map[string]interface{}{{
 				"error": customError.ErrorServerTokenNotFound.Error(),
@@ -97,7 +93,6 @@ func Test_GetAllByAccountID(t *testing.T) {
 				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
 					return "65d56316-39ad-4937-b41d-be2f103b0bd9", nil
 				}},
-			input: map[string]interface{}{},
 			runBefore: func(req http.Request) {
 				req.Header.Set("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI")
 			},
@@ -110,9 +105,8 @@ func Test_GetAllByAccountID(t *testing.T) {
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
 
-			body, _ := json.Marshal(test.input)
 			rec := httptest.NewRecorder()
-			req := httptest.NewRequest(http.MethodPost, "/transfer", bytes.NewReader(body))
+			req := httptest.NewRequest(http.MethodGet, "/transfer", nil)
 			if test.runBefore != nil {
 				test.runBefore(*req)
 			}
