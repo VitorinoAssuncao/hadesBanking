@@ -69,7 +69,7 @@ func Test_GetBalance(t *testing.T) {
 			},
 			wantCode: 400,
 			wantBody: map[string]interface{}{
-				"error": customError.ErrorServerTokenNotFound.Error(),
+				"error": "authorization token invalid",
 			},
 		},
 		{
@@ -91,7 +91,7 @@ func Test_GetBalance(t *testing.T) {
 			},
 			wantCode: 500,
 			wantBody: map[string]interface{}{
-				"error": customError.ErrorAccountIDNotFound.Error(),
+				"error": "account not found, please validate the ID informed",
 			},
 		},
 	}

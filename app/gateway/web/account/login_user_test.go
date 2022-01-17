@@ -84,7 +84,7 @@ func Test_LoginUser(t *testing.T) {
 			},
 			wantCode: 400,
 			wantBody: map[string]interface{}{
-				"error": customError.ErrorAccountLogin.Error(),
+				"error": "cpf or secret invalid, please validate then",
 			},
 		},
 		{
@@ -115,7 +115,7 @@ func Test_LoginUser(t *testing.T) {
 			},
 			wantCode: 400,
 			wantBody: map[string]interface{}{
-				"error": customError.ErrorAccountLogin.Error(),
+				"error": "cpf or secret invalid, please validate then",
 			},
 		},
 		{
@@ -145,7 +145,7 @@ func Test_LoginUser(t *testing.T) {
 			},
 			wantCode: 500,
 			wantBody: map[string]interface{}{
-				"error": customError.ErrorAccountTokenGeneration.Error(),
+				"error": "error when generating the authorization token",
 			},
 		},
 	}

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/gateway/web/middleware"
 	"stoneBanking/app/gateway/web/transfer/vo/input"
 	validations "stoneBanking/app/gateway/web/transfer/vo/input/validations/transfer"
@@ -42,6 +43,12 @@ func (controller Controller) Create(w http.ResponseWriter, r *http.Request) {
 	transfer := transferData.GenerateTransfer()
 	newTransfer, err := controller.usecase.Create(context.Background(), transfer)
 	if err != nil {
+		if err != customError.ErrorTransferCreate {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
+			return
+		}
+
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
 		return

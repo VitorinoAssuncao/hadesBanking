@@ -60,7 +60,7 @@ func Test_GetAll(t *testing.T) {
 			tokenRepository: &token.RepositoryMock{},
 			wantCode:        500,
 			wantBody: []map[string]interface{}{{
-				"error": customError.ErrorAccountsListing.Error(),
+				"error": "error when listing all accounts",
 			}},
 		},
 	}
