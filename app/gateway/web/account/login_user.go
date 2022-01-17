@@ -18,7 +18,9 @@ import (
 //@Accept json
 //@Produce json
 //@Param account body input.LoginVO true "Account Login Data"
-//@Sucess 200 {object} output.LoginOutputVO
+//@Success 200 {object} output.LoginOutputVO
+//@Failure	400 {object} output.OutputError
+//@Failure 500 {object} output.OutputError
 //@Router /account/login [post]
 func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) {
 	var loginData input.LoginVO

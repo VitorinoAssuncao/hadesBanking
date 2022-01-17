@@ -49,7 +49,26 @@ var doc = `{
                         }
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/output.AccountOutputVO"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/output.OutputError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/output.OutputError"
+                        }
+                    }
+                }
             }
         },
         "/account/balance": {
@@ -67,7 +86,26 @@ var doc = `{
                         "required": true
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/output.AccountBalanceVO"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/output.OutputError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/output.OutputError"
+                        }
+                    }
+                }
             }
         },
         "/account/login": {
@@ -90,7 +128,26 @@ var doc = `{
                         }
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/output.LoginOutputVO"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/output.OutputError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/output.OutputError"
+                        }
+                    }
+                }
             }
         },
         "/accounts": {
@@ -99,7 +156,29 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/output.AccountOutputVO"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/output.OutputError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/output.OutputError"
+                        }
+                    }
+                }
             }
         }
     },
@@ -135,6 +214,58 @@ var doc = `{
                 "secret": {
                     "type": "string",
                     "example": "123456"
+                }
+            }
+        },
+        "output.AccountBalanceVO": {
+            "type": "object",
+            "properties": {
+                "balance": {
+                    "type": "number",
+                    "example": 12.34
+                }
+            }
+        },
+        "output.AccountOutputVO": {
+            "type": "object",
+            "properties": {
+                "balance": {
+                    "type": "number",
+                    "example": 10
+                },
+                "cpf": {
+                    "type": "string",
+                    "example": "600.246.058-67"
+                },
+                "created_at": {
+                    "type": "string",
+                    "example": "12/05/2021 00:01:01"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "123"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "João da Silva"
+                }
+            }
+        },
+        "output.LoginOutputVO": {
+            "type": "object",
+            "properties": {
+                "authorization": {
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                }
+            }
+        },
+        "output.OutputError": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "error"
                 }
             }
         }

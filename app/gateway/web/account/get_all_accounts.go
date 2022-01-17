@@ -9,7 +9,9 @@ import (
 //@Sumary Get All Accounts
 //@Description Get all accounts actually in the system
 //@Produce json
-//@Sucess 200 {object} []output.AccountOutputVO
+//@Success 200 {object} []output.AccountOutputVO
+//@Failure	400 {object} output.OutputError
+//@Failure 500 {object} output.OutputError
 //@Router /accounts [get]
 func (controller *Controller) GetAll(w http.ResponseWriter, r *http.Request) {
 	accounts, err := controller.usecase.GetAll(r.Context())

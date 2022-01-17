@@ -15,7 +15,9 @@ import (
 //@Accept json
 //@Produce json
 //@Param account body input.CreateAccountVO true "Account Creation Data"
-//@Sucess 200 {object} output.AccountOutputVO
+//@Success 200 {object} output.AccountOutputVO
+//@Failure	400 {object} output.OutputError
+//@Failure 500 {object} output.OutputError
 //@Router /account [post]
 func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
 	var accountInput = input.CreateAccountVO{}
