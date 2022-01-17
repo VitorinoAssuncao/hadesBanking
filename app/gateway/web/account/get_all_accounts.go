@@ -6,6 +6,13 @@ import (
 	"stoneBanking/app/gateway/web/account/vo/output"
 )
 
+//@Sumary Get All Accounts
+//@Description Get all accounts actually in the system
+//@Produce json
+//@Success 200 {object} []output.AccountOutputVO
+//@Failure	400 {object} output.OutputError
+//@Failure 500 {object} output.OutputError
+//@Router /accounts [GET]
 func (controller *Controller) GetAll(w http.ResponseWriter, r *http.Request) {
 	accounts, err := controller.usecase.GetAll(r.Context())
 	if err != nil {

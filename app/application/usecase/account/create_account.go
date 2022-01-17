@@ -3,6 +3,7 @@ package account
 import (
 	"context"
 	"database/sql"
+	"errors"
 	validations "stoneBanking/app/application/usecase/account/validations"
 	"stoneBanking/app/domain/entities/account"
 	customError "stoneBanking/app/domain/errors"
@@ -20,7 +21,7 @@ func (usecase *usecase) Create(ctx context.Context, accountData account.Account)
 		return account.Account{}, customError.ErrorAccountCPFExists
 	}
 
-	if err != sql.ErrNoRows {
+	if errors.Is(err, sql.ErrNoRows) {
 		return account.Account{}, customError.ErrorCreateAccount
 	}
 
