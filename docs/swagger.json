@@ -1,0 +1,127 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a simples application to create accounts and transfers between valide accounts",
+        "title": "stoneBanking API",
+        "contact": {
+            "name": "API Support",
+            "email": "vitorinomuller@gmail.com"
+        },
+        "license": {
+            "name": "Stone Co®."
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8000",
+    "paths": {
+        "/account": {
+            "post": {
+                "description": "With the data received, validate her and if all is correct, and dont exist a account with that document, create a new account",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "description": "Account Creation Data",
+                        "name": "account",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/input.CreateAccountVO"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/account/balance": {
+            "get": {
+                "description": "With a authorization token valid, return the balance of a account",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization Token",
+                        "name": "authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/account/login": {
+            "post": {
+                "description": "With the data received, validate if is correct, and log the user, returning a token of authorization",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "description": "Account Login Data",
+                        "name": "account",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/input.LoginVO"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/accounts": {
+            "get": {
+                "description": "Get all accounts actually in the system",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {}
+            }
+        }
+    },
+    "definitions": {
+        "input.CreateAccountVO": {
+            "type": "object",
+            "properties": {
+                "balance": {
+                    "type": "integer",
+                    "example": 1000
+                },
+                "cpf": {
+                    "type": "string",
+                    "example": "600.246.058-67"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "João da Silva"
+                },
+                "secret": {
+                    "type": "string",
+                    "example": "123456"
+                }
+            }
+        },
+        "input.LoginVO": {
+            "type": "object",
+            "properties": {
+                "cpf": {
+                    "type": "string",
+                    "example": "600.246.058-67"
+                },
+                "secret": {
+                    "type": "string",
+                    "example": "123456"
+                }
+            }
+        }
+    }
+}

@@ -19,7 +19,7 @@ import (
 //@Produce json
 //@Param account body input.LoginVO true "Account Login Data"
 //@Sucess 200 {object} output.LoginOutputVO
-//@Router /account [post]
+//@Router /account/login [post]
 func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) {
 	var loginData input.LoginVO
 	reqBody, err := ioutil.ReadAll(r.Body)

@@ -7,6 +7,12 @@ import (
 	"stoneBanking/app/gateway/web/middleware"
 )
 
+//@Sumary Get the balance of a account
+//@Description With a authorization token valid, return the balance of a account
+//@Produce json
+//@Param authorization header string true "Authorization Token"
+//@Sucess 200 {object} output.AccountBalanceVO
+//@Router /account/balance [get]
 func (controller *Controller) GetBalance(w http.ResponseWriter, r *http.Request) {
 	tokenID, err := middleware.GetAccountIDFromToken(r, controller.tokenRepo)
 	if err != nil {
