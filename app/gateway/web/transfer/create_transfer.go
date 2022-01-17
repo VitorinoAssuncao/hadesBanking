@@ -12,6 +12,16 @@ import (
 	"stoneBanking/app/gateway/web/transfer/vo/output"
 )
 
+//@Sumary Create a transfer
+//@Description With the data received, validate her and if all is correct, create a new transfer, and update the balance of accounts
+//@Accept json
+//@Produce json
+//@Param authorization header string true "Authorization Token"
+//@Param transfer body input.CreateTransferVO true "Transfer Creation Data"
+//@Success 200 {object} output.TransferOutputVO
+//@Failure	400 {object} output.OutputError
+//@Failure 500 {object} output.OutputError
+//@Router /transfer [POST]
 func (controller Controller) Create(w http.ResponseWriter, r *http.Request) {
 
 	accountID, err := middleware.GetAccountIDFromToken(r, controller.tokenRepo)
