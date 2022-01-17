@@ -3,6 +3,7 @@ package account
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"net/http"
 	"stoneBanking/app/domain/entities/account"
@@ -13,8 +14,17 @@ import (
 	"stoneBanking/app/gateway/web/account/vo/output"
 )
 
+//@Sumary Log in the account
+//@Description With the data received, validate if is correct, and log the user, returning a token of authorization
+//@Accept json
+//@Produce json
+//@Param account body input.LoginVO true "Account Login Data"
+//@Success 200 {object} output.LoginOutputVO
+//@Failure	400 {object} output.OutputError
+//@Failure 500 {object} output.OutputError
+//@Router /account/login [POST]
 func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) {
-	var loginData input.CreateAccountVO
+	var loginData input.LoginVO
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -38,7 +48,7 @@ func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) 
 
 	token, err := controller.usecase.LoginUser(context.Background(), account)
 	if err != nil {
-		if err == customError.ErrorAccountTokenGeneration {
+		if errors.Is(err, customError.ErrorAccountTokenGeneration) {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
 			return

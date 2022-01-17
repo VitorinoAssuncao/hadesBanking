@@ -3,6 +3,7 @@ package transfer
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
@@ -10,6 +11,15 @@ import (
 	"stoneBanking/app/gateway/web/transfer/vo/output"
 )
 
+//@Sumary Get all transfers
+//@Description With a valid Authorization Token, get all the transfers that has made or received by the account
+//@Accept json
+//@Produce json
+//@Param authorization header string true "Authorization Token"
+//@Success 200 {object} []output.TransferOutputVO
+//@Failure	400 {object} output.OutputError
+//@Failure 500 {object} output.OutputError
+//@Router /transfer [GET]
 func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Request) {
 	accountID, err := middleware.GetAccountIDFromToken(r, controller.tokenRepo)
 	if err != nil {
@@ -27,7 +37,7 @@ func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Re
 	}
 
 	if err != nil {
-		if err != customError.ErrorTransferListing {
+		if errors.Is(err, customError.ErrorTransferListing) {
 			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode([]output.OutputError{{Error: err.Error()}})
 			return

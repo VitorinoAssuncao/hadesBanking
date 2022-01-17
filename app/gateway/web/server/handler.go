@@ -7,7 +7,10 @@ import (
 	accounts "stoneBanking/app/gateway/web/account"
 	transfers "stoneBanking/app/gateway/web/transfer"
 
+	_ "stoneBanking/docs"
+
 	"github.com/gorilla/mux"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 type Server struct {
@@ -16,6 +19,7 @@ type Server struct {
 
 func New(usecase *UseCaseWrapper, tokenRepository token.Repository) *Server {
 	router := mux.NewRouter().StrictSlash(true)
+	router.PathPrefix("/documentation/").Handler(httpSwagger.WrapHandler)
 	controller_account := accounts.New(usecase.Accounts, tokenRepository)
 	controller_transfer := transfers.New(usecase.Transfer, tokenRepository)
 	router.HandleFunc("/account", controller_account.Create).Methods("POST")
@@ -24,7 +28,7 @@ func New(usecase *UseCaseWrapper, tokenRepository token.Repository) *Server {
 	router.HandleFunc("/account/balance", controller_account.GetBalance).Methods("GET")
 	router.HandleFunc("/transfer", controller_transfer.Create).Methods("POST")
 	router.HandleFunc("/transfer", controller_transfer.GetAllByAccountID).Methods("GET")
-	log.Fatal(http.ListenAndServe(":3000", router))
+	log.Fatal(http.ListenAndServe(":8000", router))
 	server := Server{Router: *router}
 	return &server
 }
