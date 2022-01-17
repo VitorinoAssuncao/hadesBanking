@@ -18,7 +18,7 @@ import (
 //@Success 200 {object} output.AccountOutputVO
 //@Failure	400 {object} output.OutputError
 //@Failure 500 {object} output.OutputError
-//@Router /account [post]
+//@Router /account [POST]
 func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
 	var accountInput = input.CreateAccountVO{}
 

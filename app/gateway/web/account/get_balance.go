@@ -14,7 +14,7 @@ import (
 //@Success 200 {object} output.AccountBalanceVO
 //@Failure	400 {object} output.OutputError
 //@Failure 500 {object} output.OutputError
-//@Router /account/balance [get]
+//@Router /account/balance [GET]
 func (controller *Controller) GetBalance(w http.ResponseWriter, r *http.Request) {
 	tokenID, err := middleware.GetAccountIDFromToken(r, controller.tokenRepo)
 	if err != nil {
