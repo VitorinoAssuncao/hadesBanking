@@ -13,8 +13,15 @@ import (
 	"stoneBanking/app/gateway/web/account/vo/output"
 )
 
+//@Sumary Log in the account
+//@Description With the data received, validate if is correct, and log the user, returning a token of authorization
+//@Accept json
+//@Produce json
+//@Param account body input.LoginVO true "Account Login Data"
+//@Sucess 200 {object} output.LoginOutputVO
+//@Router /account [post]
 func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) {
-	var loginData input.CreateAccountVO
+	var loginData input.LoginVO
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
