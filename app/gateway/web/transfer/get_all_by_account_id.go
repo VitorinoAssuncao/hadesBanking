@@ -30,6 +30,7 @@ func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Re
 		if err != customError.ErrorTransferListing {
 			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode([]output.OutputError{{Error: err.Error()}})
+			return
 		}
 
 		w.WriteHeader(http.StatusInternalServerError)
