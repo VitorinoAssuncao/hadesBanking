@@ -108,7 +108,7 @@ func Test_Create(t *testing.T) {
 			},
 			wantCode: 400,
 			wantBody: map[string]interface{}{
-				"error": customError.ErrorServerTokenNotFound.Error(),
+				"error": "error when generating the authorization token",
 			},
 		},
 		{
@@ -147,7 +147,7 @@ func Test_Create(t *testing.T) {
 			},
 			wantCode: 400,
 			wantBody: map[string]interface{}{
-				"error": customError.ErrorTransferAccountDestinyIDRequired.Error(),
+				"error": "field account_origin_id is required",
 			},
 		},
 		{
@@ -187,7 +187,7 @@ func Test_Create(t *testing.T) {
 			},
 			wantCode: 400,
 			wantBody: map[string]interface{}{
-				"error": customError.ErrorTransferOriginEqualDestiny.Error(),
+				"error": "origin account and destiny account cannot by the same",
 			},
 		},
 		{
@@ -227,7 +227,7 @@ func Test_Create(t *testing.T) {
 			},
 			wantCode: 400,
 			wantBody: map[string]interface{}{
-				"error": customError.ErrorTransferAmountInvalid.Error(),
+				"error": "transfer amount should be greater than 0",
 			},
 		},
 		{
@@ -267,7 +267,7 @@ func Test_Create(t *testing.T) {
 			},
 			wantCode: 400,
 			wantBody: map[string]interface{}{
-				"error": customError.ErrorTransferCreateInsufficientFunds.Error(),
+				"error": "insuficient funds",
 			},
 		},
 		{
@@ -301,7 +301,7 @@ func Test_Create(t *testing.T) {
 			},
 			wantCode: 500,
 			wantBody: map[string]interface{}{
-				"error": customError.ErrorTransferCreate.Error(),
+				"error": "error when creating transfer, please try again",
 			},
 		},
 	}

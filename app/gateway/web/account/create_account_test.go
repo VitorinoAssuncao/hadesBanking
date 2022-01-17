@@ -90,7 +90,7 @@ func Test_Create(t *testing.T) {
 			},
 			wantCode: 400,
 			wantBody: map[string]interface{}{
-				"error": customError.ErrorAccountNameRequired.Error(),
+				"error": "the field 'Name' is required",
 			},
 		},
 		{
@@ -114,7 +114,7 @@ func Test_Create(t *testing.T) {
 			},
 			wantCode: 400,
 			wantBody: map[string]interface{}{
-				"error": customError.ErrorAccountBalanceInvalid.Error(),
+				"error": "the field 'Balance' need to by equal or major than 0(zero)",
 			},
 		},
 		{
@@ -138,7 +138,7 @@ func Test_Create(t *testing.T) {
 			},
 			wantCode: 500,
 			wantBody: map[string]interface{}{
-				"error": customError.ErrorCreateAccount.Error(),
+				"error": "error when creating a new account",
 			},
 		},
 	}
