@@ -3,6 +3,7 @@ package account
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"net/http"
 	"stoneBanking/app/domain/entities/account"
@@ -47,7 +48,7 @@ func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) 
 
 	token, err := controller.usecase.LoginUser(context.Background(), account)
 	if err != nil {
-		if err == customError.ErrorAccountTokenGeneration {
+		if errors.Is(err, customError.ErrorAccountTokenGeneration) {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
 			return

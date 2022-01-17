@@ -3,6 +3,7 @@ package transfer
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
@@ -36,7 +37,7 @@ func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Re
 	}
 
 	if err != nil {
-		if err != customError.ErrorTransferListing {
+		if errors.Is(err, customError.ErrorTransferListing) {
 			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode([]output.OutputError{{Error: err.Error()}})
 		}
