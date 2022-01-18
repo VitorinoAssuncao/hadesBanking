@@ -9,6 +9,7 @@ import (
 	"net/http/httptest"
 	usecase "stoneBanking/app/application/usecase/account"
 	"stoneBanking/app/domain/entities/account"
+	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/gateway/web/account/vo/input"
@@ -23,6 +24,7 @@ func Test_Create(t *testing.T) {
 		name            string
 		accountUsecase  usecase.Usecase
 		tokenRepository token.Repository
+		logRepository   logHelper.Repository
 		input           input.CreateAccountVO
 		wantCode        int
 		wantBody        map[string]interface{}
@@ -45,8 +47,10 @@ func Test_Create(t *testing.T) {
 						return account.Account{}, sql.ErrNoRows
 					},
 				},
-				&token.RepositoryMock{}),
+				&token.RepositoryMock{},
+				&logHelper.RepositoryMock{}),
 			tokenRepository: &token.RepositoryMock{},
+			logRepository:   &logHelper.RepositoryMock{},
 			input: input.CreateAccountVO{
 				Name:    "Joao",
 				CPF:     "761.647.810-78",
@@ -80,8 +84,10 @@ func Test_Create(t *testing.T) {
 						return account.Account{}, sql.ErrNoRows
 					},
 				},
-				&token.RepositoryMock{}),
+				&token.RepositoryMock{},
+				&logHelper.RepositoryMock{}),
 			tokenRepository: &token.RepositoryMock{},
+			logRepository:   &logHelper.RepositoryMock{},
 			input: input.CreateAccountVO{
 				Name:    "",
 				CPF:     "761.647.810-78",
@@ -104,8 +110,10 @@ func Test_Create(t *testing.T) {
 						return account.Account{}, sql.ErrNoRows
 					},
 				},
-				&token.RepositoryMock{}),
+				&token.RepositoryMock{},
+				&logHelper.RepositoryMock{}),
 			tokenRepository: &token.RepositoryMock{},
+			logRepository:   &logHelper.RepositoryMock{},
 			input: input.CreateAccountVO{
 				Name:    "Joao do Rio",
 				CPF:     "761.647.810-78",
@@ -128,7 +136,8 @@ func Test_Create(t *testing.T) {
 						return account.Account{}, sql.ErrNoRows
 					},
 				},
-				&token.RepositoryMock{}),
+				&token.RepositoryMock{},
+				&logHelper.RepositoryMock{}),
 			tokenRepository: &token.RepositoryMock{},
 			input: input.CreateAccountVO{
 				Name:    "Joao do Rio",
@@ -149,7 +158,7 @@ func Test_Create(t *testing.T) {
 			body, _ := json.Marshal(test.input)
 			rec := httptest.NewRecorder()
 			req := httptest.NewRequest(http.MethodPost, "/account", bytes.NewReader(body))
-			controller := New(test.accountUsecase, test.tokenRepository)
+			controller := New(test.accountUsecase, test.tokenRepository, test.logRepository)
 			controller.Create(rec, req)
 
 			assert.Equal(t, test.wantCode, rec.Code)

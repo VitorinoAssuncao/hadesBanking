@@ -10,8 +10,12 @@ import (
 )
 
 func (usecase *usecase) Create(ctx context.Context, accountData account.Account) (account.Account, error) {
+	const operation = "Usecase.Account.Create"
+
+	usecase.logRepository.LogInfo(operation, "begin validation of the input data")
 	err := validations.ValidateAccountData(accountData)
 	if err != nil {
+		usecase.logRepository.LogError(operation, err.Error())
 		return account.Account{}, err
 	}
 
@@ -22,14 +26,18 @@ func (usecase *usecase) Create(ctx context.Context, accountData account.Account)
 	}
 
 	if !errors.Is(err, sql.ErrNoRows) {
+		usecase.logRepository.LogError(operation, err.Error())
 		return account.Account{}, customError.ErrorCreateAccount
 	}
 
+	usecase.logRepository.LogInfo(operation, "create the account in database")
 	accountResult, err := usecase.accountRepository.Create(ctx, accountData)
 
 	if err != nil {
+		usecase.logRepository.LogError(operation, err.Error())
 		return account.Account{}, customError.ErrorCreateAccount
 	}
 
+	usecase.logRepository.LogInfo(operation, "account created sucessfully")
 	return accountResult, nil
 }

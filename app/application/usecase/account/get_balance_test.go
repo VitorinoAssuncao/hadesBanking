@@ -3,6 +3,7 @@ package account
 import (
 	"context"
 	"stoneBanking/app/domain/entities/account"
+	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
@@ -16,6 +17,7 @@ func Test_GetBalance(t *testing.T) {
 		name        string
 		accountMock account.Repository
 		tokenMock   token.Repository
+		logMock     logHelper.Repository
 		input       string
 		want        float64
 		wantErr     error
@@ -35,6 +37,7 @@ func Test_GetBalance(t *testing.T) {
 					return account, nil
 				},
 			},
+			logMock: &logHelper.RepositoryMock{},
 			input:   "94b9c27e-2880-42e3-8988-62dceb6b6463",
 			want:    1,
 			wantErr: nil,
@@ -46,6 +49,7 @@ func Test_GetBalance(t *testing.T) {
 					return account.Account{}, customError.ErrorAccountIDNotFound
 				},
 			},
+			logMock: &logHelper.RepositoryMock{},
 			input:   "94b9c27e-2880-42e3-8988-62dceb6b6464",
 			want:    -1,
 			wantErr: customError.ErrorAccountIDNotFound,
@@ -53,7 +57,7 @@ func Test_GetBalance(t *testing.T) {
 	}
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			u := New(test.accountMock, test.tokenMock)
+			u := New(test.accountMock, test.tokenMock, test.logMock)
 			got, err := u.GetBalance(context.Background(), test.input)
 			assert.Equal(t, err, test.wantErr)
 			assert.Equal(t, test.want, got)

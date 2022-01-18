@@ -37,5 +37,5 @@ func main() {
 	workspaces := server.NewUseCaseWrapper(repository)
 
 	// Initialize the server and host him in localhost:8000
-	server.New(workspaces, repository.Token)
+	server.New(workspaces, repository.Token, repository.Log)
 }

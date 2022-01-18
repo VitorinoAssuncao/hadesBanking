@@ -3,6 +3,7 @@ package server
 import (
 	"log"
 	"net/http"
+	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
 	accounts "stoneBanking/app/gateway/web/account"
 	transfers "stoneBanking/app/gateway/web/transfer"
@@ -17,10 +18,10 @@ type Server struct {
 	Router mux.Router
 }
 
-func New(usecase *UseCaseWrapper, tokenRepository token.Repository) *Server {
+func New(usecase *UseCaseWrapper, tokenRepository token.Repository, logRepository logHelper.Repository) *Server {
 	router := mux.NewRouter().StrictSlash(true)
 	router.PathPrefix("/documentation/").Handler(httpSwagger.WrapHandler)
-	controller_account := accounts.New(usecase.Accounts, tokenRepository)
+	controller_account := accounts.New(usecase.Accounts, tokenRepository, logRepository)
 	controller_transfer := transfers.New(usecase.Transfer, tokenRepository)
 	router.HandleFunc("/account", controller_account.Create).Methods("POST")
 	router.HandleFunc("/account/login", controller_account.LoginUser).Methods("POST")

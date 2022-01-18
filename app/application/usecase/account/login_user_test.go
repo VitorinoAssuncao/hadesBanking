@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"stoneBanking/app/domain/entities/account"
+	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
@@ -17,6 +18,7 @@ func Test_LoginUser(t *testing.T) {
 		name        string
 		accountMock account.Repository
 		tokenMock   token.Repository
+		logMock     logHelper.Repository
 		input       account.Account
 		want        string
 		wantErr     error
@@ -41,6 +43,7 @@ func Test_LoginUser(t *testing.T) {
 					return signedToken, nil
 				},
 			},
+			logMock: &logHelper.RepositoryMock{},
 			input: account.Account{
 				CPF:    "761.647.810-78",
 				Secret: "J0@0doR10",
@@ -61,6 +64,7 @@ func Test_LoginUser(t *testing.T) {
 					return signedToken, nil
 				},
 			},
+			logMock: &logHelper.RepositoryMock{},
 			input: account.Account{
 				CPF:    "761.647.810-78",
 				Secret: "J0@0doR10",
@@ -88,6 +92,7 @@ func Test_LoginUser(t *testing.T) {
 					return signedToken, nil
 				},
 			},
+			logMock: &logHelper.RepositoryMock{},
 			input: account.Account{
 				CPF:    "761.647.810-78",
 				Secret: "J0@0doR10",
@@ -114,6 +119,7 @@ func Test_LoginUser(t *testing.T) {
 					return signedToken, errors.New("test error in token generation")
 				},
 			},
+			logMock: &logHelper.RepositoryMock{},
 			input: account.Account{
 				CPF:    "761.647.810-78",
 				Secret: "J0@0doR10",
@@ -124,7 +130,7 @@ func Test_LoginUser(t *testing.T) {
 	}
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			u := New(test.accountMock, test.tokenMock)
+			u := New(test.accountMock, test.tokenMock, test.logMock)
 			got, err := u.LoginUser(context.Background(), test.input)
 			assert.Equal(t, err, test.wantErr)
 			assert.Equal(t, test.want, got)

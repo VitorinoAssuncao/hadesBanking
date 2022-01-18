@@ -20,17 +20,22 @@ import (
 //@Failure 500 {object} output.OutputError
 //@Router /account [POST]
 func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
-	var accountInput = input.CreateAccountVO{}
+	const operation = "Gateway.Rest.Account.Create"
+	controller.log.LogInfo(operation, "received request in url:"+r.URL.RawPath)
 
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
+		controller.log.LogError(operation, err.Error())
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
 		return
 	}
 
+	controller.log.LogInfo(operation, "unmarshal the data to a internal object")
+	var accountInput = input.CreateAccountVO{}
 	err = json.Unmarshal(reqBody, &accountInput)
 	if err != nil {
+		controller.log.LogError(operation, err.Error())
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
 		return
@@ -40,6 +45,7 @@ func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
 
 	accountInput, err = validations.ValidateAccountInput(accountInput)
 	if err != nil {
+		controller.log.LogError(operation, err.Error())
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
 		return
@@ -48,6 +54,7 @@ func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
 	accountData := accountInput.GenerateAccount()
 	account, err := controller.usecase.Create(r.Context(), accountData)
 	if err != nil {
+		controller.log.LogError(operation, err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
 		return
