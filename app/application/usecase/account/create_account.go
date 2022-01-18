@@ -21,7 +21,7 @@ func (usecase *usecase) Create(ctx context.Context, accountData account.Account)
 		return account.Account{}, customError.ErrorAccountCPFExists
 	}
 
-	if errors.Is(err, sql.ErrNoRows) {
+	if !errors.Is(err, sql.ErrNoRows) {
 		return account.Account{}, customError.ErrorCreateAccount
 	}
 
