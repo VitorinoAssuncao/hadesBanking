@@ -21,7 +21,7 @@ import (
 //@Router /account [POST]
 func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Account.Create"
-	controller.log.LogInfo(operation, "received request in url:"+r.URL.RawPath)
+	controller.log.LogInfo(operation, "received request in url: "+r.URL.Path)
 
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -43,6 +43,7 @@ func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
 
 	accountInput.CPF = types.Document(accountInput.CPF.TrimCPF())
 
+	controller.log.LogInfo(operation, "begin the validation of the input data")
 	accountInput, err = validations.ValidateAccountInput(accountInput)
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
