@@ -67,7 +67,7 @@ func Test_GetBalance(t *testing.T) {
 					return "", customError.ErrorServerTokenNotFound
 				},
 			},
-			wantCode: 400,
+			wantCode: 401,
 			wantBody: map[string]interface{}{
 				"error": "authorization token invalid",
 			},
