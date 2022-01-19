@@ -34,7 +34,6 @@ func createLogger(env string) *zap.Logger {
 }
 func (l LogRepository) LogInfo(operation string, msg string) {
 	l.logger.Info(msg, zap.String("operation:", operation))
-	l.logger.With()
 }
 
 func (l LogRepository) LogWarn(operation string, msg string) {
