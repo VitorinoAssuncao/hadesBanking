@@ -29,7 +29,7 @@ func Test_Create(t *testing.T) {
 					return account, nil
 				},
 				GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
-					return account.Account{}, sql.ErrNoRows
+					return account.Account{}, customError.ErrorAccountCPFNotFound
 				},
 			},
 			logMock: &logHelper.RepositoryMock{},
@@ -58,7 +58,7 @@ func Test_Create(t *testing.T) {
 					return account, nil
 				},
 				GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
-					return account.Account{}, sql.ErrNoRows
+					return account.Account{}, customError.ErrorAccountCPFNotFound
 				},
 			},
 			logMock: &logHelper.RepositoryMock{},
@@ -131,7 +131,7 @@ func Test_Create(t *testing.T) {
 					return account, customError.ErrorCreateAccount
 				},
 				GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
-					return account.Account{}, sql.ErrNoRows
+					return account.Account{}, customError.ErrorAccountCPFNotFound
 				},
 			},
 			logMock: &logHelper.RepositoryMock{},
