@@ -14,17 +14,23 @@ type LogRepository struct {
 }
 
 func NewLogRepository() logHelper.Repository {
+	logger := &LogRepository{enviroment: os.Getenv("ENVIROMENT")}
+	logger.logger = createLogger(logger.enviroment)
+	return logger
+}
+
+func createLogger(env string) *zap.Logger {
 	config := zap.NewProductionConfig()
+	if env == "development" {
+		config = zap.NewDevelopmentConfig()
+	}
 	config.DisableCaller = true
 	config.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
 	config.DisableStacktrace = true
 	newLogger, _ := config.Build()
-	return &LogRepository{
-		logger:     newLogger,
-		enviroment: os.Getenv("ENVIROMENT"),
-	}
-}
+	return newLogger
 
+}
 func (l LogRepository) LogInfo(operation string, msg string) {
 	l.logger.Info(msg, zap.String("operation:", operation), zap.String("enviroment:", l.enviroment))
 }
