@@ -12,7 +12,7 @@ import (
 func (usecase *usecase) Create(ctx context.Context, accountData account.Account) (account.Account, error) {
 	const operation = "Usecase.Account.Create"
 
-	usecase.logRepository.LogInfo(operation, "begin validation of the input data")
+	usecase.logRepository.LogInfo(operation, "begin validation of the received data")
 	err := validations.ValidateAccountData(accountData)
 	if err != nil {
 		usecase.logRepository.LogError(operation, err.Error())

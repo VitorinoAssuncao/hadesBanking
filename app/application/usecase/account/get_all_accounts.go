@@ -7,11 +7,15 @@ import (
 )
 
 func (usecase *usecase) GetAll(ctx context.Context) ([]account.Account, error) {
+	const operation = "Usecase.Account.GetAll"
+
 	var accounts = make([]account.Account, 0)
 	accounts, err := usecase.accountRepository.GetAll(ctx)
 	if err != nil {
+		usecase.logRepository.LogError(operation, err.Error())
 		return nil, customError.ErrorAccountsListing
 	}
 
+	usecase.logRepository.LogInfo(operation, "listing data sucessfully")
 	return accounts, nil
 }
