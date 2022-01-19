@@ -26,13 +26,13 @@ func NewLogRepository() logHelper.Repository {
 }
 
 func (l LogRepository) LogInfo(operation string, msg string) {
-	l.logger.Info(operation, zap.String("enviroment:", l.enviroment), zap.String("message:", msg))
+	l.logger.Info(msg, zap.String("operation:", operation), zap.String("enviroment:", l.enviroment))
 }
 
 func (l LogRepository) LogWarn(operation string, msg string) {
-	l.logger.Warn(operation, zap.String("enviroment:", l.enviroment), zap.String("message:", msg))
+	l.logger.Warn(msg, zap.String("operation:", operation), zap.String("enviroment:", l.enviroment))
 }
 
 func (l LogRepository) LogError(operation string, msg string) {
-	l.logger.Error(operation, zap.String("enviroment:", l.enviroment), zap.String("message:", msg))
+	l.logger.Error(msg, zap.String("operation:", operation), zap.String("enviroment:", l.enviroment))
 }
