@@ -3,6 +3,7 @@ package transfer
 import (
 	"context"
 	"stoneBanking/app/domain/entities/account"
+	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/transfer"
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
@@ -16,6 +17,7 @@ func Test_GetAllByAccountID(t *testing.T) {
 		name         string
 		accountMock  account.Repository
 		transferMock transfer.Repository
+		logMock      logHelper.Repository
 		input        types.ExternalID
 		wantQt       int
 		wantValue    []transfer.Transfer
@@ -47,8 +49,9 @@ func Test_GetAllByAccountID(t *testing.T) {
 					}}, nil
 				},
 			},
-			input:  "29e5ff6b-6a0d-402e-a77c-67fc2281aca0",
-			wantQt: 1,
+			logMock: &logHelper.RepositoryMock{},
+			input:   "29e5ff6b-6a0d-402e-a77c-67fc2281aca0",
+			wantQt:  1,
 			wantValue: []transfer.Transfer{{
 				ID:                   1,
 				ExternalID:           "29e5ff6b-6a0d-402e-a77c-67fc2281aca0",
@@ -76,6 +79,7 @@ func Test_GetAllByAccountID(t *testing.T) {
 					}}, nil
 				},
 			},
+			logMock:   &logHelper.RepositoryMock{},
 			input:     "29e5ff6b-6a0d-402e-a77c-67fc2281aca9",
 			wantQt:    0,
 			wantValue: []transfer.Transfer{},
@@ -100,6 +104,7 @@ func Test_GetAllByAccountID(t *testing.T) {
 					return []transfer.Transfer{}, customError.ErrorTransferListing
 				},
 			},
+			logMock:   &logHelper.RepositoryMock{},
 			input:     "29e5ff6b-6a0d-402e-a77c-67fc2281aca0",
 			wantQt:    0,
 			wantValue: []transfer.Transfer{},
@@ -108,7 +113,7 @@ func Test_GetAllByAccountID(t *testing.T) {
 	}
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			u := New(test.transferMock, test.accountMock)
+			u := New(test.transferMock, test.accountMock, test.logMock)
 			got, err := u.GetAllByAccountID(context.Background(), test.input)
 			assert.Equal(t, err, test.wantErr)
 			assert.Equal(t, test.wantQt, len(got))

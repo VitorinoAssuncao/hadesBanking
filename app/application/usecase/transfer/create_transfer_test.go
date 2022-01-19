@@ -3,6 +3,7 @@ package transfer
 import (
 	"context"
 	"stoneBanking/app/domain/entities/account"
+	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/transfer"
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
@@ -16,6 +17,7 @@ func Test_Create(t *testing.T) {
 		name         string
 		accountMock  account.Repository
 		transferMock transfer.Repository
+		logMock      logHelper.Repository
 		input        transfer.Transfer
 		want         transfer.Transfer
 		wantErr      error
@@ -46,6 +48,7 @@ func Test_Create(t *testing.T) {
 					}, nil
 				},
 			},
+			logMock: &logHelper.RepositoryMock{},
 			input: transfer.Transfer{
 				AccountOriginID:      1,
 				AccountDestinationID: 2,
@@ -74,6 +77,7 @@ func Test_Create(t *testing.T) {
 					return transfer.Transfer{}, nil
 				},
 			},
+			logMock: &logHelper.RepositoryMock{},
 			input: transfer.Transfer{
 				AccountOriginID:      1,
 				AccountDestinationID: 2,
@@ -100,6 +104,7 @@ func Test_Create(t *testing.T) {
 					return transfer.Transfer{}, customError.ErrorTransferCreateInsufficientFunds
 				},
 			},
+			logMock: &logHelper.RepositoryMock{},
 			input: transfer.Transfer{
 				AccountOriginID:      1,
 				AccountDestinationID: 2,
@@ -126,6 +131,7 @@ func Test_Create(t *testing.T) {
 					return transfer.Transfer{}, customError.ErrorTransferCreate
 				},
 			},
+			logMock: &logHelper.RepositoryMock{},
 			input: transfer.Transfer{
 				AccountOriginID:      1,
 				AccountDestinationID: 2,
@@ -137,7 +143,7 @@ func Test_Create(t *testing.T) {
 	}
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			u := New(test.transferMock, test.accountMock)
+			u := New(test.transferMock, test.accountMock, test.logMock)
 			got, err := u.Create(context.Background(), test.input)
 			assert.Equal(t, err, test.wantErr)
 			assert.Equal(t, test.want, got)
