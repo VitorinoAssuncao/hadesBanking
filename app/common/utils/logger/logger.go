@@ -9,13 +9,13 @@ import (
 )
 
 type LogRepository struct {
-	logger     *zap.Logger
-	enviroment string
+	logger *zap.Logger
 }
 
 func NewLogRepository() logHelper.Repository {
-	logger := &LogRepository{enviroment: os.Getenv("ENVIROMENT")}
-	logger.logger = createLogger(logger.enviroment)
+	enviroment := os.Getenv("ENVIROMENT")
+	tempLogger := createLogger(enviroment)
+	logger := &LogRepository{tempLogger}
 	return logger
 }
 
@@ -27,18 +27,20 @@ func createLogger(env string) *zap.Logger {
 	config.DisableCaller = true
 	config.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
 	config.DisableStacktrace = true
-	newLogger, _ := config.Build()
+	logger, _ := config.Build()
+	newLogger := logger.With(zap.String("enviroment", env))
 	return newLogger
 
 }
 func (l LogRepository) LogInfo(operation string, msg string) {
-	l.logger.Info(msg, zap.String("operation:", operation), zap.String("enviroment:", l.enviroment))
+	l.logger.Info(msg, zap.String("operation:", operation))
+	l.logger.With()
 }
 
 func (l LogRepository) LogWarn(operation string, msg string) {
-	l.logger.Warn(msg, zap.String("operation:", operation), zap.String("enviroment:", l.enviroment))
+	l.logger.Warn(msg, zap.String("operation:", operation))
 }
 
 func (l LogRepository) LogError(operation string, msg string) {
-	l.logger.Error(msg, zap.String("operation:", operation), zap.String("enviroment:", l.enviroment))
+	l.logger.Error(msg, zap.String("operation:", operation))
 }
