@@ -22,7 +22,7 @@ func New(usecase *UseCaseWrapper, tokenRepository token.Repository, logRepositor
 	router := mux.NewRouter().StrictSlash(true)
 	router.PathPrefix("/documentation/").Handler(httpSwagger.WrapHandler)
 	controller_account := accounts.New(usecase.Accounts, tokenRepository, logRepository)
-	controller_transfer := transfers.New(usecase.Transfer, tokenRepository)
+	controller_transfer := transfers.New(usecase.Transfer, tokenRepository, logRepository)
 	router.HandleFunc("/account", controller_account.Create).Methods("POST")
 	router.HandleFunc("/account/login", controller_account.LoginUser).Methods("POST")
 	router.HandleFunc("/accounts", controller_account.GetAll).Methods("GET")

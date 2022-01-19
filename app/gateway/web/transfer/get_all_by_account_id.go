@@ -21,6 +21,9 @@ import (
 //@Failure 500 {object} output.OutputError
 //@Router /transfer [GET]
 func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Request) {
+	const operation = "Gateway.Rest.Transfer.GetAllByAccountID"
+	controller.log.LogInfo(operation, "received request in url: "+r.URL.Path)
+
 	accountID, err := middleware.GetAccountIDFromToken(r, controller.tokenRepo)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)

@@ -7,6 +7,7 @@ import (
 	"net/http/httptest"
 	usecase "stoneBanking/app/application/usecase/transfer"
 	"stoneBanking/app/domain/entities/account"
+	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
 	"stoneBanking/app/domain/entities/transfer"
 	customError "stoneBanking/app/domain/errors"
@@ -21,6 +22,7 @@ func Test_GetAllByAccountID(t *testing.T) {
 		name            string
 		transferUsecase usecase.Usecase
 		tokenRepository token.Repository
+		logRepository   logHelper.Repository
 		runBefore       func(http.Request)
 		wantCode        int
 		wantBody        []map[string]interface{}
@@ -41,11 +43,13 @@ func Test_GetAllByAccountID(t *testing.T) {
 				&account.RepositoryMock{
 					GetByIDFunc: func(ctx context.Context, accountID types.ExternalID) (account.Account, error) {
 						return account.Account{}, nil
-					}}),
+					}},
+				&logHelper.RepositoryMock{}),
 			tokenRepository: &token.RepositoryMock{
 				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
 					return "65d56316-39ad-4937-b41d-be2f103b0bd9", nil
 				}},
+			logRepository: &logHelper.RepositoryMock{},
 			runBefore: func(req http.Request) {
 				req.Header.Set("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI")
 			},
@@ -68,7 +72,9 @@ func Test_GetAllByAccountID(t *testing.T) {
 				&account.RepositoryMock{
 					GetByIDFunc: func(ctx context.Context, accountID types.ExternalID) (account.Account, error) {
 						return account.Account{}, nil
-					}}),
+					}},
+				&logHelper.RepositoryMock{}),
+			logRepository: &logHelper.RepositoryMock{},
 			tokenRepository: &token.RepositoryMock{
 				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
 					return "", customError.ErrorServerTokenNotFound
@@ -88,7 +94,9 @@ func Test_GetAllByAccountID(t *testing.T) {
 				&account.RepositoryMock{
 					GetByIDFunc: func(ctx context.Context, accountID types.ExternalID) (account.Account, error) {
 						return account.Account{}, nil
-					}}),
+					}},
+				&logHelper.RepositoryMock{}),
+			logRepository: &logHelper.RepositoryMock{},
 			tokenRepository: &token.RepositoryMock{
 				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
 					return "65d56316-39ad-4937-b41d-be2f103b0bd9", nil
@@ -111,7 +119,7 @@ func Test_GetAllByAccountID(t *testing.T) {
 				test.runBefore(*req)
 			}
 
-			controller := New(test.transferUsecase, test.tokenRepository)
+			controller := New(test.transferUsecase, test.tokenRepository, test.logRepository)
 			controller.GetAllByAccountID(rec, req)
 
 			assert.Equal(t, test.wantCode, rec.Code)
