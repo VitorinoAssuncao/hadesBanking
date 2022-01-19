@@ -15,7 +15,6 @@ import (
 //@Router /accounts [GET]
 func (controller *Controller) GetAll(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Account.GetAll"
-	controller.log.LogInfo(operation, "received request in url: "+r.URL.Path)
 
 	accounts, err := controller.usecase.GetAll(r.Context())
 	if err != nil {

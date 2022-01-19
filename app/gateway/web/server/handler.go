@@ -6,6 +6,7 @@ import (
 	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
 	accounts "stoneBanking/app/gateway/web/account"
+	"stoneBanking/app/gateway/web/middleware"
 	transfers "stoneBanking/app/gateway/web/transfer"
 
 	_ "stoneBanking/docs"
@@ -20,6 +21,7 @@ type Server struct {
 
 func New(usecase *UseCaseWrapper, tokenRepository token.Repository, logRepository logHelper.Repository) *Server {
 	router := mux.NewRouter().StrictSlash(true)
+	router.Use(middleware.LogRoutes)
 	router.PathPrefix("/documentation/").Handler(httpSwagger.WrapHandler)
 	controller_account := accounts.New(usecase.Accounts, tokenRepository, logRepository)
 	controller_transfer := transfers.New(usecase.Transfer, tokenRepository, logRepository)

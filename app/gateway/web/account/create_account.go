@@ -21,7 +21,6 @@ import (
 //@Router /account [POST]
 func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Account.Create"
-	controller.log.LogInfo(operation, "received request in url: "+r.URL.Path)
 
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {

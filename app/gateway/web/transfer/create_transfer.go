@@ -25,7 +25,6 @@ import (
 //@Router /transfer [POST]
 func (controller Controller) Create(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Transfer.Create"
-	controller.log.LogInfo(operation, "received request in url: "+r.URL.Path)
 
 	controller.log.LogInfo(operation, "getting the account id from the token in the header")
 	accountID, err := middleware.GetAccountIDFromToken(r, controller.tokenRepo)

@@ -19,7 +19,6 @@ import (
 //@Router /account/balance [GET]
 func (controller *Controller) GetBalance(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Account.GetBalance"
-	controller.log.LogInfo(operation, "received request in url: "+r.URL.Path)
 
 	controller.log.LogInfo(operation, "take the value from the token")
 	tokenID, err := middleware.GetAccountIDFromToken(r, controller.tokenRepo)

@@ -25,7 +25,6 @@ import (
 //@Router /account/login [POST]
 func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Account.GetBalance"
-	controller.log.LogInfo(operation, "received request in url: "+r.URL.Path)
 
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
