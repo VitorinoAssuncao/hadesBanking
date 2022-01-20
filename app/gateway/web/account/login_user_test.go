@@ -8,6 +8,7 @@ import (
 	"net/http/httptest"
 	usecase "stoneBanking/app/application/usecase/account"
 	"stoneBanking/app/domain/entities/account"
+	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/gateway/web/account/vo/input"
@@ -21,6 +22,7 @@ func Test_LoginUser(t *testing.T) {
 		name            string
 		accountUsecase  usecase.Usecase
 		tokenRepository token.Repository
+		logRepository   logHelper.Repository
 		input           input.CreateAccountVO
 		wantCode        int
 		wantBody        map[string]interface{}
@@ -45,8 +47,10 @@ func Test_LoginUser(t *testing.T) {
 						signedToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI"
 						return signedToken, nil
 					},
-				}),
+				},
+				&logHelper.RepositoryMock{}),
 			tokenRepository: &token.RepositoryMock{},
+			logRepository:   &logHelper.RepositoryMock{},
 			input: input.CreateAccountVO{
 				CPF:    "761.647.810-78",
 				Secret: "12344",
@@ -76,8 +80,10 @@ func Test_LoginUser(t *testing.T) {
 						signedToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI"
 						return signedToken, nil
 					},
-				}),
+				},
+				&logHelper.RepositoryMock{}),
 			tokenRepository: &token.RepositoryMock{},
+			logRepository:   &logHelper.RepositoryMock{},
 			input: input.CreateAccountVO{
 				CPF:    "",
 				Secret: "12344",
@@ -107,8 +113,10 @@ func Test_LoginUser(t *testing.T) {
 						signedToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI"
 						return signedToken, nil
 					},
-				}),
+				},
+				&logHelper.RepositoryMock{}),
 			tokenRepository: &token.RepositoryMock{},
+			logRepository:   &logHelper.RepositoryMock{},
 			input: input.CreateAccountVO{
 				CPF:    "761.647.810-78",
 				Secret: "12345",
@@ -137,8 +145,10 @@ func Test_LoginUser(t *testing.T) {
 					GenerateTokenFunc: func(accountExternalID string) (signedToken string, err error) {
 						return "", customError.ErrorAccountTokenGeneration
 					},
-				}),
+				},
+				&logHelper.RepositoryMock{}),
 			tokenRepository: &token.RepositoryMock{},
+			logRepository:   &logHelper.RepositoryMock{},
 			input: input.CreateAccountVO{
 				CPF:    "761.647.810-78",
 				Secret: "12344",
@@ -154,7 +164,7 @@ func Test_LoginUser(t *testing.T) {
 			body, _ := json.Marshal(test.input)
 			rec := httptest.NewRecorder()
 			req := httptest.NewRequest(http.MethodPost, "/account/login", bytes.NewReader(body))
-			controller := New(test.accountUsecase, test.tokenRepository)
+			controller := New(test.accountUsecase, test.tokenRepository, test.logRepository)
 			controller.LoginUser(rec, req)
 
 			assert.Equal(t, test.wantCode, rec.Code)

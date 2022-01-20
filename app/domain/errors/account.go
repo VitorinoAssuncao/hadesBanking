@@ -6,6 +6,7 @@ var (
 	ErrorAccountCPFExists       = errors.New("an account with this cpf already exist")
 	ErrorCreateAccount          = errors.New("error when creating a new account")
 	ErrorAccountIDNotFound      = errors.New("account not found, please validate the ID informed")
+	ErrorAccountCPFNotFound     = errors.New("account not found, please validate the CPF informed")
 	ErrorAccountLogin           = errors.New("cpf or secret invalid, please validate then")
 	ErrorAccountTokenGeneration = errors.New("error when generating the authorization token")
 	ErrorAccountsListing        = errors.New("error when listing all accounts")

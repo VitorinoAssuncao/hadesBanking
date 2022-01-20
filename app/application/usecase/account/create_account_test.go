@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"stoneBanking/app/domain/entities/account"
+	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
 	customError "stoneBanking/app/domain/errors"
 	"testing"
@@ -16,6 +17,7 @@ func Test_Create(t *testing.T) {
 		name        string
 		accountMock account.Repository
 		tokenMock   token.Repository
+		logMock     logHelper.Repository
 		input       account.Account
 		want        account.Account
 		wantErr     error
@@ -27,9 +29,10 @@ func Test_Create(t *testing.T) {
 					return account, nil
 				},
 				GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
-					return account.Account{}, sql.ErrNoRows
+					return account.Account{}, customError.ErrorAccountCPFNotFound
 				},
 			},
+			logMock: &logHelper.RepositoryMock{},
 			input: account.Account{
 				ID:         1,
 				Name:       "Joao do Rio",
@@ -55,9 +58,10 @@ func Test_Create(t *testing.T) {
 					return account, nil
 				},
 				GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
-					return account.Account{}, sql.ErrNoRows
+					return account.Account{}, customError.ErrorAccountCPFNotFound
 				},
 			},
+			logMock: &logHelper.RepositoryMock{},
 			input: account.Account{
 				ID:         1,
 				Name:       "",
@@ -86,6 +90,7 @@ func Test_Create(t *testing.T) {
 					}, nil
 				},
 			},
+			logMock: &logHelper.RepositoryMock{},
 			input: account.Account{
 				ID:         1,
 				Name:       "Joao do Rio",
@@ -107,6 +112,7 @@ func Test_Create(t *testing.T) {
 					return account.Account{}, sql.ErrConnDone
 				},
 			},
+			logMock: &logHelper.RepositoryMock{},
 			input: account.Account{
 				ID:         1,
 				Name:       "Joao do Rio",
@@ -125,9 +131,10 @@ func Test_Create(t *testing.T) {
 					return account, customError.ErrorCreateAccount
 				},
 				GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
-					return account.Account{}, sql.ErrNoRows
+					return account.Account{}, customError.ErrorAccountCPFNotFound
 				},
 			},
+			logMock: &logHelper.RepositoryMock{},
 			input: account.Account{
 				ID:         1,
 				Name:       "Joao do Rio",
@@ -143,9 +150,9 @@ func Test_Create(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			u := New(test.accountMock, test.tokenMock)
+			u := New(test.accountMock, test.tokenMock, test.logMock)
 			got, err := u.Create(context.Background(), test.input)
-			assert.Equal(t, err, test.wantErr)
+			assert.Equal(t, test.wantErr, err)
 			assert.Equal(t, test.want, got)
 		})
 	}

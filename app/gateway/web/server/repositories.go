@@ -2,7 +2,9 @@ package server
 
 import (
 	"database/sql"
+	commonLog "stoneBanking/app/common/utils/logger"
 	"stoneBanking/app/domain/entities/account"
+	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
 	"stoneBanking/app/domain/entities/transfer"
 	postgresAccount "stoneBanking/app/gateway/database/postgres/accounts"
@@ -14,6 +16,7 @@ type RepositorieWrapper struct {
 	Account  account.Repository
 	Transfer transfer.Repository
 	Token    token.Repository
+	Log      logHelper.Repository
 }
 
 func NewPostgresRepositoryWrapper(db *sql.DB, signKey string) *RepositorieWrapper {
@@ -21,5 +24,6 @@ func NewPostgresRepositoryWrapper(db *sql.DB, signKey string) *RepositorieWrappe
 		Account:  postgresAccount.NewAccountRepository(db),
 		Transfer: postgresTransfer.NewTransferRepository(db),
 		Token:    webToken.NewTokenRepository(signKey),
+		Log:      commonLog.NewLogRepository(),
 	}
 }

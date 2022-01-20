@@ -3,6 +3,7 @@ package account
 import (
 	"context"
 	"stoneBanking/app/domain/entities/account"
+	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
 )
 
@@ -16,11 +17,13 @@ type Usecase interface {
 type usecase struct {
 	accountRepository account.Repository
 	tokenRepository   token.Repository
+	logRepository     logHelper.Repository
 }
 
-func New(account account.Repository, token token.Repository) *usecase {
+func New(account account.Repository, token token.Repository, logger logHelper.Repository) *usecase {
 	return &usecase{
 		accountRepository: account,
 		tokenRepository:   token,
+		logRepository:     logger,
 	}
 }

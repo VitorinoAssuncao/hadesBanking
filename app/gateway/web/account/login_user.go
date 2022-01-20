@@ -24,18 +24,24 @@ import (
 //@Failure 500 {object} output.OutputError
 //@Router /account/login [POST]
 func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) {
-	var loginData input.LoginVO
+	const operation = "Gateway.Rest.Account.GetBalance"
+
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
+		controller.log.LogError(operation, err.Error())
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
 		return
 	}
 
+	controller.log.LogInfo(operation, "unmarshal the data to a internal object")
+	var loginData input.LoginVO
 	json.Unmarshal(reqBody, &loginData)
 
+	controller.log.LogInfo(operation, "validating the input data")
 	err = validations.ValidateLoginInputData(loginData)
 	if err != nil {
+		controller.log.LogError(operation, err.Error())
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
 		return
@@ -46,14 +52,17 @@ func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) 
 		Secret: types.Password(loginData.Secret),
 	}
 
+	controller.log.LogInfo(operation, "trying to log in the system")
 	token, err := controller.usecase.LoginUser(context.Background(), account)
 	if err != nil {
 		if errors.Is(err, customError.ErrorAccountTokenGeneration) {
+			controller.log.LogError(operation, err.Error())
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
 			return
 		}
 
+		controller.log.LogError(operation, err.Error())
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
 		return

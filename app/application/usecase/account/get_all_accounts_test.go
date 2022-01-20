@@ -3,6 +3,7 @@ package account
 import (
 	"context"
 	"stoneBanking/app/domain/entities/account"
+	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
 	customError "stoneBanking/app/domain/errors"
 	"testing"
@@ -15,6 +16,7 @@ func Test_GetAll(t *testing.T) {
 		name        string
 		accountMock account.Repository
 		tokenMock   token.Repository
+		logMock     logHelper.Repository
 		want        int
 		wantErr     error
 	}{
@@ -35,6 +37,7 @@ func Test_GetAll(t *testing.T) {
 					return accounts, nil
 				},
 			},
+			logMock: &logHelper.RepositoryMock{},
 			want:    1,
 			wantErr: nil,
 		},
@@ -45,13 +48,14 @@ func Test_GetAll(t *testing.T) {
 					return []account.Account{}, customError.ErrorAccountsListing
 				},
 			},
+			logMock: &logHelper.RepositoryMock{},
 			want:    0,
 			wantErr: customError.ErrorAccountsListing,
 		},
 	}
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			u := New(test.accountMock, test.tokenMock)
+			u := New(test.accountMock, test.tokenMock, test.logMock)
 			got, err := u.GetAll(context.Background())
 			assert.Equal(t, err, test.wantErr)
 			assert.Equal(t, test.want, len(got))

@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"net/http"
+	logHelper "stoneBanking/app/common/utils/logger"
 	"stoneBanking/app/domain/entities/token"
 	customError "stoneBanking/app/domain/errors"
 )
@@ -18,4 +19,12 @@ func GetAccountIDFromToken(r *http.Request, t token.Repository) (string, error) 
 		return "", err
 	}
 	return accountExternalID, nil
+}
+
+func LogRoutes(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log := logHelper.NewLogRepository()
+		log.LogInfo("request", "received request in url: "+r.URL.Path)
+		h.ServeHTTP(w, r)
+	})
 }

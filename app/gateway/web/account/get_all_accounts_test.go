@@ -7,6 +7,7 @@ import (
 	"net/http/httptest"
 	usecase "stoneBanking/app/application/usecase/account"
 	"stoneBanking/app/domain/entities/account"
+	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
 	customError "stoneBanking/app/domain/errors"
 	"testing"
@@ -19,6 +20,7 @@ func Test_GetAll(t *testing.T) {
 		name            string
 		accountUsecase  usecase.Usecase
 		tokenRepository token.Repository
+		logRepository   logHelper.Repository
 		wantCode        int
 		wantBody        []map[string]interface{}
 	}{
@@ -37,8 +39,10 @@ func Test_GetAll(t *testing.T) {
 						}}, nil
 					},
 				},
-				&token.RepositoryMock{}),
+				&token.RepositoryMock{},
+				&logHelper.RepositoryMock{}),
 			tokenRepository: &token.RepositoryMock{},
+			logRepository:   &logHelper.RepositoryMock{},
 			wantCode:        200,
 			wantBody: []map[string]interface{}{{
 				"id":         "94b9c27e-2880-42e3-8988-62dceb6b6463",
@@ -56,7 +60,8 @@ func Test_GetAll(t *testing.T) {
 						return []account.Account{{}}, customError.ErrorAccountsListing
 					},
 				},
-				&token.RepositoryMock{}),
+				&token.RepositoryMock{},
+				&logHelper.RepositoryMock{}),
 			tokenRepository: &token.RepositoryMock{},
 			wantCode:        500,
 			wantBody: []map[string]interface{}{{
@@ -69,7 +74,7 @@ func Test_GetAll(t *testing.T) {
 
 			rec := httptest.NewRecorder()
 			req := httptest.NewRequest(http.MethodGet, "/account", nil)
-			controller := New(test.accountUsecase, test.tokenRepository)
+			controller := New(test.accountUsecase, test.tokenRepository, test.logRepository)
 			controller.GetAll(rec, req)
 			assert.Equal(t, test.wantCode, rec.Code)
 

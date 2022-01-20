@@ -16,3 +16,4 @@
 .env
 build/stoneBanking
 profile.cov
+.vscode

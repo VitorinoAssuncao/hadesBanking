@@ -8,6 +8,7 @@ import (
 	"net/http/httptest"
 	usecase "stoneBanking/app/application/usecase/transfer"
 	"stoneBanking/app/domain/entities/account"
+	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
 	"stoneBanking/app/domain/entities/transfer"
 	customError "stoneBanking/app/domain/errors"
@@ -22,6 +23,7 @@ func Test_Create(t *testing.T) {
 		name            string
 		transferUsecase usecase.Usecase
 		tokenRepository token.Repository
+		logRepository   logHelper.Repository
 		input           map[string]interface{}
 		runBefore       func(http.Request)
 		wantCode        int
@@ -50,11 +52,13 @@ func Test_Create(t *testing.T) {
 							Secret:     "J0@0doR10",
 							Balance:    100,
 						}, nil
-					}}),
+					}},
+				&logHelper.RepositoryMock{}),
 			tokenRepository: &token.RepositoryMock{
 				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
 					return "65d56316-39ad-4937-b41d-be2f103b0bd9", nil
 				}},
+			logRepository: &logHelper.RepositoryMock{},
 			input: map[string]interface{}{
 				"account_destiny_id": "e391600e-7ea9-42aa-85c0-21a2a6c00019",
 				"amount":             1,
@@ -94,11 +98,13 @@ func Test_Create(t *testing.T) {
 							Secret:     "J0@0doR10",
 							Balance:    100,
 						}, nil
-					}}),
+					}},
+				&logHelper.RepositoryMock{}),
 			tokenRepository: &token.RepositoryMock{
 				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
 					return "", customError.ErrorServerTokenNotFound
 				}},
+			logRepository: &logHelper.RepositoryMock{},
 			input: map[string]interface{}{
 				"account_destiny_id": "e391600e-7ea9-42aa-85c0-21a2a6c00019",
 				"amount":             1,
@@ -134,11 +140,13 @@ func Test_Create(t *testing.T) {
 							Secret:     "J0@0doR10",
 							Balance:    100,
 						}, nil
-					}}),
+					}},
+				&logHelper.RepositoryMock{}),
 			tokenRepository: &token.RepositoryMock{
 				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
 					return "65d56316-39ad-4937-b41d-be2f103b0bd9", nil
 				}},
+			logRepository: &logHelper.RepositoryMock{},
 			input: map[string]interface{}{
 				"amount": 1,
 			},
@@ -173,11 +181,13 @@ func Test_Create(t *testing.T) {
 							Secret:     "J0@0doR10",
 							Balance:    100,
 						}, nil
-					}}),
+					}},
+				&logHelper.RepositoryMock{}),
 			tokenRepository: &token.RepositoryMock{
 				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
 					return "65d56316-39ad-4937-b41d-be2f103b0bd9", nil
 				}},
+			logRepository: &logHelper.RepositoryMock{},
 			input: map[string]interface{}{
 				"account_destiny_id": "65d56316-39ad-4937-b41d-be2f103b0bd9",
 				"amount":             1,
@@ -213,11 +223,13 @@ func Test_Create(t *testing.T) {
 							Secret:     "J0@0doR10",
 							Balance:    1,
 						}, nil
-					}}),
+					}},
+				&logHelper.RepositoryMock{}),
 			tokenRepository: &token.RepositoryMock{
 				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
 					return "65d56316-39ad-4937-b41d-be2f103b0bd9", nil
 				}},
+			logRepository: &logHelper.RepositoryMock{},
 			input: map[string]interface{}{
 				"account_destiny_id": "e391600e-7ea9-42aa-85c0-21a2a6c00019",
 				"amount":             0,
@@ -253,11 +265,13 @@ func Test_Create(t *testing.T) {
 							Secret:     "J0@0doR10",
 							Balance:    100,
 						}, nil
-					}}),
+					}},
+				&logHelper.RepositoryMock{}),
 			tokenRepository: &token.RepositoryMock{
 				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
 					return "65d56316-39ad-4937-b41d-be2f103b0bd9", nil
 				}},
+			logRepository: &logHelper.RepositoryMock{},
 			input: map[string]interface{}{
 				"account_destiny_id": "e391600e-7ea9-42aa-85c0-21a2a6c00019",
 				"amount":             101,
@@ -287,11 +301,13 @@ func Test_Create(t *testing.T) {
 							Secret:     "J0@0doR10",
 							Balance:    100,
 						}, nil
-					}}),
+					}},
+				&logHelper.RepositoryMock{}),
 			tokenRepository: &token.RepositoryMock{
 				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
 					return "65d56316-39ad-4937-b41d-be2f103b0bd9", nil
 				}},
+			logRepository: &logHelper.RepositoryMock{},
 			input: map[string]interface{}{
 				"account_destiny_id": "e391600e-7ea9-42aa-85c0-21a2a6c00019",
 				"amount":             1,
@@ -315,7 +331,7 @@ func Test_Create(t *testing.T) {
 				test.runBefore(*req)
 			}
 
-			controller := New(test.transferUsecase, test.tokenRepository)
+			controller := New(test.transferUsecase, test.tokenRepository, test.logRepository)
 			controller.Create(rec, req)
 
 			assert.Equal(t, test.wantCode, rec.Code)
