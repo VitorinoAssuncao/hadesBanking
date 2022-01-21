@@ -26,7 +26,7 @@ func (usecase *usecase) Create(ctx context.Context, transferData transfer.Transf
 
 	usecase.logRepository.LogInfo(operation, "validating if the funds is sufficient")
 	if accountOrigin.Balance < types.Money(transferData.Amount) {
-		usecase.logRepository.LogError(operation, err.Error())
+		usecase.logRepository.LogError(operation, customError.ErrorTransferCreateInsufficientFunds.Error())
 		return transfer.Transfer{}, customError.ErrorTransferCreateInsufficientFunds
 	}
 
