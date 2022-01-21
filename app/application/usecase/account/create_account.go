@@ -24,7 +24,7 @@ func (usecase *usecase) Create(ctx context.Context, accountData account.Account)
 		return account.Account{}, customError.ErrorAccountCPFExists
 	}
 
-	if err == customError.ErrorAccountCPFNotFound {
+	if err != customError.ErrorAccountCPFNotFound {
 		usecase.logRepository.LogError(operation, err.Error())
 		return account.Account{}, customError.ErrorCreateAccount
 	}
