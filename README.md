@@ -6,8 +6,6 @@ Para tal foram selecionadas as seguintes técnologias:
 
 * [Go](https://golang.org) Uma linguagem robusta e rápida, ela foi utilizada como base para o desenvolvimento da aplicação, por sua escalabilidade e capacidade de processamento de dados.
 
-* [ORM - Gorm](https://gorm.io/index.html) Foi utilizado o ORM Gorm, por sua simplicidade e eficiência, pois ao abstrair as consultas nos permite maior customização e possíveis alterações futuras fáceis no banco de dados.
-
 * [Banco de Dados Postgresql](https://www.postgresql.org) Como dito anteriormente, com o ORM a seleção pelo banco de dados se tornou secundário, neste caso selecionei o postgresql por alinhamento de usos internos.
 
 # Requisitos para rodar o projeto de forma Local:
@@ -39,9 +37,6 @@ Após ter a imagem docker configurada, ou possuir um banco de dados local config
 
 ``` go build ```
 
-
-
-
 # Estruturas Relevantes:
 
 Este projeto consiste em uma aplicação de backend, a qual não possui uma rota raiz (/) atualmente, possuindo apenas 3 estruturas de rotas, conforme a necessidade do usuário:
@@ -49,7 +44,6 @@ Este projeto consiste em uma aplicação de backend, a qual não possui uma rota
 • accounts: Referente aos dados de conta, gerais e individuais. E a partir do ID do usuário que será possível acessar o saldo da conta através das rotas (/accounts/balancce) e uma listagem de contas gerais (/accounts). Além disso, é possível se fazer nessa rota o login do usuário em questão (/accounts/login)
 
 • transfers: Rota responsável pelas ações de transfêrencia entre duas contas, só sendo permitido realizar as mesmas quando realizado previamente um login. Deverá obrigatoriamente enviar um token no header das requisições.
-
 
 # EndPoints
 
@@ -61,12 +55,22 @@ Segue abaixo rotas principais liberadas atualmente no projeto:
 ` "GET /accounts" : Rota que retorna a listagem de contas cadastradas.`
 
 ### Response  
-`{
-    "Account_id": 1,
-    "Account_cpf": "383333333",
-    "Account_name": "Joao",
-    "Created_at": "2021-10-23T00:24:16.902971-03:00"
- }`
+`[
+  {
+		"id": "abc7cf9f-b984-4d0c-9dfa-8c89eaf1bfb0",
+		"name": "Joselino das Neves",
+		"cpf": "74202445023",
+		"balance": 99.99,
+		"created_at": "2022-01-18T17:28:53Z"
+	},
+  {
+	"id": "7b17f816-ef30-4096-95ef-c6118068ade1",
+	"name": "João",
+	"cpf": "34760400036",
+	"balance": 99.99,
+	"created_at": "2022-01-21T13:12:41Z"
+  }
+]`
  
 ---
 
@@ -75,20 +79,19 @@ Segue abaixo rotas principais liberadas atualmente no projeto:
 
 - Body (JSON)
 `{
-	"name": "Vitorino",
-	"cpf": "57857751011",
-	"secret":"12345",
-	"balance": 1000
+	"name":"João",
+	"cpf":"347.604.000-36",
+	"secret":"12344",
+	"balance":9999
 }`
 ---
 ### Response
-`{
-  "ID": 3,
-  "Name": "Vitorino",
-  "Cpf": "57857751011",
-  "Secret": "$2a$14$W2wx0ynuJa9wRA9CX65VL./nPgtmgMD.0Mmzz5YsZIIbPNJipYam6",
-  "Balance": 1000,
-  "Created_at": "2021-10-22T14:47:01.064005-03:00"
+`  {
+	"id": "7b17f816-ef30-4096-95ef-c6118068ade1",
+	"name": "João",
+	"cpf": "34760400036",
+	"balance": 99.99,
+	"created_at": "2022-01-21T13:12:41Z"
 }`
 
 
@@ -104,7 +107,7 @@ Segue abaixo rotas principais liberadas atualmente no projeto:
 
 ### Response
 `{
-  "balance": 1000
+  "balance": 10.00
 }`
 
 ### Request
@@ -118,7 +121,7 @@ Segue abaixo rotas principais liberadas atualmente no projeto:
 
 ### Response
 `{
-  "accountToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzQ4OTI0NzIsImlzcyI6InZpdG9yaW5vIiwiVXNlcl9pZCI6MX0.dlyrFzbfBz7QPBQOaq9c1_gCVmv2JcjkI0SGWZ6ZsVU"
+	"authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI"
 }`
 
 ## Transfer
@@ -133,20 +136,20 @@ Segue abaixo rotas principais liberadas atualmente no projeto:
 
 ### Response  
 `[
-  {
-    "id": 1,
-    "acount_origin_id": 10,
-    "acount_destination_id": 1,
-    "amount": 100,
-    "created_at": "2021-10-15T21:10:45-03:00"
-  },
-  {
-    "id": 2,
-    "acount_origin_id": 10,
-    "acount_destination_id": 1,
-    "amount": 100,
-    "created_at": "2021-10-15T21:11:58-03:00"
-  }
+	{
+		"id": "5ccbb3f0-9351-45c2-80cb-cfffbee767c2",
+		"account_origin_id": "c036475f-b7a0-4f34-8f1f-c43515d31724",
+		"account_destiny_id": "4cc7fe98-9996-408c-bff7-06cee3e6c519",
+		"value": 0.01,
+		"created_at": "2022-01-10T11:46:37Z"
+	},
+  	{
+		"id": "5ccbb3f0-9351-45c2-80cb-cfffbee767c2",
+		"account_origin_id": "c036475f-b7a0-4f34-8f1f-c43515d31724",
+		"account_destiny_id": "4cc7fe98-9996-408c-bff7-06cee3e6c519",
+		"value": 0.01,
+		"created_at": "2022-01-10T11:46:37Z"
+	}
 ]`
 
 ---
@@ -161,16 +164,16 @@ Segue abaixo rotas principais liberadas atualmente no projeto:
 
 - Body (JSON):
 `{
-	"acount_destination_id":2,
-	"amount": 100
+	"account_destiny_id":"4cc7fe98-9996-408c-bff7-06cee3e6c519",
+	"amount":1
 }`
 
 ### Response
 
 `{
-  "id": 1,
-  "acount_origin_id": 1,
-  "acount_destination_id": 2,
-  "amount": 100,
-  "created_at": "2021-10-22T03:48:24.903575-03:00"
+	"id": "5ccbb3f0-9351-45c2-80cb-cfffbee767c2",
+	"account_origin_name": "c036475f-b7a0-4f34-8f1f-c43515d31724",
+	"account_destiny_name": "4cc7fe98-9996-408c-bff7-06cee3e6c519",
+	"value": 0.01,
+	"created_at": "2022-01-10T11:46:37Z"
 }`
