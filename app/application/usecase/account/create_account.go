@@ -2,6 +2,7 @@ package account
 
 import (
 	"context"
+	"errors"
 	validations "stoneBanking/app/application/usecase/account/validations"
 	"stoneBanking/app/domain/entities/account"
 	customError "stoneBanking/app/domain/errors"
@@ -24,7 +25,7 @@ func (usecase *usecase) Create(ctx context.Context, accountData account.Account)
 		return account.Account{}, customError.ErrorAccountCPFExists
 	}
 
-	if err != customError.ErrorAccountCPFNotFound {
+	if !errors.Is(err, customError.ErrorAccountCPFNotFound) {
 		usecase.logRepository.LogError(operation, err.Error())
 		return account.Account{}, customError.ErrorCreateAccount
 	}

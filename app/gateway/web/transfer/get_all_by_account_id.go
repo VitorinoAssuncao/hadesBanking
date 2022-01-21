@@ -29,9 +29,9 @@ func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Re
 		json.NewEncoder(w).Encode([]output.OutputError{{Error: err.Error()}})
 		return
 	}
-
 	transfers, err := controller.usecase.GetAllByAccountID(context.Background(), types.ExternalID(accountID))
 
+	controller.log.LogInfo(operation, "creating the objects to by listed")
 	var transfersOutput = make([]output.TransferOutputVO, 0)
 	for _, transfer := range transfers {
 		transferOutput := output.TransferToTransferOutput(transfer)
@@ -39,7 +39,7 @@ func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Re
 	}
 
 	if err != nil {
-		if errors.Is(err, customError.ErrorTransferListing) {
+		if errors.Is(err, customError.ErrorTransferAccountNotFound) {
 			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode([]output.OutputError{{Error: err.Error()}})
 			return
@@ -50,5 +50,6 @@ func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Re
 		return
 	}
 
+	controller.log.LogInfo(operation, "transfers listed sucessfully")
 	json.NewEncoder(w).Encode(transfersOutput)
 }
