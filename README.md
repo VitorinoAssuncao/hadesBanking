@@ -18,13 +18,11 @@ Atualmente o banco utilizado é uma base PostgreSQL disponível através de imag
 
 Para se baixar o arquivo diretamente do git pode se utilizar o comando abaixo:
 
- ``` git clone https://github.com/VitorinoAssuncao/hades.git ```
+ ``` git clone https://github.com/VitorinoAssuncao/stoneBanking.git ```
 
 GitHub CLI
  
- ``` gh repo clone VitorinoAssuncao/hades ```
-
-Ou simplesmente acessando  a pagina e selecionando a opção de preferencia para download.
+ ``` gh repo clone VitorinoAssuncao/stoneBanking ```
 
 
 # Gerando Imagem Docker:
@@ -39,15 +37,8 @@ Dessa forma o sistema irá gerar a imagem docker já com os dados de banco criad
 
 Após ter a imagem docker configurada, ou possuir um banco de dados local configurado de forma apropriada, basta abrir no se programa de preferencia o comando abaixo:
 
-``` go run main.go database.go entities.go handler.go usecase.go validations.go ```
+``` go build ```
 
-Ou caso prefira, dar dois cliques no arquivo hades.exe gerado.
-
-# Rodando os testes:
-
-Para a geração dos testes unitários nesse caso se foi usada uma base temporária que simula os dados da base real.
-
-Se observar na imagem do docker-compose, existem 2 dados referentes a banco de dados, 1 comentado e o outro não. A parte comentada se refere a base de testes, sendo necessária derrubar a imagem anterior via docker, e alterar os comentários (comentar a base live e descomentar a base de testes), após isso volta a rodar o comando para subir a imagem docker.
 
 
 
@@ -55,9 +46,7 @@ Se observar na imagem do docker-compose, existem 2 dados referentes a banco de d
 
 Este projeto consiste em uma aplicação de backend, a qual não possui uma rota raiz (/) atualmente, possuindo apenas 3 estruturas de rotas, conforme a necessidade do usuário:
 
-• accounts: Referente aos dados de conta, gerais e individuais. E a partir do ID do usuário que será possível acessar o saldo da conta através das rotas (/accounts/{id}/balancce) e uma listagem de contas gerais (/accounts).
-
-• login: Rota responsável pela autenticação da conta, retornando um token de validação necessário para todas as ações de transferencia (/login).
+• accounts: Referente aos dados de conta, gerais e individuais. E a partir do ID do usuário que será possível acessar o saldo da conta através das rotas (/accounts/balancce) e uma listagem de contas gerais (/accounts). Além disso, é possível se fazer nessa rota o login do usuário em questão (/accounts/login)
 
 • transfers: Rota responsável pelas ações de transfêrencia entre duas contas, só sendo permitido realizar as mesmas quando realizado previamente um login. Deverá obrigatoriamente enviar um token no header das requisições.
 
@@ -103,9 +92,15 @@ Segue abaixo rotas principais liberadas atualmente no projeto:
 }`
 
 
-## Login
+## Balance
 ### Request
-` "GET /account/{id}/balance" : Rota validar o saldo atual da conta (id = id da conta)`
+` "GET /account/balance" : Rota validar o saldo atual da conta, deve-se passar o token de acesso, recebido ao logar`
+
+- Header 
+`{
+	Authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzQ4OTI0NzIsImlzcyI6InZpdG9yaW5vIiwiVXNlcl9pZCI6MX0.dlyrFzbfBz7QPBQOaq9c1_gCVmv2JcjkI0SGWZ6ZsVU"
+}`
+
 
 ### Response
 `{
@@ -133,7 +128,7 @@ Segue abaixo rotas principais liberadas atualmente no projeto:
 
 - Header 
 `{
-	Token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzQ4OTI0NzIsImlzcyI6InZpdG9yaW5vIiwiVXNlcl9pZCI6MX0.dlyrFzbfBz7QPBQOaq9c1_gCVmv2JcjkI0SGWZ6ZsVU"
+	Authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzQ4OTI0NzIsImlzcyI6InZpdG9yaW5vIiwiVXNlcl9pZCI6MX0.dlyrFzbfBz7QPBQOaq9c1_gCVmv2JcjkI0SGWZ6ZsVU"
 }`
 
 ### Response  
