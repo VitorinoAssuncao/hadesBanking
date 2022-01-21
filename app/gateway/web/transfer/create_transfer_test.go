@@ -114,7 +114,7 @@ func Test_Create(t *testing.T) {
 			},
 			wantCode: 400,
 			wantBody: map[string]interface{}{
-				"error": "error when generating the authorization token",
+				"error": "authorization token invalid",
 			},
 		},
 		{
@@ -155,7 +155,7 @@ func Test_Create(t *testing.T) {
 			},
 			wantCode: 400,
 			wantBody: map[string]interface{}{
-				"error": "field account_origin_id is required",
+				"error": "field account_destiny_id is required",
 			},
 		},
 		{
