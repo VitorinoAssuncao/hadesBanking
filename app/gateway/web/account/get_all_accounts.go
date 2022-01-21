@@ -30,6 +30,7 @@ func (controller *Controller) GetAll(w http.ResponseWriter, r *http.Request) {
 		accountsOutput = append(accountsOutput, tempAccount)
 	}
 
+	controller.log.LogInfo(operation, "accounts created sucessfully")
 	json.NewEncoder(w).Encode(accountsOutput)
 
 }
