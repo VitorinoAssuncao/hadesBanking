@@ -9,7 +9,7 @@ import (
 func (usecase *usecase) GetAll(ctx context.Context) ([]account.Account, error) {
 	const operation = "Usecase.Account.GetAll"
 
-	var accounts = make([]account.Account, 0)
+	var accounts []account.Account
 	accounts, err := usecase.accountRepository.GetAll(ctx)
 	if err != nil {
 		usecase.logRepository.LogError(operation, err.Error())
