@@ -39,7 +39,7 @@ func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Re
 	}
 
 	if err != nil {
-		if errors.Is(err, customError.ErrorTransferListing) {
+		if errors.Is(err, customError.ErrorTransferAccountNotFound) {
 			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode([]output.OutputError{{Error: err.Error()}})
 			return

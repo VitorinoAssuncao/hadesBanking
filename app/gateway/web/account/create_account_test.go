@@ -44,7 +44,7 @@ func Test_Create(t *testing.T) {
 						}, nil
 					},
 					GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
-						return account.Account{}, sql.ErrNoRows
+						return account.Account{}, customError.ErrorAccountCPFNotFound
 					},
 				},
 				&token.RepositoryMock{},
@@ -139,6 +139,7 @@ func Test_Create(t *testing.T) {
 				&token.RepositoryMock{},
 				&logHelper.RepositoryMock{}),
 			tokenRepository: &token.RepositoryMock{},
+			logRepository:   &logHelper.RepositoryMock{},
 			input: input.CreateAccountVO{
 				Name:    "Joao do Rio",
 				CPF:     "761.647.810-78",
