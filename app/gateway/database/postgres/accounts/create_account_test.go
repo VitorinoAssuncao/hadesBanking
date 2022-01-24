@@ -65,7 +65,7 @@ func Test_Create(t *testing.T) {
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
 
-			TruncateTable(database)
+			TruncateTable(database) //nolint: errorlint
 			if test.runBefore != nil {
 				test.runBefore(database)
 			}
