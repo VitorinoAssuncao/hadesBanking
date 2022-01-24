@@ -26,7 +26,7 @@ func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
+		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()}) //nolint: errorlint
 		return
 	}
 
@@ -36,7 +36,7 @@ func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
+		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()}) //nolint: errorlint
 		return
 	}
 
@@ -47,7 +47,7 @@ func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
+		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()}) //nolint: errorlint
 		return
 	}
 
