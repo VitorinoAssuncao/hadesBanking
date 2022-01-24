@@ -26,13 +26,13 @@ func (controller *Controller) GetBalance(w http.ResponseWriter, r *http.Request)
 		if errors.Is(err, customError.ErrorServerTokenNotFound) {
 			controller.log.LogError(operation, err.Error())
 			w.WriteHeader(http.StatusUnauthorized)
-			json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
+			json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()}) //nolint: errorlint
 			return
 		}
 
 		controller.log.LogError(operation, err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
+		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()}) //nolint: errorlint
 		return
 	}
 
@@ -40,7 +40,7 @@ func (controller *Controller) GetBalance(w http.ResponseWriter, r *http.Request)
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
+		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()}) //nolint: errorlint
 		return
 	}
 
@@ -48,5 +48,5 @@ func (controller *Controller) GetBalance(w http.ResponseWriter, r *http.Request)
 		Balance: balance,
 	}
 
-	json.NewEncoder(w).Encode(balanceOutput)
+	json.NewEncoder(w).Encode(balanceOutput) //nolint: errorlint
 }

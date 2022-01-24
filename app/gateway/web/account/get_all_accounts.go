@@ -20,7 +20,7 @@ func (controller *Controller) GetAll(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode([]output.OutputError{{Error: err.Error()}})
+		json.NewEncoder(w).Encode([]output.OutputError{{Error: err.Error()}}) //nolint: errorlint
 		return
 	}
 
@@ -31,6 +31,6 @@ func (controller *Controller) GetAll(w http.ResponseWriter, r *http.Request) {
 	}
 
 	controller.log.LogInfo(operation, "accounts created sucessfully")
-	json.NewEncoder(w).Encode(accountsOutput)
+	json.NewEncoder(w).Encode(accountsOutput) //nolint: errorlint
 
 }

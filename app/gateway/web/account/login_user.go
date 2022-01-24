@@ -30,20 +30,26 @@ func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) 
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
+		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()}) //nolint: errorlint
 		return
 	}
 
 	controller.log.LogInfo(operation, "unmarshal the data to a internal object")
 	var loginData input.LoginVO
-	json.Unmarshal(reqBody, &loginData)
+	err = json.Unmarshal(reqBody, &loginData)
+	if err != nil {
+		controller.log.LogError(operation, err.Error())
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()}) //nolint: errorlint
+		return
+	}
 
 	controller.log.LogInfo(operation, "validating the input data")
 	err = validations.ValidateLoginInputData(loginData)
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
+		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()}) //nolint: errorlint
 		return
 	}
 
@@ -58,13 +64,13 @@ func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) 
 		if errors.Is(err, customError.ErrorAccountTokenGeneration) {
 			controller.log.LogError(operation, err.Error())
 			w.WriteHeader(http.StatusInternalServerError)
-			json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
+			json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()}) //nolint: errorlint
 			return
 		}
 
 		controller.log.LogError(operation, err.Error())
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()})
+		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()}) //nolint: errorlint
 		return
 	}
 
@@ -72,5 +78,5 @@ func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) 
 		Authorization: token,
 	}
 
-	json.NewEncoder(w).Encode(loginOutput)
+	json.NewEncoder(w).Encode(loginOutput) //nolint: errorlint
 }

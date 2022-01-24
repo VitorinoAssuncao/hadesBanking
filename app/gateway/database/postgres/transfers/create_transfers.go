@@ -38,7 +38,7 @@ func (r transferRepository) Create(ctx context.Context, transferData transfer.Tr
 		return transfer.Transfer{}, err
 	}
 
-	defer tx.Rollback()
+	defer tx.Rollback() //nolint: errorlint
 	row := tx.QueryRow(
 		sqlQueryCreate,
 		transferData.AccountOriginID,
