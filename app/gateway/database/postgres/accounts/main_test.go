@@ -43,7 +43,7 @@ func SetupTests(pool dockertest.Pool) dockertest.Resource {
 
 	hostAndPort := resource.GetHostPort("5432/tcp")
 	dbUrl := fmt.Sprintf("postgres://user_name:secret@%s/dbname?sslmode=disable", hostAndPort)
-	resource.Expire(120)
+	resource.Expire(120) //nolint: errorlint
 	pool.MaxWait = 120 * time.Second
 
 	if err = pool.Retry(func() error {
