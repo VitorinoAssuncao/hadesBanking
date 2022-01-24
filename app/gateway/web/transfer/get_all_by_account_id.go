@@ -51,5 +51,5 @@ func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Re
 	}
 
 	controller.log.LogInfo(operation, "transfers listed sucessfully")
-	json.NewEncoder(w).Encode(transfersOutput)
+	json.NewEncoder(w).Encode(transfersOutput) //nolint: errorlint
 }

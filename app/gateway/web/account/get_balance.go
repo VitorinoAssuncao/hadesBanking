@@ -48,5 +48,5 @@ func (controller *Controller) GetBalance(w http.ResponseWriter, r *http.Request)
 		Balance: balance,
 	}
 
-	json.NewEncoder(w).Encode(balanceOutput)
+	json.NewEncoder(w).Encode(balanceOutput) //nolint: errorlint
 }

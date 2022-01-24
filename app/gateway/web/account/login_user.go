@@ -72,5 +72,5 @@ func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) 
 		Authorization: token,
 	}
 
-	json.NewEncoder(w).Encode(loginOutput)
+	json.NewEncoder(w).Encode(loginOutput) //nolint: errorlint
 }

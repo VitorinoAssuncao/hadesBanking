@@ -31,6 +31,6 @@ func (controller *Controller) GetAll(w http.ResponseWriter, r *http.Request) {
 	}
 
 	controller.log.LogInfo(operation, "accounts created sucessfully")
-	json.NewEncoder(w).Encode(accountsOutput)
+	json.NewEncoder(w).Encode(accountsOutput) //nolint: errorlint
 
 }

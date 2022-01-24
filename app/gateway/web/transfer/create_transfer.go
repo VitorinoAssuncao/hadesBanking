@@ -77,5 +77,5 @@ func (controller Controller) Create(w http.ResponseWriter, r *http.Request) {
 
 	transferOutput := output.TransferToTransferOutput(newTransfer)
 	controller.log.LogInfo(operation, "transfer created sucessfully")
-	json.NewEncoder(w).Encode(transferOutput)
+	json.NewEncoder(w).Encode(transferOutput) //nolint: errorlint
 }

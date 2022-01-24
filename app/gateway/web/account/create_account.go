@@ -62,5 +62,5 @@ func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
 
 	accountOutput := output.AccountToOutput(account)
 
-	json.NewEncoder(w).Encode(accountOutput)
+	json.NewEncoder(w).Encode(accountOutput) //nolint: errorlint
 }
