@@ -65,7 +65,10 @@ func Test_Create(t *testing.T) {
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
 
-			TruncateTable(database) //nolint: errorlint
+			if TruncateTable(database) != nil {
+				t.Errorf("has not possible clean the databases")
+			}
+
 			if test.runBefore != nil {
 				test.runBefore(database)
 			}

@@ -36,7 +36,13 @@ func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) 
 
 	controller.log.LogInfo(operation, "unmarshal the data to a internal object")
 	var loginData input.LoginVO
-	json.Unmarshal(reqBody, &loginData)
+	err = json.Unmarshal(reqBody, &loginData)
+	if err != nil {
+		controller.log.LogError(operation, err.Error())
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()}) //nolint: errorlint
+		return
+	}
 
 	controller.log.LogInfo(operation, "validating the input data")
 	err = validations.ValidateLoginInputData(loginData)

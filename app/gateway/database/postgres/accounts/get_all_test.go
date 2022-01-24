@@ -32,7 +32,10 @@ func Test_GetAll(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			TruncateTable(database)
+			if TruncateTable(database) != nil {
+				t.Errorf("has not possible clean the databases")
+			}
+
 			_, err := accountRepository.Create(ctx, test.input)
 			if err != nil {
 				t.Errorf("error when creating account")

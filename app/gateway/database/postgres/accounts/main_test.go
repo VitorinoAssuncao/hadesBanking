@@ -70,12 +70,6 @@ func setDatabase(resource dockertest.Resource) {
 	}
 }
 
-func DropTests(pool dockertest.Pool, resource *dockertest.Resource) {
-	if err := pool.Purge(resource); err != nil {
-		log.Fatalf("Não foi possível limpar o banco - %s", err)
-	}
-}
-
 func TruncateTable(db *sql.DB) error {
 	sqlQuery := `truncate accounts RESTART IDENTITY cascade`
 	_, err := db.Exec(sqlQuery)
