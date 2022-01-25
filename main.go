@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"stoneBanking/app/common/utils/config"
 	"stoneBanking/app/gateway/database/postgres"
 	"stoneBanking/app/gateway/web/server"
@@ -22,7 +23,7 @@ func main() {
 
 	err := godotenv.Load(".env")
 	if err != nil {
-		fmt.Println("Não foi possível carregar as varíaveis de ambiente")
+		log.Fatal("has not possible to load the env file")
 	}
 
 	// Load the env variables
