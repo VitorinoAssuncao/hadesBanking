@@ -13,7 +13,13 @@ import (
 func InitiliazeDatabase(config config.Config) (*sql.DB, error) {
 	const migrationPath = "file://app/gateway/database/postgres/migrations"
 
-	dbUrl := "postgres://" + config.DBUser + ":" + config.DBPass + "@0.0.0.0:5432/" + config.DBBase + "?sslmode=disable"
+	dbUrl := "postgres://" +
+		config.DBUser + ":" +
+		config.DBPass + "@" +
+		config.DBHost + ":" +
+		config.DBPort + "/" +
+		config.DBBase + "?sslmode=" +
+		config.DBSSLMode
 
 	db, _ := sql.Open("postgres", dbUrl)
 	err := Migrate(migrationPath, dbUrl)
