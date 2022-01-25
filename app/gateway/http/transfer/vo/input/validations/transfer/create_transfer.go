@@ -6,7 +6,7 @@ import (
 )
 
 func ValidateTransferData(transferData input.CreateTransferVO) (input.CreateTransferVO, error) {
-	if transferData.AccountOriginID == transferData.AccountDestinyID {
+	if transferData.AccountOriginID == transferData.AccountDestinationID {
 		return input.CreateTransferVO{}, customError.ErrorTransferOriginEqualDestiny
 	}
 
@@ -14,7 +14,7 @@ func ValidateTransferData(transferData input.CreateTransferVO) (input.CreateTran
 		return input.CreateTransferVO{}, customError.ErrorTransferAccountOriginIDRequired
 	}
 
-	if transferData.AccountDestinyID == "" {
+	if transferData.AccountDestinationID == "" {
 		return input.CreateTransferVO{}, customError.ErrorTransferAccountDestinyIDRequired
 	}
 

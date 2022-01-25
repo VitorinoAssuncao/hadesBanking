@@ -6,15 +6,15 @@ import (
 )
 
 type CreateTransferVO struct {
-	AccountOriginID  string `json:"account_origin_id" example:"2"`
-	AccountDestinyID string `json:"account_destiny_id" example:"3"`
-	Amount           int    `json:"amount" example:"1000"`
+	AccountOriginID      string `json:"account_origin_id" example:"2"`
+	AccountDestinationID string `json:"account_destination_id" example:"3"`
+	Amount               int    `json:"amount" example:"1000"`
 }
 
 func (inputTransfer CreateTransferVO) GenerateTransfer() transfer.Transfer {
 	transfer := transfer.Transfer{
 		AccountOriginExternalID:      types.ExternalID(inputTransfer.AccountOriginID),
-		AccountDestinationExternalID: types.ExternalID(inputTransfer.AccountDestinyID),
+		AccountDestinationExternalID: types.ExternalID(inputTransfer.AccountDestinationID),
 		Amount:                       types.Money(inputTransfer.Amount),
 	}
 	return transfer
