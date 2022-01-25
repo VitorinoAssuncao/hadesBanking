@@ -7,10 +7,10 @@ import (
 	"io/ioutil"
 	"net/http"
 	customError "stoneBanking/app/domain/errors"
-	"stoneBanking/app/gateway/web/middleware"
-	"stoneBanking/app/gateway/web/transfer/vo/input"
-	validations "stoneBanking/app/gateway/web/transfer/vo/input/validations/transfer"
-	"stoneBanking/app/gateway/web/transfer/vo/output"
+	"stoneBanking/app/gateway/http/middleware"
+	"stoneBanking/app/gateway/http/transfer/vo/input"
+	validations "stoneBanking/app/gateway/http/transfer/vo/input/validations/transfer"
+	"stoneBanking/app/gateway/http/transfer/vo/output"
 )
 
 //@Sumary Create a transfer

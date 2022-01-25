@@ -7,8 +7,8 @@ import (
 	"net/http"
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
-	"stoneBanking/app/gateway/web/middleware"
-	"stoneBanking/app/gateway/web/transfer/vo/output"
+	"stoneBanking/app/gateway/http/middleware"
+	"stoneBanking/app/gateway/http/transfer/vo/output"
 )
 
 //@Sumary Get all transfers

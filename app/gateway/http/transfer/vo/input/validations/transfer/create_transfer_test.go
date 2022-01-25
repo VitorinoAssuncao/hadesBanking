@@ -1,7 +1,7 @@
 package transfer
 
 import (
-	"stoneBanking/app/gateway/web/transfer/vo/input"
+	"stoneBanking/app/gateway/http/transfer/vo/input"
 	"testing"
 
 	"github.com/stretchr/testify/assert"

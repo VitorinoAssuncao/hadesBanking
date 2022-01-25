@@ -1,7 +1,7 @@
 package input
 
 import (
-	"stoneBanking/app/gateway/web/account/vo/input"
+	"stoneBanking/app/gateway/http/account/vo/input"
 	"testing"
 
 	"github.com/stretchr/testify/assert"

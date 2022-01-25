@@ -3,7 +3,7 @@ package account
 import (
 	"encoding/json"
 	"net/http"
-	"stoneBanking/app/gateway/web/account/vo/output"
+	"stoneBanking/app/gateway/http/account/vo/output"
 )
 
 //@Sumary Get All Accounts

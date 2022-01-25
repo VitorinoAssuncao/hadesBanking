@@ -6,7 +6,7 @@ import (
 	"stoneBanking/app/common/utils/config"
 	commonLog "stoneBanking/app/common/utils/logger"
 	"stoneBanking/app/gateway/database/postgres"
-	"stoneBanking/app/gateway/web/server"
+	"stoneBanking/app/gateway/http/server"
 
 	"github.com/joho/godotenv"
 )

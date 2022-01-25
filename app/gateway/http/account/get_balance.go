@@ -5,8 +5,8 @@ import (
 	"errors"
 	"net/http"
 	customError "stoneBanking/app/domain/errors"
-	"stoneBanking/app/gateway/web/account/vo/output"
-	"stoneBanking/app/gateway/web/middleware"
+	"stoneBanking/app/gateway/http/account/vo/output"
+	"stoneBanking/app/gateway/http/middleware"
 )
 
 //@Sumary Get the balance of a account

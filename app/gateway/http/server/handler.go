@@ -5,9 +5,9 @@ import (
 	"net/http"
 	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
-	accounts "stoneBanking/app/gateway/web/account"
-	"stoneBanking/app/gateway/web/middleware"
-	transfers "stoneBanking/app/gateway/web/transfer"
+	accounts "stoneBanking/app/gateway/http/account"
+	"stoneBanking/app/gateway/http/middleware"
+	transfers "stoneBanking/app/gateway/http/transfer"
 
 	_ "stoneBanking/docs"
 
