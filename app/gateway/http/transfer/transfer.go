@@ -7,15 +7,15 @@ import (
 )
 
 type Controller struct {
-	usecase transfer.Usecase
-	token   token.Authenticator
-	log     logHelper.Logger
+	usecase   transfer.Usecase
+	tokenRepo token.Authenticator
+	log       logHelper.Logger
 }
 
 func New(useCase transfer.Usecase, token token.Authenticator, log logHelper.Logger) Controller {
 	return Controller{
-		usecase: useCase,
-		token:   token,
-		log:     log,
+		usecase:   useCase,
+		tokenRepo: token,
+		log:       log,
 	}
 }
