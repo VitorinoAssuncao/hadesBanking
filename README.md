@@ -111,7 +111,7 @@ Segue abaixo rotas principais liberadas atualmente no projeto:
 }`
 
 ### Request
-` "POST /login" : Rota para realizar o login na conta`
+` "POST /account/login" : Rota para realizar o login na conta`
 
 - Body (JSON)
 `{
