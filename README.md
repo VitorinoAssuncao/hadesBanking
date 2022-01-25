@@ -6,7 +6,7 @@ Para tal foram selecionadas as seguintes técnologias:
 
 * [Go](https://golang.org) Uma linguagem robusta e rápida, ela foi utilizada como base para o desenvolvimento da aplicação, por sua escalabilidade e capacidade de processamento de dados.
 
-* [Banco de Dados Postgresql](https://www.postgresql.org) Como dito anteriormente, com o ORM a seleção pelo banco de dados se tornou secundário, neste caso selecionei o postgresql por alinhamento de usos internos.
+* [Banco de Dados Postgresql](https://www.postgresql.org) É um banco de dados rápido, leve e eficiente, atendendo assim todos os requisitos necessários.
 
 # Requisitos para rodar o projeto de forma Local:
 
