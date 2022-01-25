@@ -34,8 +34,11 @@ func main() {
 	log := commonLog.NewLogger()
 
 	// Initialize the database and return him to a variable
-	postgres.InitiliazeDatabase(cfg)
-	db := postgres.RetrieveConnection()
+
+	db, err := postgres.InitiliazeDatabase(cfg)
+	if err != nil {
+		log.Fatal(err) //TODO trocar por função de log após melhorar a inicialização dela
+	}
 
 	// Create the repositories and usecase repositories
 	repository := server.NewPostgresRepositoryWrapper(db, cfg.SigningKey, log)
