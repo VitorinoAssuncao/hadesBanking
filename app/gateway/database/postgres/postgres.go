@@ -12,7 +12,6 @@ import (
 
 func InitiliazeDatabase(config config.Config) (*sql.DB, error) {
 	const migrationPath = "file://app/gateway/database/postgres/migrations"
-	var database *sql.DB
 
 	dbUrl := "postgres://" + config.DBUser + ":" + config.DBPass + "@0.0.0.0:5432/" + config.DBBase + "?sslmode=disable"
 
@@ -24,8 +23,7 @@ func InitiliazeDatabase(config config.Config) (*sql.DB, error) {
 		}
 	}
 
-	database = db
-	return database, nil
+	return db, nil
 }
 
 func Migrate(migration_string, db_string string) error {
