@@ -16,7 +16,7 @@ type AccountBalanceVO struct {
 	Balance float64 `json:"balance" example:"12.34"`
 }
 
-func AccountToOutput(account account.Account) AccountOutputVO {
+func ToOutput(account account.Account) AccountOutputVO {
 	accountOutput := AccountOutputVO{
 		ID:         string(account.ExternalID),
 		Name:       account.Name,
@@ -25,4 +25,13 @@ func AccountToOutput(account account.Account) AccountOutputVO {
 		Created_At: account.CreatedAt.Format("2006-01-02T15:04:05Z07:00"),
 	}
 	return accountOutput
+}
+
+func ToOutputs(accounts []account.Account) []AccountOutputVO {
+	var accountsOutput = make([]AccountOutputVO, 0)
+	for _, account := range accounts {
+		tempAccount := ToOutput(account)
+		accountsOutput = append(accountsOutput, tempAccount)
+	}
+	return accountsOutput
 }
