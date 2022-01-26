@@ -14,11 +14,11 @@ Atualmente o banco utilizado é uma base PostgreSQL disponível através de imag
 
 Para se baixar o arquivo diretamente do git pode se utilizar o comando abaixo:
 
- ``` git clone https://github.com/VitorinoAssuncao/stoneBanking.git ```
+ ``` git clone https://github.com/VitorinoAssuncao/hadesBanking.git ```
 
 GitHub CLI
  
- ``` gh repo clone VitorinoAssuncao/stoneBanking ```
+ ``` gh repo clone VitorinoAssuncao/hadesBanking ```
 
 
 # Gerando Imagem Docker:
