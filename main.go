@@ -31,7 +31,7 @@ func main() {
 	cfg := config.LoadConfig()
 
 	// Initiliaze the logger
-	log := commonLog.NewLogger()
+	logger := commonLog.NewLogger()
 
 	// Initialize the database and return him to a variable
 
@@ -41,9 +41,9 @@ func main() {
 	}
 
 	// Create the repositories and usecase repositories
-	repository := server.NewPostgresRepositoryWrapper(db, cfg.SigningKey, log)
+	repository := server.NewPostgresRepositoryWrapper(db, cfg.SigningKey, logger)
 	workspaces := server.NewUseCaseWrapper(repository)
 
 	// Initialize the server and host him in localhost:8000
-	server.New(workspaces, repository.Token, log)
+	server.New(workspaces, repository.Token, logger)
 }
