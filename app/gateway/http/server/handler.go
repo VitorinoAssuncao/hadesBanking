@@ -26,12 +26,23 @@ func New(usecase *UseCaseWrapper, token token.Authenticator, logger logHelper.Lo
 	router.PathPrefix("/documentation/").Handler(httpSwagger.WrapHandler)
 	controller_account := accounts.New(usecase.Accounts, token, logger)
 	controller_transfer := transfers.New(usecase.Transfer, token, logger)
-	router.HandleFunc("/account", controller_account.Create).Methods("POST")
-	router.HandleFunc("/account/login", controller_account.LoginUser).Methods("POST")
-	router.HandleFunc("/accounts", controller_account.GetAll).Methods("GET")
-	router.HandleFunc("/account/balance", controller_account.GetBalance).Methods("GET")
-	router.HandleFunc("/transfer", controller_transfer.Create).Methods("POST")
-	router.HandleFunc("/transfer", controller_transfer.GetAllByAccountID).Methods("GET")
+
+	account := router.PathPrefix("/accounts").Subrouter()
+	account.HandleFunc("", controller_account.GetAll).Methods("GET")
+	account.HandleFunc("", controller_account.Create).Methods("POST")
+	account.HandleFunc("/balance", controller_account.GetBalance).Methods("GET")
+
+	login := router.PathPrefix("/login").Subrouter()
+	login.HandleFunc("", controller_account.LoginUser).Methods("POST")
+
+	transfer := router.PathPrefix("transfer").Subrouter()
+	transfer.HandleFunc("", controller_transfer.Create).Methods("POST")
+	transfer.HandleFunc("", controller_transfer.GetAllByAccountID).Methods("GET")
+
+	// Documentation
+	doc := router.PathPrefix("/documentation").Subrouter()
+	doc.PathPrefix("/swagger").Handler(httpSwagger.WrapHandler)
+
 	log.Fatal(http.ListenAndServe(":8000", router))
 	server := Server{Router: *router}
 	return &server
