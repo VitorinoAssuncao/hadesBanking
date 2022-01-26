@@ -1,5 +1,3 @@
-# Desafio da Empresa Stone.
-
 Esta pequena api foi criada conforme os requisitos do [desafio stone](https://gist.github.com/guilhermebr/fb0d5896d76634703d385a4c68b730d8),com o objetivo de permitir a criação de contas financeiras e as transferencias entre elas. 
 
 Para tal foram selecionadas as seguintes técnologias:
