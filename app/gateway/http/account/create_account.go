@@ -2,7 +2,6 @@ package account
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
 
 	"stoneBanking/app/gateway/http/account/vo/input"
@@ -25,19 +24,11 @@ func (c *Controller) Create(w http.ResponseWriter, r *http.Request) {
 	c.log.SetRequestIDFromContext(r.Context())
 	resp := response.NewResponse(w)
 
-	reqBody, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		c.log.LogWarn(operation, err.Error())
-		resp.BadRequest(response.NewError(err))
-		return
-	}
-	defer r.Body.Close()
-
-	c.log.LogDebug(operation, "unmarshal the data to a internal object")
-	var accountInput = input.CreateAccountVO{}
-	err = json.Unmarshal(reqBody, &accountInput)
-	if err != nil {
-		c.log.LogWarn(operation, err.Error())
+	c.log.LogInfo(operation, "receive the body and unmarshal the data")
+	var accountInput input.CreateAccountVO
+	if err := json.NewDecoder(r.Body).Decode(&accountInput); err != nil {
+		c.log.LogError(operation, err.Error())
+		w.WriteHeader(http.StatusBadRequest)
 		resp.BadRequest(response.NewError(err))
 		return
 	}
