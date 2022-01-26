@@ -19,7 +19,7 @@ import (
 //@Success 200 {object} []output.TransferOutputVO
 //@Failure	400 {object} output.OutputError
 //@Failure 500 {object} output.OutputError
-//@Router /transfer [GET]
+//@Router /transfers [GET]
 func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Transfer.GetAllByAccountID"
 	resp := response.NewResponse(w)

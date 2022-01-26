@@ -18,7 +18,7 @@ import (
 //@Success 200 {object} output.AccountOutputVO
 //@Failure	400 {object} output.OutputError
 //@Failure 500 {object} output.OutputError
-//@Router /account [POST]
+//@Router /accounts [POST]
 func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Account.Create"
 	resp := response.NewResponse(w)

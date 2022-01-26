@@ -23,7 +23,7 @@ import (
 //@Success 200 {object} output.TransferOutputVO
 //@Failure	400 {object} output.OutputError
 //@Failure 500 {object} output.OutputError
-//@Router /transfer [POST]
+//@Router /transfers [POST]
 func (controller Controller) Create(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Transfer.Create"
 	resp := response.NewResponse(w)

@@ -23,7 +23,7 @@ import (
 //@Success 200 {object} output.LoginOutputVO
 //@Failure	400 {object} output.OutputError
 //@Failure 500 {object} output.OutputError
-//@Router /account/login [POST]
+//@Router /login [POST]
 func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Account.GetBalance"
 	resp := response.NewResponse(w)

@@ -16,7 +16,7 @@ import (
 //@Success 200 {object} output.AccountBalanceVO
 //@Failure	400 {object} output.OutputError
 //@Failure 500 {object} output.OutputError
-//@Router /account/balance [GET]
+//@Router /accounts/balance [GET]
 func (controller *Controller) GetBalance(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Account.GetBalance"
 	resp := response.NewResponse(w)
