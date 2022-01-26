@@ -17,7 +17,7 @@ func Test_LoginUser(t *testing.T) {
 	testCases := []struct {
 		name        string
 		accountMock account.Repository
-		tokenMock   token.Repository
+		tokenMock   token.Authenticator
 		logMock     logHelper.Logger
 		input       account.Account
 		want        string

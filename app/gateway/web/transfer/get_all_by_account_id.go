@@ -23,7 +23,7 @@ import (
 func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Transfer.GetAllByAccountID"
 
-	accountID, err := middleware.GetAccountIDFromToken(r, controller.tokenRepo)
+	accountID, err := middleware.GetAccountIDFromToken(r, controller.token)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode([]output.OutputError{{Error: err.Error()}}) //nolint: errorlint

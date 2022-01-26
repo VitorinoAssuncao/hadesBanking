@@ -24,7 +24,7 @@ func (usecase *usecase) LoginUser(ctx context.Context, loginInput account.Accoun
 	}
 
 	usecase.logger.LogInfo(operation, "generating the authorization token")
-	token, err := usecase.tokenRepository.GenerateToken(string(tempAccount.ExternalID))
+	token, err := usecase.token.GenerateToken(string(tempAccount.ExternalID))
 	if err != nil {
 		usecase.logger.LogError(operation, err.Error())
 		return "", customError.ErrorAccountTokenGeneration

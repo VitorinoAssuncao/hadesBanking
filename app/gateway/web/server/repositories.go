@@ -15,7 +15,7 @@ import (
 type RepositorieWrapper struct {
 	Account  account.Repository
 	Transfer transfer.Repository
-	Token    token.Repository
+	Token    token.Authenticator
 	Log      logHelper.Logger
 }
 
@@ -23,7 +23,7 @@ func NewPostgresRepositoryWrapper(db *sql.DB, signKey string, log logHelper.Logg
 	return &RepositorieWrapper{
 		Account:  postgresAccount.NewAccountRepository(db),
 		Transfer: postgresTransfer.NewTransferRepository(db),
-		Token:    webToken.NewTokenRepository(signKey),
+		Token:    webToken.NewTokenAuthenticator(signKey),
 		Log:      commonLog.NewLogger(),
 	}
 }

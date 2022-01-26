@@ -22,7 +22,7 @@ func Test_Create(t *testing.T) {
 	testCases := []struct {
 		name            string
 		transferUsecase usecase.Usecase
-		tokenRepository token.Repository
+		authenticator   token.Authenticator
 		logger          logHelper.Logger
 		input           map[string]interface{}
 		runBefore       func(http.Request)
@@ -54,7 +54,7 @@ func Test_Create(t *testing.T) {
 						}, nil
 					}},
 				&logHelper.RepositoryMock{}),
-			tokenRepository: &token.RepositoryMock{
+			authenticator: &token.RepositoryMock{
 				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
 					return "65d56316-39ad-4937-b41d-be2f103b0bd9", nil
 				}},
@@ -100,7 +100,7 @@ func Test_Create(t *testing.T) {
 						}, nil
 					}},
 				&logHelper.RepositoryMock{}),
-			tokenRepository: &token.RepositoryMock{
+			authenticator: &token.RepositoryMock{
 				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
 					return "", customError.ErrorServerTokenNotFound
 				}},
@@ -142,7 +142,7 @@ func Test_Create(t *testing.T) {
 						}, nil
 					}},
 				&logHelper.RepositoryMock{}),
-			tokenRepository: &token.RepositoryMock{
+			authenticator: &token.RepositoryMock{
 				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
 					return "65d56316-39ad-4937-b41d-be2f103b0bd9", nil
 				}},
@@ -183,7 +183,7 @@ func Test_Create(t *testing.T) {
 						}, nil
 					}},
 				&logHelper.RepositoryMock{}),
-			tokenRepository: &token.RepositoryMock{
+			authenticator: &token.RepositoryMock{
 				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
 					return "65d56316-39ad-4937-b41d-be2f103b0bd9", nil
 				}},
@@ -225,7 +225,7 @@ func Test_Create(t *testing.T) {
 						}, nil
 					}},
 				&logHelper.RepositoryMock{}),
-			tokenRepository: &token.RepositoryMock{
+			authenticator: &token.RepositoryMock{
 				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
 					return "65d56316-39ad-4937-b41d-be2f103b0bd9", nil
 				}},
@@ -267,7 +267,7 @@ func Test_Create(t *testing.T) {
 						}, nil
 					}},
 				&logHelper.RepositoryMock{}),
-			tokenRepository: &token.RepositoryMock{
+			authenticator: &token.RepositoryMock{
 				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
 					return "65d56316-39ad-4937-b41d-be2f103b0bd9", nil
 				}},
@@ -303,7 +303,7 @@ func Test_Create(t *testing.T) {
 						}, nil
 					}},
 				&logHelper.RepositoryMock{}),
-			tokenRepository: &token.RepositoryMock{
+			authenticator: &token.RepositoryMock{
 				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
 					return "65d56316-39ad-4937-b41d-be2f103b0bd9", nil
 				}},
@@ -331,7 +331,7 @@ func Test_Create(t *testing.T) {
 				test.runBefore(*req)
 			}
 
-			controller := New(test.transferUsecase, test.tokenRepository, test.logger)
+			controller := New(test.transferUsecase, test.authenticator, test.logger)
 			controller.Create(rec, req)
 
 			assert.Equal(t, test.wantCode, rec.Code)

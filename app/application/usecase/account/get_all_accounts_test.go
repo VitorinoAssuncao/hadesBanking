@@ -15,7 +15,7 @@ func Test_GetAll(t *testing.T) {
 	testCases := []struct {
 		name        string
 		accountMock account.Repository
-		tokenMock   token.Repository
+		tokenMock   token.Authenticator
 		logMock     logHelper.Logger
 		want        int
 		wantErr     error

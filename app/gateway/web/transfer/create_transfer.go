@@ -27,7 +27,7 @@ func (controller Controller) Create(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Transfer.Create"
 
 	controller.log.LogInfo(operation, "getting the account id from the token in the header")
-	accountID, err := middleware.GetAccountIDFromToken(r, controller.tokenRepo)
+	accountID, err := middleware.GetAccountIDFromToken(r, controller.token)
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
 		w.WriteHeader(http.StatusBadRequest)
