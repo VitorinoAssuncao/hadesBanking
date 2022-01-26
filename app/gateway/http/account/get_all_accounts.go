@@ -24,7 +24,16 @@ func (controller *Controller) GetAll(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+<<<<<<< HEAD:app/gateway/http/account/get_all_accounts.go
 	accountsOutput := output.ToOutputs(accounts)
+=======
+	var accountsOutput = make([]output.AccountOutputVO, 0, len(accounts))
+	for _, account := range accounts {
+		tempAccount := output.AccountToOutput(account)
+		accountsOutput = append(accountsOutput, tempAccount)
+	}
+
+>>>>>>> refactor: changed to initiliaze and use append:app/gateway/web/account/get_all_accounts.go
 	controller.log.LogInfo(operation, "accounts created sucessfully")
 	json.NewEncoder(w).Encode(accountsOutput) //nolint: errorlint
 

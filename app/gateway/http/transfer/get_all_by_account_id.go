@@ -32,15 +32,7 @@ func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Re
 	transfers, err := controller.usecase.GetAllByAccountID(context.Background(), types.ExternalID(accountID))
 
 	controller.log.LogInfo(operation, "creating the objects to by listed")
-<<<<<<< HEAD:app/gateway/http/transfer/get_all_by_account_id.go
 	transfersOutput := output.ToOutputs(transfers)
-=======
-	var transfersOutput = make([]output.TransferOutputVO, len(transfers))
-	for index, transfer := range transfers {
-		transferOutput := output.TransferToTransferOutput(transfer)
-		transfersOutput[index] = transferOutput
-	}
->>>>>>> refactor: changed the list initiliazation:app/gateway/web/transfer/get_all_by_account_id.go
 
 	if err != nil {
 		if errors.Is(err, customError.ErrorTransferAccountNotFound) {
