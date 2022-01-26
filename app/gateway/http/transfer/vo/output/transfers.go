@@ -10,7 +10,7 @@ type TransferOutputVO struct {
 	Created_At                  string  `json:"created_at" example:"12/05/2021 00:01:01" `
 }
 
-func TransferToTransferOutput(transfer transfer.Transfer) TransferOutputVO {
+func ToOutput(transfer transfer.Transfer) TransferOutputVO {
 	transferOutput := TransferOutputVO{
 		ID:                          string(transfer.ExternalID),
 		AccountOriginExternalID:     string(transfer.AccountOriginExternalID),

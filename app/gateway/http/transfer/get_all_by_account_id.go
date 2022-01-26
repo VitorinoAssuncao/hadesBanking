@@ -34,7 +34,7 @@ func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Re
 	controller.log.LogInfo(operation, "creating the objects to by listed")
 	var transfersOutput = make([]output.TransferOutputVO, 0)
 	for _, transfer := range transfers {
-		transferOutput := output.TransferToTransferOutput(transfer)
+		transferOutput := output.ToOutput(transfer)
 		transfersOutput = append(transfersOutput, transferOutput)
 	}
 
