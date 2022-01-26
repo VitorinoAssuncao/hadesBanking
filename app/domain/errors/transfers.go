@@ -11,6 +11,6 @@ var (
 	ErrorTransferCreate                   = errors.New("error when creating transfer, please try again")
 	ErrorTransferOriginEqualDestiny       = errors.New("origin account and destiny account cannot by the same")
 	ErrorTransferAccountOriginIDRequired  = errors.New("field account_origin_id is required")
-	ErrorTransferAccountDestinyIDRequired = errors.New("field account_destiny_id is required")
+	ErrorTransferAccountDestinyIDRequired = errors.New("field account_destination_id is required")
 	ErrorTransferAmountInvalid            = errors.New("transfer amount should be greater than 0")
 )

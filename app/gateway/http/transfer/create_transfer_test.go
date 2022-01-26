@@ -60,19 +60,19 @@ func Test_Create(t *testing.T) {
 				}},
 			logger: &logHelper.RepositoryMock{},
 			input: map[string]interface{}{
-				"account_destiny_id": "e391600e-7ea9-42aa-85c0-21a2a6c00019",
-				"amount":             1,
+				"account_destination_id": "e391600e-7ea9-42aa-85c0-21a2a6c00019",
+				"amount":                 1,
 			},
 			runBefore: func(req http.Request) {
 				req.Header.Set("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI")
 			},
 			wantCode: 200,
 			wantBody: map[string]interface{}{
-				"id":                 "cb34f1f3-24ba-4a70-981b-cdc5d77a7347",
-				"account_origin_id":  "65d56316-39ad-4937-b41d-be2f103b0bd9",
-				"account_destiny_id": "e391600e-7ea9-42aa-85c0-21a2a6c00019",
-				"value":              0.01,
-				"created_at":         "0001-01-01T00:00:00Z",
+				"id":                     "cb34f1f3-24ba-4a70-981b-cdc5d77a7347",
+				"account_origin_id":      "65d56316-39ad-4937-b41d-be2f103b0bd9",
+				"account_destination_id": "e391600e-7ea9-42aa-85c0-21a2a6c00019",
+				"value":                  0.01,
+				"created_at":             "0001-01-01T00:00:00Z",
 			},
 		},
 		{
@@ -106,8 +106,8 @@ func Test_Create(t *testing.T) {
 				}},
 			logger: &logHelper.RepositoryMock{},
 			input: map[string]interface{}{
-				"account_destiny_id": "e391600e-7ea9-42aa-85c0-21a2a6c00019",
-				"amount":             1,
+				"account_destination_id": "e391600e-7ea9-42aa-85c0-21a2a6c00019",
+				"amount":                 1,
 			},
 			runBefore: func(req http.Request) {
 				req.Header.Set("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI")
@@ -155,7 +155,7 @@ func Test_Create(t *testing.T) {
 			},
 			wantCode: 400,
 			wantBody: map[string]interface{}{
-				"error": "field account_destiny_id is required",
+				"error": "field account_destination_id is required",
 			},
 		},
 		{
@@ -189,8 +189,8 @@ func Test_Create(t *testing.T) {
 				}},
 			logger: &logHelper.RepositoryMock{},
 			input: map[string]interface{}{
-				"account_destiny_id": "65d56316-39ad-4937-b41d-be2f103b0bd9",
-				"amount":             1,
+				"account_destination_id": "65d56316-39ad-4937-b41d-be2f103b0bd9",
+				"amount":                 1,
 			},
 			runBefore: func(req http.Request) {
 				req.Header.Set("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI")
@@ -231,8 +231,8 @@ func Test_Create(t *testing.T) {
 				}},
 			logger: &logHelper.RepositoryMock{},
 			input: map[string]interface{}{
-				"account_destiny_id": "e391600e-7ea9-42aa-85c0-21a2a6c00019",
-				"amount":             0,
+				"account_destination_id": "e391600e-7ea9-42aa-85c0-21a2a6c00019",
+				"amount":                 0,
 			},
 			runBefore: func(req http.Request) {
 				req.Header.Set("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI")
@@ -273,8 +273,8 @@ func Test_Create(t *testing.T) {
 				}},
 			logger: &logHelper.RepositoryMock{},
 			input: map[string]interface{}{
-				"account_destiny_id": "e391600e-7ea9-42aa-85c0-21a2a6c00019",
-				"amount":             101,
+				"account_destination_id": "e391600e-7ea9-42aa-85c0-21a2a6c00019",
+				"amount":                 101,
 			},
 			runBefore: func(req http.Request) {
 				req.Header.Set("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI")
@@ -309,8 +309,8 @@ func Test_Create(t *testing.T) {
 				}},
 			logger: &logHelper.RepositoryMock{},
 			input: map[string]interface{}{
-				"account_destiny_id": "e391600e-7ea9-42aa-85c0-21a2a6c00019",
-				"amount":             1,
+				"account_destination_id": "e391600e-7ea9-42aa-85c0-21a2a6c00019",
+				"amount":                 1,
 			},
 			runBefore: func(req http.Request) {
 				req.Header.Set("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI")
