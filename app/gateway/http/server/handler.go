@@ -35,7 +35,7 @@ func New(usecase *UseCaseWrapper, token token.Authenticator, logger logHelper.Lo
 	login := router.PathPrefix("/login").Subrouter()
 	login.HandleFunc("", controller_account.LoginUser).Methods("POST")
 
-	transfer := router.PathPrefix("transfer").Subrouter()
+	transfer := router.PathPrefix("transfers").Subrouter()
 	transfer.HandleFunc("", controller_transfer.Create).Methods("POST")
 	transfer.HandleFunc("", controller_transfer.GetAllByAccountID).Methods("GET")
 
