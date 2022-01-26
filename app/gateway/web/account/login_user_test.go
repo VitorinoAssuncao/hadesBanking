@@ -22,7 +22,7 @@ func Test_LoginUser(t *testing.T) {
 		name            string
 		accountUsecase  usecase.Usecase
 		tokenRepository token.Repository
-		logRepository   logHelper.Repository
+		logRepository   logHelper.Logger
 		input           input.CreateAccountVO
 		wantCode        int
 		wantBody        map[string]interface{}

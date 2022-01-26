@@ -8,14 +8,14 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-type LogRepository struct {
+type Log struct {
 	logger *zap.Logger
 }
 
-func NewLogRepository() logHelper.Repository {
+func NewLogger() logHelper.Logger {
 	enviroment := os.Getenv("ENVIROMENT")
 	tempLogger := createLogger(enviroment)
-	logger := &LogRepository{tempLogger}
+	logger := &Log{tempLogger}
 	return logger
 }
 
@@ -32,14 +32,14 @@ func createLogger(env string) *zap.Logger {
 	return newLogger
 
 }
-func (l LogRepository) LogInfo(operation string, msg string) {
+func (l Log) LogInfo(operation string, msg string) {
 	l.logger.Info(msg, zap.String("operation:", operation))
 }
 
-func (l LogRepository) LogWarn(operation string, msg string) {
+func (l Log) LogWarn(operation string, msg string) {
 	l.logger.Warn(msg, zap.String("operation:", operation))
 }
 
-func (l LogRepository) LogError(operation string, msg string) {
+func (l Log) LogError(operation string, msg string) {
 	l.logger.Error(msg, zap.String("operation:", operation))
 }

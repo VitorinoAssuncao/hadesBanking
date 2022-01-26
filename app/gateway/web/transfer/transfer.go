@@ -9,10 +9,10 @@ import (
 type Controller struct {
 	usecase   transfer.Usecase
 	tokenRepo token.Repository
-	log       logHelper.Repository
+	log       logHelper.Logger
 }
 
-func New(useCase transfer.Usecase, token token.Repository, log logHelper.Repository) Controller {
+func New(useCase transfer.Usecase, token token.Repository, log logHelper.Logger) Controller {
 	return Controller{
 		usecase:   useCase,
 		tokenRepo: token,

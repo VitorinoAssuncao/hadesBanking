@@ -23,7 +23,7 @@ func Test_Create(t *testing.T) {
 		name            string
 		transferUsecase usecase.Usecase
 		tokenRepository token.Repository
-		logRepository   logHelper.Repository
+		logRepository   logHelper.Logger
 		input           map[string]interface{}
 		runBefore       func(http.Request)
 		wantCode        int

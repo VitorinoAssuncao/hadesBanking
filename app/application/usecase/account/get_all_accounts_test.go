@@ -16,7 +16,7 @@ func Test_GetAll(t *testing.T) {
 		name        string
 		accountMock account.Repository
 		tokenMock   token.Repository
-		logMock     logHelper.Repository
+		logMock     logHelper.Logger
 		want        int
 		wantErr     error
 	}{

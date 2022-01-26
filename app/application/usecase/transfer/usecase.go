@@ -16,13 +16,13 @@ type Usecase interface {
 type usecase struct {
 	transferRepository transfer.Repository
 	accountRepository  account.Repository
-	logRepository      logHelper.Repository
+	logger             logHelper.Logger
 }
 
-func New(transfer transfer.Repository, account account.Repository, log logHelper.Repository) *usecase {
+func New(transfer transfer.Repository, account account.Repository, log logHelper.Logger) *usecase {
 	return &usecase{
 		transferRepository: transfer,
 		accountRepository:  account,
-		logRepository:      log,
+		logger:             log,
 	}
 }

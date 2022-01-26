@@ -17,7 +17,7 @@ func Test_GetAllByAccountID(t *testing.T) {
 		name         string
 		accountMock  account.Repository
 		transferMock transfer.Repository
-		logMock      logHelper.Repository
+		logMock      logHelper.Logger
 		input        types.ExternalID
 		wantQt       int
 		wantValue    []transfer.Transfer

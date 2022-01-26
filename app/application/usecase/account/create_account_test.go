@@ -17,7 +17,7 @@ func Test_Create(t *testing.T) {
 		name        string
 		accountMock account.Repository
 		tokenMock   token.Repository
-		logMock     logHelper.Repository
+		logMock     logHelper.Logger
 		input       account.Account
 		want        account.Account
 		wantErr     error

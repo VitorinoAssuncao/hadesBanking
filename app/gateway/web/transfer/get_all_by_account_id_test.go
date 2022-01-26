@@ -22,7 +22,7 @@ func Test_GetAllByAccountID(t *testing.T) {
 		name            string
 		transferUsecase usecase.Usecase
 		tokenRepository token.Repository
-		logRepository   logHelper.Repository
+		logRepository   logHelper.Logger
 		runBefore       func(http.Request)
 		wantCode        int
 		wantBody        []map[string]interface{}
