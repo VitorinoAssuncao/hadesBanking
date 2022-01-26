@@ -20,7 +20,7 @@ func Test_GetAll(t *testing.T) {
 		name            string
 		accountUsecase  usecase.Usecase
 		tokenRepository token.Repository
-		logRepository   logHelper.Logger
+		logger          logHelper.Logger
 		wantCode        int
 		wantBody        []map[string]interface{}
 	}{
@@ -42,7 +42,7 @@ func Test_GetAll(t *testing.T) {
 				&token.RepositoryMock{},
 				&logHelper.RepositoryMock{}),
 			tokenRepository: &token.RepositoryMock{},
-			logRepository:   &logHelper.RepositoryMock{},
+			logger:          &logHelper.RepositoryMock{},
 			wantCode:        200,
 			wantBody: []map[string]interface{}{{
 				"id":         "94b9c27e-2880-42e3-8988-62dceb6b6463",
@@ -63,7 +63,7 @@ func Test_GetAll(t *testing.T) {
 				&token.RepositoryMock{},
 				&logHelper.RepositoryMock{}),
 			tokenRepository: &token.RepositoryMock{},
-			logRepository:   &logHelper.RepositoryMock{},
+			logger:          &logHelper.RepositoryMock{},
 			wantCode:        500,
 			wantBody: []map[string]interface{}{{
 				"error": "error when listing all accounts",
@@ -75,7 +75,7 @@ func Test_GetAll(t *testing.T) {
 
 			rec := httptest.NewRecorder()
 			req := httptest.NewRequest(http.MethodGet, "/account", nil)
-			controller := New(test.accountUsecase, test.tokenRepository, test.logRepository)
+			controller := New(test.accountUsecase, test.tokenRepository, test.logger)
 			controller.GetAll(rec, req)
 			assert.Equal(t, test.wantCode, rec.Code)
 
