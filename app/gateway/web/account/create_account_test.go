@@ -21,13 +21,13 @@ import (
 
 func Test_Create(t *testing.T) {
 	testCases := []struct {
-		name            string
-		accountUsecase  usecase.Usecase
-		tokenRepository token.Repository
-		logRepository   logHelper.Repository
-		input           input.CreateAccountVO
-		wantCode        int
-		wantBody        map[string]interface{}
+		name           string
+		accountUsecase usecase.Usecase
+		authenticator  token.Authenticator
+		logger         logHelper.Logger
+		input          input.CreateAccountVO
+		wantCode       int
+		wantBody       map[string]interface{}
 	}{
 		{
 			name: "with the right data, account is created sucessfully",
@@ -49,8 +49,8 @@ func Test_Create(t *testing.T) {
 				},
 				&token.RepositoryMock{},
 				&logHelper.RepositoryMock{}),
-			tokenRepository: &token.RepositoryMock{},
-			logRepository:   &logHelper.RepositoryMock{},
+			authenticator: &token.RepositoryMock{},
+			logger:        &logHelper.RepositoryMock{},
 			input: input.CreateAccountVO{
 				Name:    "Joao",
 				CPF:     "761.647.810-78",
@@ -86,8 +86,8 @@ func Test_Create(t *testing.T) {
 				},
 				&token.RepositoryMock{},
 				&logHelper.RepositoryMock{}),
-			tokenRepository: &token.RepositoryMock{},
-			logRepository:   &logHelper.RepositoryMock{},
+			authenticator: &token.RepositoryMock{},
+			logger:        &logHelper.RepositoryMock{},
 			input: input.CreateAccountVO{
 				Name:    "",
 				CPF:     "761.647.810-78",
@@ -112,8 +112,8 @@ func Test_Create(t *testing.T) {
 				},
 				&token.RepositoryMock{},
 				&logHelper.RepositoryMock{}),
-			tokenRepository: &token.RepositoryMock{},
-			logRepository:   &logHelper.RepositoryMock{},
+			authenticator: &token.RepositoryMock{},
+			logger:        &logHelper.RepositoryMock{},
 			input: input.CreateAccountVO{
 				Name:    "Joao do Rio",
 				CPF:     "761.647.810-78",
@@ -138,8 +138,8 @@ func Test_Create(t *testing.T) {
 				},
 				&token.RepositoryMock{},
 				&logHelper.RepositoryMock{}),
-			tokenRepository: &token.RepositoryMock{},
-			logRepository:   &logHelper.RepositoryMock{},
+			authenticator: &token.RepositoryMock{},
+			logger:        &logHelper.RepositoryMock{},
 			input: input.CreateAccountVO{
 				Name:    "Joao do Rio",
 				CPF:     "761.647.810-78",
@@ -159,7 +159,7 @@ func Test_Create(t *testing.T) {
 			body, _ := json.Marshal(test.input)
 			rec := httptest.NewRecorder()
 			req := httptest.NewRequest(http.MethodPost, "/account", bytes.NewReader(body))
-			controller := New(test.accountUsecase, test.tokenRepository, test.logRepository)
+			controller := New(test.accountUsecase, test.authenticator, test.logger)
 			controller.Create(rec, req)
 
 			assert.Equal(t, test.wantCode, rec.Code)

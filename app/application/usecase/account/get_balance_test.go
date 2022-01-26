@@ -16,8 +16,8 @@ func Test_GetBalance(t *testing.T) {
 	testCases := []struct {
 		name        string
 		accountMock account.Repository
-		tokenMock   token.Repository
-		logMock     logHelper.Repository
+		tokenMock   token.Authenticator
+		logMock     logHelper.Logger
 		input       string
 		want        float64
 		wantErr     error

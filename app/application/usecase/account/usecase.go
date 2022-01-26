@@ -16,14 +16,14 @@ type Usecase interface {
 
 type usecase struct {
 	accountRepository account.Repository
-	tokenRepository   token.Repository
-	logRepository     logHelper.Repository
+	token             token.Authenticator
+	logger            logHelper.Logger
 }
 
-func New(account account.Repository, token token.Repository, logger logHelper.Repository) *usecase {
+func New(account account.Repository, token token.Authenticator, logger logHelper.Logger) *usecase {
 	return &usecase{
 		accountRepository: account,
-		tokenRepository:   token,
-		logRepository:     logger,
+		token:             token,
+		logger:            logger,
 	}
 }

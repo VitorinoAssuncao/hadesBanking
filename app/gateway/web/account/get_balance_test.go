@@ -18,13 +18,13 @@ import (
 
 func Test_GetBalance(t *testing.T) {
 	testCases := []struct {
-		name            string
-		accountUsecase  usecase.Usecase
-		tokenRepository token.Repository
-		logRepository   logHelper.Repository
-		runBefore       func(req http.Request)
-		wantCode        int
-		wantBody        map[string]interface{}
+		name           string
+		accountUsecase usecase.Usecase
+		authenticator  token.Authenticator
+		logger         logHelper.Logger
+		runBefore      func(req http.Request)
+		wantCode       int
+		wantBody       map[string]interface{}
 	}{
 		{
 			name: "with a token of login, return the correct value of the account",
@@ -43,12 +43,12 @@ func Test_GetBalance(t *testing.T) {
 				},
 				&token.RepositoryMock{},
 				&logHelper.RepositoryMock{}),
-			tokenRepository: &token.RepositoryMock{
+			authenticator: &token.RepositoryMock{
 				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
 					return "94b9c27e-2880-42e3-8988-62dceb6b6463", nil
 				},
 			},
-			logRepository: &logHelper.RepositoryMock{},
+			logger: &logHelper.RepositoryMock{},
 			runBefore: func(req http.Request) {
 				req.Header.Set("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI")
 			},
@@ -67,13 +67,13 @@ func Test_GetBalance(t *testing.T) {
 				},
 				&token.RepositoryMock{},
 				&logHelper.RepositoryMock{}),
-			tokenRepository: &token.RepositoryMock{
+			authenticator: &token.RepositoryMock{
 				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
 					return "", customError.ErrorServerTokenNotFound
 				},
 			},
-			logRepository: &logHelper.RepositoryMock{},
-			wantCode:      401,
+			logger:   &logHelper.RepositoryMock{},
+			wantCode: 401,
 			wantBody: map[string]interface{}{
 				"error": "authorization token invalid",
 			},
@@ -88,7 +88,7 @@ func Test_GetBalance(t *testing.T) {
 				},
 				&token.RepositoryMock{},
 				&logHelper.RepositoryMock{}),
-			tokenRepository: &token.RepositoryMock{
+			authenticator: &token.RepositoryMock{
 				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
 					return "94b9c27e-2880-42e3-8988-62dceb6b6463", nil
 				},
@@ -96,8 +96,8 @@ func Test_GetBalance(t *testing.T) {
 			runBefore: func(req http.Request) {
 				req.Header.Set("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI")
 			},
-			logRepository: &logHelper.RepositoryMock{},
-			wantCode:      500,
+			logger:   &logHelper.RepositoryMock{},
+			wantCode: 500,
 			wantBody: map[string]interface{}{
 				"error": "account not found, please validate the ID informed",
 			},
@@ -113,7 +113,7 @@ func Test_GetBalance(t *testing.T) {
 				test.runBefore(*req)
 			}
 
-			controller := New(test.accountUsecase, test.tokenRepository, test.logRepository)
+			controller := New(test.accountUsecase, test.authenticator, test.logger)
 			controller.GetBalance(rec, req)
 
 			assert.Equal(t, test.wantCode, rec.Code)

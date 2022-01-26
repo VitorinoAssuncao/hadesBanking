@@ -21,7 +21,7 @@ func (controller *Controller) GetBalance(w http.ResponseWriter, r *http.Request)
 	const operation = "Gateway.Rest.Account.GetBalance"
 
 	controller.log.LogInfo(operation, "take the value from the token")
-	tokenID, err := middleware.GetAccountIDFromToken(r, controller.tokenRepo)
+	tokenID, err := middleware.GetAccountIDFromToken(r, controller.token)
 	if err != nil {
 		if errors.Is(err, customError.ErrorServerTokenNotFound) {
 			controller.log.LogError(operation, err.Error())

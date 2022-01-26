@@ -2,13 +2,13 @@ package token
 
 import "github.com/golang-jwt/jwt"
 
-func (r TokenRepository) ExtractAccountIDFromToken(tokenStr string) (accountExternalID string, err error) {
+func (t TokenAuthenticator) ExtractAccountIDFromToken(tokenStr string) (accountExternalID string, err error) {
 	type ClaimStruct struct {
 		jwt.StandardClaims
 		UserID string
 	}
 
-	mySigningKey := []byte(r.signKey)
+	mySigningKey := []byte(t.signKey)
 	token, err := jwt.ParseWithClaims(tokenStr, &ClaimStruct{}, func(token *jwt.Token) (interface{}, error) {
 		return mySigningKey, nil
 	})

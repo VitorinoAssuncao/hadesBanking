@@ -17,12 +17,12 @@ import (
 
 func Test_GetAll(t *testing.T) {
 	testCases := []struct {
-		name            string
-		accountUsecase  usecase.Usecase
-		tokenRepository token.Repository
-		logRepository   logHelper.Repository
-		wantCode        int
-		wantBody        []map[string]interface{}
+		name           string
+		accountUsecase usecase.Usecase
+		authenticator  token.Authenticator
+		logger         logHelper.Logger
+		wantCode       int
+		wantBody       []map[string]interface{}
 	}{
 		{
 			name: "with at last one account existing, data from account is returned sucessfully",
@@ -41,9 +41,9 @@ func Test_GetAll(t *testing.T) {
 				},
 				&token.RepositoryMock{},
 				&logHelper.RepositoryMock{}),
-			tokenRepository: &token.RepositoryMock{},
-			logRepository:   &logHelper.RepositoryMock{},
-			wantCode:        200,
+			authenticator: &token.RepositoryMock{},
+			logger:        &logHelper.RepositoryMock{},
+			wantCode:      200,
 			wantBody: []map[string]interface{}{{
 				"id":         "94b9c27e-2880-42e3-8988-62dceb6b6463",
 				"name":       "Joao do Rio",
@@ -62,9 +62,9 @@ func Test_GetAll(t *testing.T) {
 				},
 				&token.RepositoryMock{},
 				&logHelper.RepositoryMock{}),
-			tokenRepository: &token.RepositoryMock{},
-			logRepository:   &logHelper.RepositoryMock{},
-			wantCode:        500,
+			authenticator: &token.RepositoryMock{},
+			logger:        &logHelper.RepositoryMock{},
+			wantCode:      500,
 			wantBody: []map[string]interface{}{{
 				"error": "error when listing all accounts",
 			}},
@@ -75,7 +75,7 @@ func Test_GetAll(t *testing.T) {
 
 			rec := httptest.NewRecorder()
 			req := httptest.NewRequest(http.MethodGet, "/account", nil)
-			controller := New(test.accountUsecase, test.tokenRepository, test.logRepository)
+			controller := New(test.accountUsecase, test.authenticator, test.logger)
 			controller.GetAll(rec, req)
 			assert.Equal(t, test.wantCode, rec.Code)
 

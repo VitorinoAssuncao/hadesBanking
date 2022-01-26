@@ -15,15 +15,15 @@ import (
 type RepositorieWrapper struct {
 	Account  account.Repository
 	Transfer transfer.Repository
-	Token    token.Repository
-	Log      logHelper.Repository
+	Token    token.Authenticator
+	Log      logHelper.Logger
 }
 
-func NewPostgresRepositoryWrapper(db *sql.DB, signKey string) *RepositorieWrapper {
+func NewPostgresRepositoryWrapper(db *sql.DB, signKey string, log logHelper.Logger) *RepositorieWrapper {
 	return &RepositorieWrapper{
 		Account:  postgresAccount.NewAccountRepository(db),
 		Transfer: postgresTransfer.NewTransferRepository(db),
-		Token:    webToken.NewTokenRepository(signKey),
-		Log:      commonLog.NewLogRepository(),
+		Token:    webToken.NewTokenAuthenticator(signKey),
+		Log:      commonLog.NewLogger(),
 	}
 }

@@ -21,8 +21,8 @@ func Test_GetAllByAccountID(t *testing.T) {
 	testCases := []struct {
 		name            string
 		transferUsecase usecase.Usecase
-		tokenRepository token.Repository
-		logRepository   logHelper.Repository
+		authenticator   token.Authenticator
+		logger          logHelper.Logger
 		runBefore       func(http.Request)
 		wantCode        int
 		wantBody        []map[string]interface{}
@@ -45,11 +45,11 @@ func Test_GetAllByAccountID(t *testing.T) {
 						return account.Account{}, nil
 					}},
 				&logHelper.RepositoryMock{}),
-			tokenRepository: &token.RepositoryMock{
+			authenticator: &token.RepositoryMock{
 				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
 					return "65d56316-39ad-4937-b41d-be2f103b0bd9", nil
 				}},
-			logRepository: &logHelper.RepositoryMock{},
+			logger: &logHelper.RepositoryMock{},
 			runBefore: func(req http.Request) {
 				req.Header.Set("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI")
 			},
@@ -74,8 +74,8 @@ func Test_GetAllByAccountID(t *testing.T) {
 						return account.Account{}, nil
 					}},
 				&logHelper.RepositoryMock{}),
-			logRepository: &logHelper.RepositoryMock{},
-			tokenRepository: &token.RepositoryMock{
+			logger: &logHelper.RepositoryMock{},
+			authenticator: &token.RepositoryMock{
 				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
 					return "", customError.ErrorServerTokenNotFound
 				}},
@@ -96,8 +96,8 @@ func Test_GetAllByAccountID(t *testing.T) {
 						return account.Account{}, nil
 					}},
 				&logHelper.RepositoryMock{}),
-			logRepository: &logHelper.RepositoryMock{},
-			tokenRepository: &token.RepositoryMock{
+			logger: &logHelper.RepositoryMock{},
+			authenticator: &token.RepositoryMock{
 				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
 					return "65d56316-39ad-4937-b41d-be2f103b0bd9", nil
 				}},
@@ -119,7 +119,7 @@ func Test_GetAllByAccountID(t *testing.T) {
 				test.runBefore(*req)
 			}
 
-			controller := New(test.transferUsecase, test.tokenRepository, test.logRepository)
+			controller := New(test.transferUsecase, test.authenticator, test.logger)
 			controller.GetAllByAccountID(rec, req)
 
 			assert.Equal(t, test.wantCode, rec.Code)

@@ -12,10 +12,10 @@ func (usecase *usecase) GetAll(ctx context.Context) ([]account.Account, error) {
 	var accounts []account.Account
 	accounts, err := usecase.accountRepository.GetAll(ctx)
 	if err != nil {
-		usecase.logRepository.LogError(operation, err.Error())
+		usecase.logger.LogError(operation, err.Error())
 		return nil, customError.ErrorAccountsListing
 	}
 
-	usecase.logRepository.LogInfo(operation, "listing data sucessfully")
+	usecase.logger.LogInfo(operation, "listing data sucessfully")
 	return accounts, nil
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"stoneBanking/app/common/utils/config"
+	commonLog "stoneBanking/app/common/utils/logger"
 	"stoneBanking/app/gateway/database/postgres"
 	"stoneBanking/app/gateway/web/server"
 
@@ -29,14 +30,17 @@ func main() {
 	// Load the env variables
 	cfg := config.LoadConfig()
 
+	// Initiliaze the logger
+	log := commonLog.NewLogger()
+
 	// Initialize the database and return him to a variable
 	postgres.InitiliazeDatabase(cfg)
 	db := postgres.RetrieveConnection()
 
 	// Create the repositories and usecase repositories
-	repository := server.NewPostgresRepositoryWrapper(db, cfg.SigningKey)
+	repository := server.NewPostgresRepositoryWrapper(db, cfg.SigningKey, log)
 	workspaces := server.NewUseCaseWrapper(repository)
 
 	// Initialize the server and host him in localhost:8000
-	server.New(workspaces, repository.Token, repository.Log)
+	server.New(workspaces, repository.Token, log)
 }
