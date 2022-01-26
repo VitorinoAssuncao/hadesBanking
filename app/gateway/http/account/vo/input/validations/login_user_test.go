@@ -2,7 +2,7 @@ package input
 
 import (
 	customError "stoneBanking/app/domain/errors"
-	"stoneBanking/app/gateway/web/account/vo/input"
+	"stoneBanking/app/gateway/http/account/vo/input"
 	"testing"
 
 	"github.com/stretchr/testify/assert"

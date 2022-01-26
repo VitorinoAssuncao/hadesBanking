@@ -9,9 +9,9 @@ import (
 	"stoneBanking/app/domain/entities/account"
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
-	"stoneBanking/app/gateway/web/account/vo/input"
-	validations "stoneBanking/app/gateway/web/account/vo/input/validations"
-	"stoneBanking/app/gateway/web/account/vo/output"
+	"stoneBanking/app/gateway/http/account/vo/input"
+	validations "stoneBanking/app/gateway/http/account/vo/input/validations"
+	"stoneBanking/app/gateway/http/account/vo/output"
 )
 
 //@Sumary Log in the account

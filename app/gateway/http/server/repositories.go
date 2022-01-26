@@ -9,7 +9,7 @@ import (
 	"stoneBanking/app/domain/entities/transfer"
 	postgresAccount "stoneBanking/app/gateway/database/postgres/accounts"
 	postgresTransfer "stoneBanking/app/gateway/database/postgres/transfers"
-	webToken "stoneBanking/app/gateway/web/token"
+	webToken "stoneBanking/app/gateway/http/token"
 )
 
 type RepositorieWrapper struct {

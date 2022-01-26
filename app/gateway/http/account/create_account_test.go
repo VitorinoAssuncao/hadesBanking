@@ -12,7 +12,7 @@ import (
 	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
 	customError "stoneBanking/app/domain/errors"
-	"stoneBanking/app/gateway/web/account/vo/input"
+	"stoneBanking/app/gateway/http/account/vo/input"
 
 	"testing"
 

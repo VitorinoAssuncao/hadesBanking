@@ -2,7 +2,7 @@ package transfer
 
 import (
 	customError "stoneBanking/app/domain/errors"
-	"stoneBanking/app/gateway/web/transfer/vo/input"
+	"stoneBanking/app/gateway/http/transfer/vo/input"
 )
 
 func ValidateTransferData(transferData input.CreateTransferVO) (input.CreateTransferVO, error) {
