@@ -3,6 +3,7 @@ package postgres
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"stoneBanking/app/common/utils/config"
 
 	"github.com/golang-migrate/migrate/v4"
