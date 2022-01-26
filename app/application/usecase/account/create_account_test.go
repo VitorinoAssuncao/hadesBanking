@@ -2,11 +2,14 @@ package account
 
 import (
 	"context"
+<<<<<<< HEAD
 	"database/sql"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 
+=======
+>>>>>>> refactor: corrected test that failed as sideeffect
 	"stoneBanking/app/domain/entities/account"
 	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
@@ -29,9 +32,12 @@ func Test_Create(t *testing.T) {
 				CreateFunc: func(ctx context.Context, account account.Account) (account.Account, error) {
 					return account, nil
 				},
+<<<<<<< HEAD
 				GetCredentialByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 					return account.Account{}, customError.ErrorAccountCPFNotFound
 				},
+=======
+>>>>>>> refactor: corrected test that failed as sideeffect
 			},
 			logMock: &logHelper.RepositoryMock{},
 			input: account.Account{
@@ -58,9 +64,12 @@ func Test_Create(t *testing.T) {
 				CreateFunc: func(ctx context.Context, account account.Account) (account.Account, error) {
 					return account, nil
 				},
+<<<<<<< HEAD
 				GetCredentialByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 					return account.Account{}, customError.ErrorAccountCPFNotFound
 				},
+=======
+>>>>>>> refactor: corrected test that failed as sideeffect
 			},
 			logMock: &logHelper.RepositoryMock{},
 			input: account.Account{
@@ -78,6 +87,7 @@ func Test_Create(t *testing.T) {
 			name: "with right input data, try to create a account, but is duplicated from one that exist, and return error",
 			accountMock: &account.RepositoryMock{
 				CreateFunc: func(ctx context.Context, account account.Account) (account.Account, error) {
+<<<<<<< HEAD
 					return account, nil
 				},
 				GetCredentialByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
@@ -89,6 +99,9 @@ func Test_Create(t *testing.T) {
 						Secret:     "J0@0doR10",
 						Balance:    0,
 					}, nil
+=======
+					return account, customError.ErrorAccountCPFExists
+>>>>>>> refactor: corrected test that failed as sideeffect
 				},
 			},
 			logMock: &logHelper.RepositoryMock{},
