@@ -8,7 +8,7 @@ type TokenAuthenticator struct {
 	signKey string
 }
 
-func NewTokenRepository(signKey string) token.Authenticator {
+func NewTokenAuthenticator(signKey string) token.Authenticator {
 	return &TokenAuthenticator{
 		signKey: signKey,
 	}
