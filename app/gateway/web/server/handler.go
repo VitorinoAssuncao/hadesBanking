@@ -19,12 +19,12 @@ type Server struct {
 	Router mux.Router
 }
 
-func New(usecase *UseCaseWrapper, tokenRepository token.Repository, logRepository logHelper.Logger) *Server {
+func New(usecase *UseCaseWrapper, tokenRepository token.Repository, logger logHelper.Logger) *Server {
 	router := mux.NewRouter().StrictSlash(true)
 	router.Use(middleware.LogRoutes)
 	router.PathPrefix("/documentation/").Handler(httpSwagger.WrapHandler)
-	controller_account := accounts.New(usecase.Accounts, tokenRepository, logRepository)
-	controller_transfer := transfers.New(usecase.Transfer, tokenRepository, logRepository)
+	controller_account := accounts.New(usecase.Accounts, tokenRepository, logger)
+	controller_transfer := transfers.New(usecase.Transfer, tokenRepository, logger)
 	router.HandleFunc("/account", controller_account.Create).Methods("POST")
 	router.HandleFunc("/account/login", controller_account.LoginUser).Methods("POST")
 	router.HandleFunc("/accounts", controller_account.GetAll).Methods("GET")
