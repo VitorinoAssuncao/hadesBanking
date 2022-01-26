@@ -59,13 +59,13 @@ var doc = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/stoneBanking_app_gateway_web_account_vo_output.OutputError"
+                            "$ref": "#/definitions/stoneBanking_app_gateway_http_account_vo_output.OutputError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/stoneBanking_app_gateway_web_account_vo_output.OutputError"
+                            "$ref": "#/definitions/stoneBanking_app_gateway_http_account_vo_output.OutputError"
                         }
                     }
                 }
@@ -96,13 +96,13 @@ var doc = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/stoneBanking_app_gateway_web_account_vo_output.OutputError"
+                            "$ref": "#/definitions/stoneBanking_app_gateway_http_account_vo_output.OutputError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/stoneBanking_app_gateway_web_account_vo_output.OutputError"
+                            "$ref": "#/definitions/stoneBanking_app_gateway_http_account_vo_output.OutputError"
                         }
                     }
                 }
@@ -138,13 +138,13 @@ var doc = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/stoneBanking_app_gateway_web_account_vo_output.OutputError"
+                            "$ref": "#/definitions/stoneBanking_app_gateway_http_account_vo_output.OutputError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/stoneBanking_app_gateway_web_account_vo_output.OutputError"
+                            "$ref": "#/definitions/stoneBanking_app_gateway_http_account_vo_output.OutputError"
                         }
                     }
                 }
@@ -169,13 +169,13 @@ var doc = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/stoneBanking_app_gateway_web_account_vo_output.OutputError"
+                            "$ref": "#/definitions/stoneBanking_app_gateway_http_account_vo_output.OutputError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/stoneBanking_app_gateway_web_account_vo_output.OutputError"
+                            "$ref": "#/definitions/stoneBanking_app_gateway_http_account_vo_output.OutputError"
                         }
                     }
                 }
@@ -212,13 +212,13 @@ var doc = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/stoneBanking_app_gateway_web_transfer_vo_output.OutputError"
+                            "$ref": "#/definitions/stoneBanking_app_gateway_http_transfer_vo_output.OutputError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/stoneBanking_app_gateway_web_transfer_vo_output.OutputError"
+                            "$ref": "#/definitions/stoneBanking_app_gateway_http_transfer_vo_output.OutputError"
                         }
                     }
                 }
@@ -259,13 +259,13 @@ var doc = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/stoneBanking_app_gateway_web_transfer_vo_output.OutputError"
+                            "$ref": "#/definitions/stoneBanking_app_gateway_http_transfer_vo_output.OutputError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/stoneBanking_app_gateway_web_transfer_vo_output.OutputError"
+                            "$ref": "#/definitions/stoneBanking_app_gateway_http_transfer_vo_output.OutputError"
                         }
                     }
                 }
@@ -392,7 +392,7 @@ var doc = `{
                 }
             }
         },
-        "stoneBanking_app_gateway_web_account_vo_output.OutputError": {
+        "stoneBanking_app_gateway_http_account_vo_output.OutputError": {
             "type": "object",
             "properties": {
                 "error": {
@@ -401,7 +401,7 @@ var doc = `{
                 }
             }
         },
-        "stoneBanking_app_gateway_web_transfer_vo_output.OutputError": {
+        "stoneBanking_app_gateway_http_transfer_vo_output.OutputError": {
             "type": "object",
             "properties": {
                 "error": {
