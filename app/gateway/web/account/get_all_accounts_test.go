@@ -20,7 +20,7 @@ func Test_GetAll(t *testing.T) {
 		name            string
 		accountUsecase  usecase.Usecase
 		tokenRepository token.Repository
-		logRepository   logHelper.Repository
+		logRepository   logHelper.Logger
 		wantCode        int
 		wantBody        []map[string]interface{}
 	}{

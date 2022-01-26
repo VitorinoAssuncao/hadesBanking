@@ -21,7 +21,7 @@ func Test_GetBalance(t *testing.T) {
 		name            string
 		accountUsecase  usecase.Usecase
 		tokenRepository token.Repository
-		logRepository   logHelper.Repository
+		logRepository   logHelper.Logger
 		runBefore       func(req http.Request)
 		wantCode        int
 		wantBody        map[string]interface{}

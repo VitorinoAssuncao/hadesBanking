@@ -19,7 +19,7 @@ type Server struct {
 	Router mux.Router
 }
 
-func New(usecase *UseCaseWrapper, tokenRepository token.Repository, logRepository logHelper.Repository) *Server {
+func New(usecase *UseCaseWrapper, tokenRepository token.Repository, logRepository logHelper.Logger) *Server {
 	router := mux.NewRouter().StrictSlash(true)
 	router.Use(middleware.LogRoutes)
 	router.PathPrefix("/documentation/").Handler(httpSwagger.WrapHandler)
