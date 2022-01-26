@@ -24,7 +24,18 @@ func (controller *Controller) GetAll(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+<<<<<<< HEAD
 	accountsOutput := output.ToOutputs(accounts)
+=======
+	defer r.Body.Close()
+
+	var accountsOutput = make([]output.AccountOutputVO, 0)
+	for _, account := range accounts {
+		tempAccount := output.AccountToOutput(account)
+		accountsOutput = append(accountsOutput, tempAccount)
+	}
+
+>>>>>>> refactor: add body.Close() to prevent data leaking
 	controller.log.LogInfo(operation, "accounts created sucessfully")
 	json.NewEncoder(w).Encode(accountsOutput) //nolint: errorlint
 

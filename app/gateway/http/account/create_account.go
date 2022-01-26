@@ -30,6 +30,8 @@ func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	defer r.Body.Close()
+
 	controller.log.LogInfo(operation, "unmarshal the data to a internal object")
 	var accountInput = input.CreateAccountVO{}
 	err = json.Unmarshal(reqBody, &accountInput)

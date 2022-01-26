@@ -35,6 +35,8 @@ func (controller Controller) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	defer r.Body.Close()
+
 	var transferData = input.CreateTransferVO{}
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
