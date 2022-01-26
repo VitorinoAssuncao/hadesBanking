@@ -4,6 +4,8 @@ import (
 	"context"
 
 	"stoneBanking/app/domain/entities/account"
+	customError "stoneBanking/app/domain/errors"
+	"strings"
 )
 
 func (repository accountRepository) Create(ctx context.Context, newAccount account.Account) (account.Account, error) {
@@ -27,6 +29,10 @@ func (repository accountRepository) Create(ctx context.Context, newAccount accou
 	err := row.Scan(&newAccount.ID, &newAccount.ExternalID, &newAccount.CreatedAt)
 
 	if err != nil {
+		if strings.Contains(err.Error(), "duplicate key value violates unique constraint") {
+			return account.Account{}, customError.ErrorAccountCPFExists
+		}
+
 		return account.Account{}, err
 	}
 
