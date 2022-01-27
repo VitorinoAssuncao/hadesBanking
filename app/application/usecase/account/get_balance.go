@@ -14,7 +14,7 @@ func (usecase *usecase) GetBalance(ctx context.Context, accountID string) (float
 	if err != nil {
 		if errors.Is(err, customError.ErrorAccountIDNotFound) {
 			usecase.logger.LogError(operation, err.Error())
-			return -1, customError.ErrorAccountIDNotFound
+			return -1, err
 		}
 
 		usecase.logger.LogError(operation, err.Error())
