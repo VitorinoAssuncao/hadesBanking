@@ -10,7 +10,7 @@ import (
 func (usecase *usecase) GetBalance(ctx context.Context, accountID string) (float64, error) {
 	const operation = "Usecase.Account.GetBalance"
 
-	tempResult, err := usecase.accountRepository.GetBalanceByAccountID(ctx, types.ExternalID(accountID))
+	balance, err := usecase.accountRepository.GetBalanceByAccountID(ctx, types.ExternalID(accountID))
 	if err != nil {
 		if errors.Is(err, customError.ErrorAccountIDNotFound) {
 			usecase.logger.LogError(operation, err.Error())
@@ -22,5 +22,5 @@ func (usecase *usecase) GetBalance(ctx context.Context, accountID string) (float
 	}
 
 	usecase.logger.LogInfo(operation, "balance sucessfully listed")
-	return tempResult.ToFloat(), nil
+	return balance.ToFloat(), nil
 }
