@@ -5,6 +5,7 @@ import (
 
 	"stoneBanking/app/domain/entities/account"
 	customError "stoneBanking/app/domain/errors"
+	"stoneBanking/app/gateway/database/postgres/pgerrors"
 	"strings"
 
 	"github.com/lib/pq"
@@ -28,11 +29,10 @@ func (repository accountRepository) Create(ctx context.Context, newAccount accou
 		newAccount.Balance.ToInt(),
 	)
 
-	const uniqueViolationCode = "23505"
 	err := row.Scan(&newAccount.ID, &newAccount.ExternalID, &newAccount.CreatedAt)
 	if err != nil {
 		if pgErr, ok := err.(*pq.Error); ok {
-			if pgErr.Code == uniqueViolationCode && strings.Contains(err.Error(), "accounts_cpf_uk") {
+			if pgErr.Code == pgerrors.UniqueViolationCode && strings.Contains(err.Error(), "accounts_cpf_uk") {
 				return account.Account{}, customError.ErrorAccountCPFExists
 			}
 		}
