@@ -24,7 +24,7 @@ func (controller *Controller) GetAll(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	accountsOutput := output.ToOutputs(accounts)
+	accountsOutput := output.ToAccountsOutput(accounts)
 	controller.log.LogInfo(operation, "accounts created sucessfully")
 	json.NewEncoder(w).Encode(accountsOutput) //nolint: errorlint
 

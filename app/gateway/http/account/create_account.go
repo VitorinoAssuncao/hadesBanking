@@ -51,7 +51,7 @@ func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	accountData := accountInput.ToEntitie()
+	accountData := accountInput.ToEntity()
 	account, err := controller.usecase.Create(r.Context(), accountData)
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
@@ -60,7 +60,7 @@ func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	accountOutput := output.ToOutput(account)
+	accountOutput := output.ToAccountOutput(account)
 
 	json.NewEncoder(w).Encode(accountOutput) //nolint: errorlint
 }
