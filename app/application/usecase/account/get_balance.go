@@ -7,7 +7,7 @@ import (
 	"stoneBanking/app/domain/types"
 )
 
-func (usecase *usecase) GetBalance(ctx context.Context, accountID string) (float64, error) {
+func (usecase *usecase) GetBalance(ctx context.Context, accountID string) (types.Money, error) {
 	const operation = "Usecase.Account.GetBalance"
 
 	balance, err := usecase.accountRepository.GetBalanceByAccountID(ctx, types.ExternalID(accountID))
@@ -22,5 +22,5 @@ func (usecase *usecase) GetBalance(ctx context.Context, accountID string) (float
 	}
 
 	usecase.logger.LogInfo(operation, "balance sucessfully listed")
-	return balance.ToFloat(), nil
+	return balance, nil
 }

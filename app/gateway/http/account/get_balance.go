@@ -49,7 +49,7 @@ func (controller *Controller) GetBalance(w http.ResponseWriter, r *http.Request)
 	}
 
 	balanceOutput := output.AccountBalanceVO{
-		Balance: balance,
+		Balance: balance.ToFloat(),
 	}
 
 	resp.Ok(balanceOutput)
