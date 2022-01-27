@@ -19,9 +19,7 @@ import (
 //@Router /account/balance [GET]
 func (controller *Controller) GetBalance(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Account.GetBalance"
-	resp := response.CustomResponse{
-		Writer: w,
-	}
+	resp := response.CustomResponse{Writer: w}
 
 	controller.log.LogInfo(operation, "take the value from the token")
 	tokenID, err := middleware.GetAccountIDFromToken(r, controller.token)
@@ -29,6 +27,7 @@ func (controller *Controller) GetBalance(w http.ResponseWriter, r *http.Request)
 		if errors.Is(err, customError.ErrorServerTokenNotFound) {
 			controller.log.LogError(operation, err.Error())
 			resp.Unauthorized(output.OutputError{Error: err.Error()})
+			return
 		}
 
 		controller.log.LogError(operation, err.Error())
@@ -39,6 +38,7 @@ func (controller *Controller) GetBalance(w http.ResponseWriter, r *http.Request)
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
 		resp.InternalError(output.OutputError{Error: err.Error()})
+		return
 	}
 
 	balanceOutput := output.AccountBalanceVO{
