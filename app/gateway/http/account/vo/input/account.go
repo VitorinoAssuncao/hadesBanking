@@ -13,7 +13,7 @@ type CreateAccountVO struct {
 	Balance int            `json:"balance" example:"1000"`
 }
 
-func (inputAccount CreateAccountVO) GenerateAccount() account.Account {
+func (inputAccount CreateAccountVO) ToEntitie() account.Account {
 	account := account.Account{
 		Name:      inputAccount.Name,
 		CPF:       types.Document(inputAccount.CPF.TrimCPF()),

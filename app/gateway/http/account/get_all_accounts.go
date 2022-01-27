@@ -24,12 +24,7 @@ func (controller *Controller) GetAll(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var accountsOutput = make([]output.AccountOutputVO, 0)
-	for _, account := range accounts {
-		tempAccount := output.AccountToOutput(account)
-		accountsOutput = append(accountsOutput, tempAccount)
-	}
-
+	accountsOutput := output.ToOutputs(accounts)
 	controller.log.LogInfo(operation, "accounts created sucessfully")
 	json.NewEncoder(w).Encode(accountsOutput) //nolint: errorlint
 

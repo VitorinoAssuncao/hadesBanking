@@ -10,7 +10,7 @@ type TransferOutputVO struct {
 	Created_At                  string  `json:"created_at" example:"12/05/2021 00:01:01" `
 }
 
-func TransferToTransferOutput(transfer transfer.Transfer) TransferOutputVO {
+func ToOutput(transfer transfer.Transfer) TransferOutputVO {
 	transferOutput := TransferOutputVO{
 		ID:                          string(transfer.ExternalID),
 		AccountOriginExternalID:     string(transfer.AccountOriginExternalID),
@@ -19,4 +19,13 @@ func TransferToTransferOutput(transfer transfer.Transfer) TransferOutputVO {
 		Created_At:                  transfer.CreatedAt.Format("2006-01-02T15:04:05Z07:00"),
 	}
 	return transferOutput
+}
+
+func ToOutputs(transfers []transfer.Transfer) []TransferOutputVO {
+	var transfersOutput = make([]TransferOutputVO, 0, len(transfers))
+	for _, transfer := range transfers {
+		transfersOutput = append(transfersOutput, ToOutput(transfer))
+	}
+
+	return transfersOutput
 }

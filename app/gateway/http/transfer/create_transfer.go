@@ -59,7 +59,7 @@ func (controller Controller) Create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	controller.log.LogInfo(operation, "transforming in a internal object")
-	transfer := transferData.GenerateTransfer()
+	transfer := transferData.ToEntitie()
 	newTransfer, err := controller.usecase.Create(context.Background(), transfer)
 	if err != nil {
 		if !errors.Is(err, customError.ErrorTransferCreate) {
@@ -75,7 +75,7 @@ func (controller Controller) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	transferOutput := output.TransferToTransferOutput(newTransfer)
+	transferOutput := output.ToOutput(newTransfer)
 	controller.log.LogInfo(operation, "transfer created sucessfully")
 	json.NewEncoder(w).Encode(transferOutput) //nolint: errorlint
 }
