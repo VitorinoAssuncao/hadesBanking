@@ -2,6 +2,7 @@ package account
 
 import (
 	"context"
+	"database/sql"
 	"stoneBanking/app/domain/entities/account"
 	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
@@ -25,16 +26,8 @@ func Test_GetBalance(t *testing.T) {
 		{
 			name: "with the right id, return the balance of account",
 			accountMock: &account.RepositoryMock{
-				GetByIDFunc: func(ctx context.Context, accountID types.ExternalID) (account.Account, error) {
-					account := account.Account{
-						ID:         1,
-						Name:       "Joao do Rio",
-						ExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
-						CPF:        "761.647.810-78",
-						Secret:     "J0@0doR10",
-						Balance:    100,
-					}
-					return account, nil
+				GetBalanceByAccountIDFunc: func(ctx context.Context, accountID types.ExternalID) (types.Money, error) {
+					return types.Money(100), nil
 				},
 			},
 			logMock: &logHelper.RepositoryMock{},
@@ -45,14 +38,26 @@ func Test_GetBalance(t *testing.T) {
 		{
 			name: "with a invalid id, return a error of account not found",
 			accountMock: &account.RepositoryMock{
-				GetByIDFunc: func(ctx context.Context, accountID types.ExternalID) (account.Account, error) {
-					return account.Account{}, customError.ErrorAccountIDNotFound
+				GetBalanceByAccountIDFunc: func(ctx context.Context, accountID types.ExternalID) (types.Money, error) {
+					return -1, customError.ErrorAccountIDNotFound
 				},
 			},
 			logMock: &logHelper.RepositoryMock{},
 			input:   "94b9c27e-2880-42e3-8988-62dceb6b6464",
 			want:    -1,
 			wantErr: customError.ErrorAccountIDNotFound,
+		},
+		{
+			name: "with the correct id, have a sudenly error in database and return a error",
+			accountMock: &account.RepositoryMock{
+				GetBalanceByAccountIDFunc: func(ctx context.Context, accountID types.ExternalID) (types.Money, error) {
+					return -1, sql.ErrConnDone
+				},
+			},
+			logMock: &logHelper.RepositoryMock{},
+			input:   "94b9c27e-2880-42e3-8988-62dceb6b6464",
+			want:    -1,
+			wantErr: customError.ErrorAccountIDSearching,
 		},
 	}
 	for _, test := range testCases {
