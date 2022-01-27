@@ -28,11 +28,11 @@ func (repository accountRepository) Create(ctx context.Context, newAccount accou
 		newAccount.Balance.ToInt(),
 	)
 
+	const uniqueViolationCode = "23505"
 	err := row.Scan(&newAccount.ID, &newAccount.ExternalID, &newAccount.CreatedAt)
-
 	if err != nil {
 		if pgErr, ok := err.(*pq.Error); ok {
-			if pgErr.Code == "23505" && strings.Contains(err.Error(), "accounts_cpf_key") {
+			if pgErr.Code == uniqueViolationCode && strings.Contains(err.Error(), "accounts_cpf_uk") {
 				return account.Account{}, customError.ErrorAccountCPFExists
 			}
 		}
