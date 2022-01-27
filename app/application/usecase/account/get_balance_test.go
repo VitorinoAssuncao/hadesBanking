@@ -20,7 +20,7 @@ func Test_GetBalance(t *testing.T) {
 		tokenMock   token.Authenticator
 		logMock     logHelper.Logger
 		input       string
-		want        float64
+		want        types.Money
 		wantErr     error
 	}{
 		{
@@ -32,7 +32,7 @@ func Test_GetBalance(t *testing.T) {
 			},
 			logMock: &logHelper.RepositoryMock{},
 			input:   "94b9c27e-2880-42e3-8988-62dceb6b6463",
-			want:    1,
+			want:    100,
 			wantErr: nil,
 		},
 		{
