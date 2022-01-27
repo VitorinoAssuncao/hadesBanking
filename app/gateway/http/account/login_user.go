@@ -33,7 +33,6 @@ func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) 
 		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()}) //nolint: errorlint
 		return
 	}
-
 	defer r.Body.Close()
 
 	controller.log.LogInfo(operation, "unmarshal the data to a internal object")
