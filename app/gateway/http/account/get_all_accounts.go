@@ -22,7 +22,7 @@ func (controller *Controller) GetAll(w http.ResponseWriter, r *http.Request) {
 	accounts, err := controller.usecase.GetAll(r.Context())
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
-		resp.InternalError(output.OutputError{Error: err.Error()})
+		resp.InternalError([]output.OutputError{{Error: err.Error()}})
 		return
 	}
 

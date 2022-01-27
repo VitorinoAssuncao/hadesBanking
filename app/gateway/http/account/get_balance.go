@@ -1,12 +1,12 @@
 package account
 
 import (
-	"encoding/json"
 	"errors"
 	"net/http"
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/gateway/http/account/vo/output"
 	"stoneBanking/app/gateway/http/middleware"
+	"stoneBanking/app/gateway/http/response"
 )
 
 //@Sumary Get the balance of a account
@@ -19,34 +19,31 @@ import (
 //@Router /account/balance [GET]
 func (controller *Controller) GetBalance(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Account.GetBalance"
+	resp := response.CustomResponse{
+		Writer: w,
+	}
 
 	controller.log.LogInfo(operation, "take the value from the token")
 	tokenID, err := middleware.GetAccountIDFromToken(r, controller.token)
 	if err != nil {
 		if errors.Is(err, customError.ErrorServerTokenNotFound) {
 			controller.log.LogError(operation, err.Error())
-			w.WriteHeader(http.StatusUnauthorized)
-			json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()}) //nolint: errorlint
-			return
+			resp.Unauthorized(output.OutputError{Error: err.Error()})
 		}
 
 		controller.log.LogError(operation, err.Error())
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()}) //nolint: errorlint
-		return
+		resp.InternalError(output.OutputError{Error: err.Error()})
 	}
 
 	balance, err := controller.usecase.GetBalance(r.Context(), tokenID)
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()}) //nolint: errorlint
-		return
+		resp.InternalError(output.OutputError{Error: err.Error()})
 	}
 
 	balanceOutput := output.AccountBalanceVO{
 		Balance: balance,
 	}
 
-	json.NewEncoder(w).Encode(balanceOutput) //nolint: errorlint
+	resp.Ok(balanceOutput)
 }
