@@ -30,15 +30,8 @@ func Test_GetBalance(t *testing.T) {
 			name: "with a token of login, return the correct value of the account",
 			accountUsecase: usecase.New(
 				&account.RepositoryMock{
-					GetByIDFunc: func(ctx context.Context, accountID types.ExternalID) (account.Account, error) {
-						return account.Account{
-							ID:         1,
-							Name:       "Joao do Rio",
-							ExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
-							CPF:        "761.647.810-78",
-							Secret:     "J0@0doR10",
-							Balance:    0,
-						}, nil
+					GetBalanceByAccountIDFunc: func(ctx context.Context, accountID types.ExternalID) (types.Money, error) {
+						return 0, nil
 					},
 				},
 				&token.RepositoryMock{},
@@ -79,11 +72,35 @@ func Test_GetBalance(t *testing.T) {
 			},
 		},
 		{
+			name: "with a token of login, but request for a id that not exist, and return a negative value and error",
+			accountUsecase: usecase.New(
+				&account.RepositoryMock{
+					GetBalanceByAccountIDFunc: func(ctx context.Context, accountID types.ExternalID) (types.Money, error) {
+						return -1, customError.ErrorAccountIDNotFound
+					},
+				},
+				&token.RepositoryMock{},
+				&logHelper.RepositoryMock{}),
+			authenticator: &token.RepositoryMock{
+				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
+					return "94b9c27e-2880-42e3-8988-62dceb6b6463", nil
+				},
+			},
+			runBefore: func(req http.Request) {
+				req.Header.Set("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI")
+			},
+			logger:   &logHelper.RepositoryMock{},
+			wantCode: 400,
+			wantBody: map[string]interface{}{
+				"error": "account not found, please validate the ID informed",
+			},
+		},
+		{
 			name: "with a token of login, but a error happens when trying to find the account in the database, and return a error",
 			accountUsecase: usecase.New(
 				&account.RepositoryMock{
-					GetByIDFunc: func(ctx context.Context, accountID types.ExternalID) (account.Account, error) {
-						return account.Account{}, customError.ErrorAccountIDNotFound
+					GetBalanceByAccountIDFunc: func(ctx context.Context, accountID types.ExternalID) (types.Money, error) {
+						return -1, customError.ErrorAccountIDSearching
 					},
 				},
 				&token.RepositoryMock{},
@@ -99,7 +116,7 @@ func Test_GetBalance(t *testing.T) {
 			logger:   &logHelper.RepositoryMock{},
 			wantCode: http.StatusInternalServerError,
 			wantBody: map[string]interface{}{
-				"error": "account not found, please validate the ID informed",
+				"error": "error when searching for the account",
 			},
 		},
 	}
