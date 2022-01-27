@@ -8,6 +8,7 @@ import (
 	"stoneBanking/app/gateway/http/account/vo/input"
 	validations "stoneBanking/app/gateway/http/account/vo/input/validations"
 	"stoneBanking/app/gateway/http/account/vo/output"
+	"stoneBanking/app/gateway/http/response"
 )
 
 //@Sumary Create a account
@@ -21,12 +22,14 @@ import (
 //@Router /account [POST]
 func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Account.Create"
+	resp := response.CustomResponse{
+		Writer: w,
+	}
 
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()}) //nolint: errorlint
+		resp.BadRequest(output.OutputError{Error: err.Error()})
 		return
 	}
 	defer r.Body.Close()
@@ -47,8 +50,7 @@ func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
 	accountInput, err = validations.ValidateAccountInput(accountInput)
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()}) //nolint: errorlint
+		resp.BadRequest(output.OutputError{Error: err.Error()})
 		return
 	}
 
