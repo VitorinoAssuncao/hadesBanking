@@ -2,6 +2,9 @@ package account
 
 import (
 	"context"
+	"database/sql"
+	"errors"
+	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
 )
 
@@ -24,7 +27,11 @@ func (repository accountRepository) GetBalanceByAccountID(ctx context.Context, a
 	err := result.Scan(&balanceValue)
 
 	if err != nil {
-		return 0, err
+		if errors.Is(err, sql.ErrNoRows) {
+			return -1, customError.ErrorAccountIDNotFound
+		}
+
+		return -1, err
 	}
 
 	return balanceValue, nil
