@@ -57,7 +57,7 @@ func Test_Create(t *testing.T) {
 				Secret:  "J0@0doR10",
 				Balance: 100,
 			},
-			wantCode: 200,
+			wantCode: 201,
 			wantBody: map[string]interface{}{
 				"id":         "94b9c27e-2880-42e3-8988-62dceb6b6463",
 				"name":       "Joao do Rio",
