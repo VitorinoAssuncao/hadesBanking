@@ -49,8 +49,8 @@ func (c Controller) Create(w http.ResponseWriter, r *http.Request) {
 	transferInput.AccountOriginID = accountID
 
 	c.log.LogInfo(operation, "validating the data")
-	transferInput, err = validations.ValidateTransferData(transferInput)
-	if err != nil {
+
+	if transferInput, err = validations.ValidateTransferData(transferInput); err != nil {
 		c.log.LogError(operation, err.Error())
 		resp.BadRequest(output.OutputError{Error: err.Error()})
 		return
