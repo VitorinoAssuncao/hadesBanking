@@ -1,7 +1,7 @@
 package logHelper
 
 import (
-	"os"
+	"stoneBanking/app/common/utils/config"
 	logHelper "stoneBanking/app/domain/entities/logger"
 
 	"go.uber.org/zap"
@@ -12,9 +12,8 @@ type Log struct {
 	logger *zap.Logger
 }
 
-func NewLogger() logHelper.Logger {
-	enviroment := os.Getenv("ENVIROMENT")
-	tempLogger := createLogger(enviroment)
+func NewLogger(config config.Config) logHelper.Logger {
+	tempLogger := createLogger(config.Enviroment)
 	logger := &Log{tempLogger}
 	return logger
 }
