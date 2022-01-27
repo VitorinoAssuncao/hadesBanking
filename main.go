@@ -31,7 +31,7 @@ func main() {
 	cfg := config.LoadConfig()
 
 	// Initiliaze the logger
-	logger := commonLog.NewLogger()
+	logger := commonLog.NewLogger(cfg)
 
 	// Initialize the database and return him to a variable
 
