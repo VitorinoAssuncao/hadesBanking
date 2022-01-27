@@ -24,7 +24,7 @@ func Test_GetAllByID(t *testing.T) {
 		wantErr   bool
 	}{
 		{
-			name: "with a valid id in the input, find the account and return without errors",
+			name: "with a valid id in the input, find the transfers and return without errors",
 
 			runBefore: func(db *sql.DB) (value types.InternalID) {
 				sqlQuery :=
