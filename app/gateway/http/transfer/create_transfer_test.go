@@ -66,7 +66,7 @@ func Test_Create(t *testing.T) {
 			runBefore: func(req http.Request) {
 				req.Header.Set("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI")
 			},
-			wantCode: 200,
+			wantCode: 201,
 			wantBody: map[string]interface{}{
 				"id":                     "cb34f1f3-24ba-4a70-981b-cdc5d77a7347",
 				"account_origin_id":      "65d56316-39ad-4937-b41d-be2f103b0bd9",
