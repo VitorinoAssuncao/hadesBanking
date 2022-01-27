@@ -2,13 +2,22 @@ package middleware
 
 import (
 	"net/http"
-	logHelper "stoneBanking/app/common/utils/logger"
+	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
 	customError "stoneBanking/app/domain/errors"
 )
 
-func GetAccountIDFromToken(r *http.Request, t token.Authenticator) (string, error) {
+type Middleware struct {
+	l logHelper.Logger
+}
 
+func NewMiddleware(log logHelper.Logger) *Middleware {
+	return &Middleware{
+		l: log,
+	}
+}
+
+func GetAccountIDFromToken(r *http.Request, t token.Authenticator) (string, error) {
 	headerToken := r.Header.Get("Authorization")
 	if headerToken == "" {
 		return "", customError.ErrorServerTokenNotFound
@@ -21,10 +30,9 @@ func GetAccountIDFromToken(r *http.Request, t token.Authenticator) (string, erro
 	return accountExternalID, nil
 }
 
-func LogRoutes(h http.Handler) http.Handler {
+func (m *Middleware) LogRoutes(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log := logHelper.NewLogger()
-		log.LogInfo("request", "received request in url: "+r.URL.Path)
+		m.l.LogInfo("request", "received request in url: "+r.URL.Path)
 		h.ServeHTTP(w, r)
 	})
 }
