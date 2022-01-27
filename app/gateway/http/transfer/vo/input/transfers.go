@@ -11,7 +11,7 @@ type CreateTransferVO struct {
 	Amount               int    `json:"amount" example:"1000"`
 }
 
-func (inputTransfer CreateTransferVO) ToEntitie() transfer.Transfer {
+func (inputTransfer CreateTransferVO) ToEntity() transfer.Transfer {
 	transfer := transfer.Transfer{
 		AccountOriginExternalID:      types.ExternalID(inputTransfer.AccountOriginID),
 		AccountDestinationExternalID: types.ExternalID(inputTransfer.AccountDestinationID),
