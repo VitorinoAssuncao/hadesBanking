@@ -32,7 +32,7 @@ func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Re
 	transfers, err := controller.usecase.GetAllByAccountID(context.Background(), types.ExternalID(accountID))
 
 	controller.log.LogInfo(operation, "creating the objects to by listed")
-	transfersOutput := output.ToOutputs(transfers)
+	transfersOutput := output.ToTransfersOutput(transfers)
 
 	if err != nil {
 		if errors.Is(err, customError.ErrorTransferAccountNotFound) {
