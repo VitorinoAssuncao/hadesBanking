@@ -34,6 +34,7 @@ func (controller Controller) Create(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()}) //nolint: errorlint
 		return
 	}
+	defer r.Body.Close()
 
 	var transferData = input.CreateTransferVO{}
 	reqBody, err := ioutil.ReadAll(r.Body)
