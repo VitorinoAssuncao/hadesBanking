@@ -10,6 +10,7 @@ type Config struct {
 	DBPort     string
 	DBSSLMode  string
 	SigningKey string
+	Enviroment string
 }
 
 func LoadConfig() Config {
@@ -21,6 +22,7 @@ func LoadConfig() Config {
 		DBPort:     os.Getenv("POSTGRES_PORT"),
 		DBSSLMode:  os.Getenv("POSTGRES_SSLMODE"),
 		SigningKey: os.Getenv("SIGN_KEY"),
+		Enviroment: os.Getenv("Enviroment"),
 	}
 	return config
 }
