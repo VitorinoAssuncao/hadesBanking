@@ -24,8 +24,7 @@ func ToOutput(transfer transfer.Transfer) TransferOutputVO {
 func ToOutputs(transfers []transfer.Transfer) []TransferOutputVO {
 	var transfersOutput = make([]TransferOutputVO, 0, len(transfers))
 	for _, transfer := range transfers {
-		transferOutput := ToOutput(transfer)
-		transfersOutput = append(transfersOutput, transferOutput)
+		transfersOutput = append(transfersOutput, ToOutput(transfer))
 	}
 
 	return transfersOutput

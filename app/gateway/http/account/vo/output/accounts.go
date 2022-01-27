@@ -30,8 +30,7 @@ func ToOutput(account account.Account) AccountOutputVO {
 func ToOutputs(accounts []account.Account) []AccountOutputVO {
 	var accountsOutput = make([]AccountOutputVO, 0, len(accounts))
 	for _, account := range accounts {
-		tempAccount := ToOutput(account)
-		accountsOutput = append(accountsOutput, tempAccount)
+		accountsOutput = append(accountsOutput, ToOutput(account))
 	}
 	return accountsOutput
 }
