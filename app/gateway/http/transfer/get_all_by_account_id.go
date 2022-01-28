@@ -36,14 +36,14 @@ func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Re
 	transfersOutput := output.ToTransfersOutput(transfers)
 	if err != nil {
 		if errors.Is(err, customError.ErrorTransferAccountNotFound) {
-			resp.BadRequest([]output.OutputError{{Error: err.Error()}})
+			resp.BadRequest(output.OutputError{Error: err.Error()})
 			return
 		}
 
-		resp.InternalError([]output.OutputError{{Error: err.Error()}})
+		resp.InternalError(output.OutputError{Error: err.Error()})
 		return
 	}
 
-	controller.log.LogInfo(operation, "transfers listed sucessfully")
+	controller.log.LogInfo(operation, "transfers listed successfully")
 	resp.Ok(transfersOutput)
 }
