@@ -7,7 +7,7 @@ var (
 	ErrorTransferListing                  = errors.New("error when listing all transfers")
 	ErrorTransferCreateOriginError        = errors.New("account origin not found, please validate")
 	ErrorTransferCreateDestinyError       = errors.New("account destination not found, please validate")
-	ErrorTransferCreateInsufficientFunds  = errors.New("insuficient funds")
+	ErrorTransferCreateInsufficientFunds  = errors.New("insufficient funds")
 	ErrorTransferCreate                   = errors.New("error when creating transfer, please try again")
 	ErrorTransferOriginEqualDestiny       = errors.New("origin account and destiny account cannot by the same")
 	ErrorTransferAccountOriginIDRequired  = errors.New("field account_origin_id is required")
