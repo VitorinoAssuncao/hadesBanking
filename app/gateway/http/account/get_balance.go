@@ -1,7 +1,6 @@
 package account
 
 import (
-	"errors"
 	"net/http"
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/gateway/http/account/vo/output"
@@ -26,14 +25,9 @@ func (controller *Controller) GetBalance(w http.ResponseWriter, r *http.Request)
 	controller.log.LogInfo(operation, "take the value from the token")
 	accountIDToken, err := middleware.GetAccountIDFromContext(r.Context())
 	if err != nil {
-		if errors.Is(err, customError.ErrorServerTokenNotFound) {
-			controller.log.LogError(operation, err.Error())
-			resp.Unauthorized(output.OutputError{Error: err.Error()})
-			return
-		}
-
 		controller.log.LogError(operation, err.Error())
-		resp.InternalError(output.OutputError{Error: err.Error()})
+		resp.BadRequest(output.OutputError{Error: err.Error()})
+		return
 	}
 
 	vars := mux.Vars(r)
