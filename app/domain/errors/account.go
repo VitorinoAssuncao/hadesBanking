@@ -18,7 +18,7 @@ var (
 	ErrorAccountNameRequired      = errors.New("the field 'Name' is required")
 	ErrorAccountSecretRequired    = errors.New("the field 'Secret' is required")
 	ErrorAccountBalanceInvalid    = errors.New("the field 'Balance' need to by equal or major than 0(zero)")
-	ErrorAccountAcessUnauthorized = errors.New("acess unauthorized, please validate the token and id informed")
+	ErrorAccountAcessUnauthorized = errors.New("access unauthorized, please validate the token and id informed")
 	ErrorServerTokenNotFound      = errors.New("authorization token invalid")
 	ErrorServerExtractToken       = errors.New("error when extracting the data from token, please validate him")
 )
