@@ -30,12 +30,16 @@ func New(usecase *UseCaseWrapper, token token.Authenticator, logger logHelper.Lo
 	account := router.PathPrefix("/accounts").Subrouter()
 	account.HandleFunc("", controller_account.GetAll).Methods("GET")
 	account.HandleFunc("", controller_account.Create).Methods("POST")
-	account.HandleFunc("/balance", controller_account.GetBalance).Methods("GET")
+
+	balance := account.PathPrefix("/balance").Subrouter()
+	balance.Use(m.GetAccountIDFromTokenLogRoutes)
+	balance.HandleFunc("", controller_account.GetBalance).Methods("GET")
 
 	login := router.PathPrefix("/login").Subrouter()
 	login.HandleFunc("", controller_account.LoginUser).Methods("POST")
 
-	transfer := router.PathPrefix("transfers").Subrouter()
+	transfer := router.PathPrefix("/transfers").Subrouter()
+	transfer.Use(m.GetAccountIDFromTokenLogRoutes)
 	transfer.HandleFunc("", controller_transfer.Create).Methods("POST")
 	transfer.HandleFunc("", controller_transfer.GetAllByAccountID).Methods("GET")
 
