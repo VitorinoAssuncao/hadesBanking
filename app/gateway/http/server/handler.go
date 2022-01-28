@@ -21,7 +21,7 @@ type Server struct {
 
 func New(usecase *UseCaseWrapper, token token.Authenticator, logger logHelper.Logger) *Server {
 	router := mux.NewRouter().StrictSlash(true)
-	m := middleware.NewMiddleware(logger)
+	m := middleware.NewMiddleware(logger, token)
 	router.Use(m.LogRoutes)
 	router.PathPrefix("/documentation/").Handler(httpSwagger.WrapHandler)
 	controller_account := accounts.New(usecase.Accounts, token, logger)

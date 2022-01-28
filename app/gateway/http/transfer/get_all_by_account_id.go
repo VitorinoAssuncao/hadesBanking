@@ -24,7 +24,7 @@ func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Re
 	const operation = "Gateway.Rest.Transfer.GetAllByAccountID"
 	resp := response.NewResponse(w)
 
-	accountID, err := middleware.GetAccountIDFromToken(r, controller.token)
+	accountID, err := middleware.GetAccountIDFromContext(r.Context())
 	if err != nil {
 		resp.BadRequest([]output.OutputError{{Error: err.Error()}})
 		return

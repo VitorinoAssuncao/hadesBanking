@@ -22,7 +22,7 @@ func (controller *Controller) GetBalance(w http.ResponseWriter, r *http.Request)
 	resp := response.NewResponse(w)
 
 	controller.log.LogInfo(operation, "take the value from the token")
-	tokenID, err := middleware.GetAccountIDFromToken(r, controller.token)
+	tokenID, err := middleware.GetAccountIDFromContext(r.Context())
 	if err != nil {
 		if errors.Is(err, customError.ErrorServerTokenNotFound) {
 			controller.log.LogError(operation, err.Error())
