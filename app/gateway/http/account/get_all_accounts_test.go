@@ -2,7 +2,6 @@ package account
 
 import (
 	"context"
-	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	usecase "stoneBanking/app/application/usecase/account"
@@ -29,10 +28,10 @@ func Test_GetAll(t *testing.T) {
 		name     string
 		fields   fields
 		wantCode int
-		wantBody []map[string]interface{}
+		wantBody string
 	}{
 		{
-			name: "with at last one account existing, data from account is returned sucessfully",
+			name: "with at last one account existing, data from account is returned successfully",
 			fields: fields{
 				accountUsecase: usecase.New(
 					&account.RepositoryMock{
@@ -52,13 +51,16 @@ func Test_GetAll(t *testing.T) {
 				authenticator: &token.RepositoryMock{},
 				logger:        &logHelper.RepositoryMock{}},
 			wantCode: http.StatusOK,
-			wantBody: []map[string]interface{}{{
+			wantBody: `
+			[
+				{
 				"id":         "94b9c27e-2880-42e3-8988-62dceb6b6463",
 				"name":       "Joao do Rio",
 				"cpf":        "761.647.810-78",
 				"balance":    0,
-				"created_at": "0001-01-01T00:00:00Z",
-			}},
+				"created_at": "0001-01-01T00:00:00Z"
+				}
+			]`,
 		},
 		{
 			name: "with one error when listing the accounts, return error for client",
@@ -75,9 +77,10 @@ func Test_GetAll(t *testing.T) {
 				logger:        &logHelper.RepositoryMock{},
 			},
 			wantCode: http.StatusInternalServerError,
-			wantBody: []map[string]interface{}{{
-				"error": "error when listing all accounts",
-			}},
+			wantBody: `
+			{
+				"error": "error when listing all accounts"
+			}`,
 		},
 	}
 	for _, test := range testCases {
@@ -93,10 +96,7 @@ func Test_GetAll(t *testing.T) {
 
 			assert.Equal(t, test.wantCode, rec.Code)
 
-			if test.wantBody != nil {
-				wantBodyJson, _ := json.Marshal(test.wantBody)
-				assert.JSONEq(t, string(wantBodyJson), rec.Body.String())
-			}
+			assert.JSONEq(t, test.wantBody, rec.Body.String())
 		})
 	}
 }
