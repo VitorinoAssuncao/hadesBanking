@@ -1,7 +1,6 @@
 package transfer
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"net/http"
@@ -58,7 +57,7 @@ func (c Controller) Create(w http.ResponseWriter, r *http.Request) {
 
 	c.log.LogInfo(operation, "transforming in a internal object")
 	transfer := transferInput.ToEntity()
-	newTransfer, err := c.usecase.Create(context.Background(), transfer)
+	newTransfer, err := c.usecase.Create(r.Context(), transfer)
 	if err != nil {
 		if !errors.Is(err, customError.ErrorTransferCreate) {
 			c.log.LogWarn(operation, err.Error())
