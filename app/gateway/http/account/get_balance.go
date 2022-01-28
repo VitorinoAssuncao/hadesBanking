@@ -1,6 +1,7 @@
 package account
 
 import (
+	"errors"
 	"net/http"
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/gateway/http/account/vo/output"

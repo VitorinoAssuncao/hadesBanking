@@ -7,6 +7,7 @@ var (
 	ErrorCreateAccount            = errors.New("error when creating a new account")
 	ErrorAccountIDNotFound        = errors.New("account not found, please validate the ID informed")
 	ErrorAccountCPFNotFound       = errors.New("account not found, please validate the CPF informed")
+	ErrorAccountIDSearching       = errors.New("error when searching for the account")
 	ErrorAccountLogin             = errors.New("cpf or secret invalid, please validate then")
 	ErrorAccountTokenGeneration   = errors.New("error when generating the authorization token")
 	ErrorAccountsListing          = errors.New("error when listing all accounts")
