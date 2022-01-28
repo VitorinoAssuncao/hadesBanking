@@ -18,19 +18,19 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-const routePattern = "/account/{account_id}/balance"
-
-type fields struct {
-	accountUsecase usecase.Usecase
-	authenticator  token.Authenticator
-	logger         logHelper.Logger
-}
-
-type args struct {
-	request *http.Request
-}
-
 func Test_GetBalance(t *testing.T) {
+	const routePattern = "/account/{account_id}/balance"
+
+	type fields struct {
+		accountUsecase usecase.Usecase
+		authenticator  token.Authenticator
+		logger         logHelper.Logger
+	}
+
+	type args struct {
+		request *http.Request
+	}
+
 	testCases := []struct {
 		name      string
 		fields    fields
