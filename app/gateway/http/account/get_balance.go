@@ -7,6 +7,8 @@ import (
 	"stoneBanking/app/gateway/http/account/vo/output"
 	"stoneBanking/app/gateway/http/middleware"
 	"stoneBanking/app/gateway/http/response"
+
+	"github.com/gorilla/mux"
 )
 
 //@Sumary Get the balance of a account
@@ -16,13 +18,13 @@ import (
 //@Success 200 {object} output.AccountBalanceVO
 //@Failure	400 {object} output.OutputError
 //@Failure 500 {object} output.OutputError
-//@Router /accounts/balance [GET]
+//@Router /accounts/{account_id}/balance [GET]
 func (controller *Controller) GetBalance(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Account.GetBalance"
 	resp := response.NewResponse(w)
 
 	controller.log.LogInfo(operation, "take the value from the token")
-	tokenID, err := middleware.GetAccountIDFromContext(r.Context())
+	accountIDToken, err := middleware.GetAccountIDFromContext(r.Context())
 	if err != nil {
 		if errors.Is(err, customError.ErrorServerTokenNotFound) {
 			controller.log.LogError(operation, err.Error())
@@ -34,7 +36,15 @@ func (controller *Controller) GetBalance(w http.ResponseWriter, r *http.Request)
 		resp.InternalError(output.OutputError{Error: err.Error()})
 	}
 
-	balance, err := controller.usecase.GetBalance(r.Context(), tokenID)
+	vars := mux.Vars(r)
+	accountIDRoute := vars["account_id"]
+
+	if accountIDToken != accountIDRoute {
+		resp.Unauthorized(output.OutputError{Error: customError.ErrorAccountAcessUnauthorized.Error()})
+		return
+	}
+
+	balance, err := controller.usecase.GetBalance(r.Context(), accountIDToken)
 	if err != nil {
 		if errors.Is(err, customError.ErrorAccountIDNotFound) {
 			controller.log.LogError(operation, err.Error())
