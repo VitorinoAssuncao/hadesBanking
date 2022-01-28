@@ -363,7 +363,6 @@ func Test_Create(t *testing.T) {
 	}
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			controller := New(test.fields.transferUsecase, test.fields.authenticator, test.fields.logger)
 
 			body, _ := json.Marshal(test.args.input)
 			req := httptest.NewRequest(http.MethodPost, "/transfers", bytes.NewReader(body))
@@ -373,8 +372,11 @@ func Test_Create(t *testing.T) {
 			}
 
 			router := mux.NewRouter()
+
 			middleware := middleware.NewMiddleware(test.fields.logger, test.fields.authenticator)
 			router.Use(middleware.GetAccountIDFromTokenLogRoutes)
+
+			controller := New(test.fields.transferUsecase, test.fields.authenticator, test.fields.logger)
 			router.HandleFunc(routePattern, controller.Create)
 
 			rec := httptest.NewRecorder()
