@@ -140,7 +140,7 @@ var doc = `{
                 }
             }
         },
-        "/login": {
+        "/account/login": {
             "post": {
                 "description": "With the data received, validate if is correct, and log the user, returning a token of authorization",
                 "consumes": [
