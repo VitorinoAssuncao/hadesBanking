@@ -22,7 +22,7 @@ import (
 //@Router /transfer [GET]
 func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Transfer.GetAllByAccountID"
-	resp := response.CustomResponse{Writer: w}
+	resp := response.NewResponse(w)
 
 	accountID, err := middleware.GetAccountIDFromToken(r, controller.token)
 	if err != nil {

@@ -26,7 +26,7 @@ import (
 //@Router /account/login [POST]
 func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Account.GetBalance"
-	resp := response.CustomResponse{Writer: w}
+	resp := response.NewResponse(w)
 
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {

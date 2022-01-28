@@ -22,9 +22,7 @@ import (
 //@Router /account [POST]
 func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Account.Create"
-	resp := response.CustomResponse{
-		Writer: w,
-	}
+	resp := response.NewResponse(w)
 
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {

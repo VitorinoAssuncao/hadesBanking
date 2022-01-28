@@ -10,6 +10,12 @@ type CustomResponse struct {
 	Writer http.ResponseWriter
 }
 
+func NewResponse(w http.ResponseWriter) *CustomResponse {
+	return &CustomResponse{
+		Writer: w,
+	}
+}
+
 func (r CustomResponse) InternalError(body interface{}) {
 	r.Writer.WriteHeader(http.StatusInternalServerError)
 	if err := json.NewEncoder(r.Writer).Encode(body); err != nil {
