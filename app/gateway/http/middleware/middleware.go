@@ -4,30 +4,21 @@ import (
 	"net/http"
 	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
-	customError "stoneBanking/app/domain/errors"
+	"stoneBanking/app/domain/types"
 )
 
 type Middleware struct {
 	l logHelper.Logger
+	t token.Authenticator
 }
 
-func NewMiddleware(log logHelper.Logger) *Middleware {
+const AccountContextKey = types.ContextKey("account_id")
+
+func NewMiddleware(log logHelper.Logger, token token.Authenticator) *Middleware {
 	return &Middleware{
 		l: log,
+		t: token,
 	}
-}
-
-func GetAccountIDFromToken(r *http.Request, t token.Authenticator) (string, error) {
-	headerToken := r.Header.Get("Authorization")
-	if headerToken == "" {
-		return "", customError.ErrorServerTokenNotFound
-	}
-
-	accountExternalID, err := t.ExtractAccountIDFromToken(headerToken)
-	if err != nil {
-		return "", err
-	}
-	return accountExternalID, nil
 }
 
 func (m *Middleware) LogRoutes(h http.Handler) http.Handler {
