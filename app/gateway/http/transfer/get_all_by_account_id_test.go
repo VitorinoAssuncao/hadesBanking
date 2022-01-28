@@ -53,7 +53,7 @@ func Test_GetAllByAccountID(t *testing.T) {
 			runBefore: func(req http.Request) {
 				req.Header.Set("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI")
 			},
-			wantCode: 200,
+			wantCode: http.StatusOK,
 			wantBody: []map[string]interface{}{{
 				"id":                     "cb34f1f3-24ba-4a70-981b-cdc5d77a7347",
 				"account_origin_id":      "65d56316-39ad-4937-b41d-be2f103b0bd9",
@@ -79,7 +79,7 @@ func Test_GetAllByAccountID(t *testing.T) {
 				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
 					return "", customError.ErrorServerTokenNotFound
 				}},
-			wantCode: 400,
+			wantCode: http.StatusBadRequest,
 			wantBody: []map[string]interface{}{{
 				"error": "authorization token invalid",
 			}},
@@ -104,7 +104,7 @@ func Test_GetAllByAccountID(t *testing.T) {
 			runBefore: func(req http.Request) {
 				req.Header.Set("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI")
 			},
-			wantCode: 500,
+			wantCode: http.StatusInternalServerError,
 			wantBody: []map[string]interface{}{{
 				"error": "error when listing all transfers",
 			}},

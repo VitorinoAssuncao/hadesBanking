@@ -57,7 +57,7 @@ func Test_Create(t *testing.T) {
 				Secret:  "J0@0doR10",
 				Balance: 100,
 			},
-			wantCode: 201,
+			wantCode: http.StatusCreated,
 			wantBody: map[string]interface{}{
 				"id":         "94b9c27e-2880-42e3-8988-62dceb6b6463",
 				"name":       "Joao do Rio",
@@ -94,7 +94,7 @@ func Test_Create(t *testing.T) {
 				Secret:  "J0@0doR10",
 				Balance: 100,
 			},
-			wantCode: 400,
+			wantCode: http.StatusBadRequest,
 			wantBody: map[string]interface{}{
 				"error": "the field 'Name' is required",
 			},
@@ -120,7 +120,7 @@ func Test_Create(t *testing.T) {
 				Secret:  "J0@0doR10",
 				Balance: -100,
 			},
-			wantCode: 400,
+			wantCode: http.StatusBadRequest,
 			wantBody: map[string]interface{}{
 				"error": "the field 'Balance' need to by equal or major than 0(zero)",
 			},
@@ -146,7 +146,7 @@ func Test_Create(t *testing.T) {
 				Secret:  "J0@0doR10",
 				Balance: 100,
 			},
-			wantCode: 500,
+			wantCode: http.StatusInternalServerError,
 			wantBody: map[string]interface{}{
 				"error": "error when creating a new account",
 			},

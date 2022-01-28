@@ -43,7 +43,7 @@ func Test_GetAll(t *testing.T) {
 				&logHelper.RepositoryMock{}),
 			authenticator: &token.RepositoryMock{},
 			logger:        &logHelper.RepositoryMock{},
-			wantCode:      200,
+			wantCode:      http.StatusOK,
 			wantBody: []map[string]interface{}{{
 				"id":         "94b9c27e-2880-42e3-8988-62dceb6b6463",
 				"name":       "Joao do Rio",
@@ -64,7 +64,7 @@ func Test_GetAll(t *testing.T) {
 				&logHelper.RepositoryMock{}),
 			authenticator: &token.RepositoryMock{},
 			logger:        &logHelper.RepositoryMock{},
-			wantCode:      500,
+			wantCode:      http.StatusInternalServerError,
 			wantBody: []map[string]interface{}{{
 				"error": "error when listing all accounts",
 			}},

@@ -52,7 +52,7 @@ func Test_GetBalance(t *testing.T) {
 			runBefore: func(req http.Request) {
 				req.Header.Set("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI")
 			},
-			wantCode: 200,
+			wantCode: http.StatusOK,
 			wantBody: map[string]interface{}{
 				"balance": 0,
 			},
@@ -73,7 +73,7 @@ func Test_GetBalance(t *testing.T) {
 				},
 			},
 			logger:   &logHelper.RepositoryMock{},
-			wantCode: 401,
+			wantCode: http.StatusUnauthorized,
 			wantBody: map[string]interface{}{
 				"error": "authorization token invalid",
 			},
@@ -97,7 +97,7 @@ func Test_GetBalance(t *testing.T) {
 				req.Header.Set("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI")
 			},
 			logger:   &logHelper.RepositoryMock{},
-			wantCode: 500,
+			wantCode: http.StatusInternalServerError,
 			wantBody: map[string]interface{}{
 				"error": "account not found, please validate the ID informed",
 			},
