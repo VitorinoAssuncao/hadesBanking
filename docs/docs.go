@@ -29,7 +29,36 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/account": {
+        "/accounts": {
+            "get": {
+                "description": "Get all accounts actually in the system",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/output.AccountOutputVO"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/stoneBanking_app_gateway_http_account_vo_output.OutputError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/stoneBanking_app_gateway_http_account_vo_output.OutputError"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "With the data received, validate her and if all is correct, and dont exist a account with that document, create a new account",
                 "consumes": [
@@ -59,19 +88,19 @@ var doc = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/stoneBanking_app_gateway_web_account_vo_output.OutputError"
+                            "$ref": "#/definitions/stoneBanking_app_gateway_http_account_vo_output.OutputError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/stoneBanking_app_gateway_web_account_vo_output.OutputError"
+                            "$ref": "#/definitions/stoneBanking_app_gateway_http_account_vo_output.OutputError"
                         }
                     }
                 }
             }
         },
-        "/account/balance": {
+        "/accounts/balance": {
             "get": {
                 "description": "With a authorization token valid, return the balance of a account",
                 "produces": [
@@ -96,19 +125,19 @@ var doc = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/stoneBanking_app_gateway_web_account_vo_output.OutputError"
+                            "$ref": "#/definitions/stoneBanking_app_gateway_http_account_vo_output.OutputError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/stoneBanking_app_gateway_web_account_vo_output.OutputError"
+                            "$ref": "#/definitions/stoneBanking_app_gateway_http_account_vo_output.OutputError"
                         }
                     }
                 }
             }
         },
-        "/account/login": {
+        "/login": {
             "post": {
                 "description": "With the data received, validate if is correct, and log the user, returning a token of authorization",
                 "consumes": [
@@ -138,91 +167,19 @@ var doc = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/stoneBanking_app_gateway_web_account_vo_output.OutputError"
+                            "$ref": "#/definitions/stoneBanking_app_gateway_http_account_vo_output.OutputError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/stoneBanking_app_gateway_web_account_vo_output.OutputError"
-                        }
-                    }
-                }
-            }
-        },
-        "/accounts": {
-            "get": {
-                "description": "Get all accounts actually in the system",
-                "produces": [
-                    "application/json"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/output.AccountOutputVO"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/stoneBanking_app_gateway_web_account_vo_output.OutputError"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/stoneBanking_app_gateway_web_account_vo_output.OutputError"
+                            "$ref": "#/definitions/stoneBanking_app_gateway_http_account_vo_output.OutputError"
                         }
                     }
                 }
             }
         },
         "/transfer": {
-            "get": {
-                "description": "With a valid Authorization Token, get all the transfers that has made or received by the account",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authorization Token",
-                        "name": "authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/output.TransferOutputVO"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/stoneBanking_app_gateway_web_transfer_vo_output.OutputError"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/stoneBanking_app_gateway_web_transfer_vo_output.OutputError"
-                        }
-                    }
-                }
-            },
             "post": {
                 "description": "With the data received, validate her and if all is correct, create a new transfer, and update the balance of accounts",
                 "consumes": [
@@ -259,13 +216,56 @@ var doc = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/stoneBanking_app_gateway_web_transfer_vo_output.OutputError"
+                            "$ref": "#/definitions/stoneBanking_app_gateway_http_transfer_vo_output.OutputError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/stoneBanking_app_gateway_web_transfer_vo_output.OutputError"
+                            "$ref": "#/definitions/stoneBanking_app_gateway_http_transfer_vo_output.OutputError"
+                        }
+                    }
+                }
+            }
+        },
+        "/transfers": {
+            "get": {
+                "description": "With a valid Authorization Token, get all the transfers that has made or received by the account",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization Token",
+                        "name": "authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/output.TransferOutputVO"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/stoneBanking_app_gateway_http_transfer_vo_output.OutputError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/stoneBanking_app_gateway_http_transfer_vo_output.OutputError"
                         }
                     }
                 }
@@ -392,7 +392,7 @@ var doc = `{
                 }
             }
         },
-        "stoneBanking_app_gateway_web_account_vo_output.OutputError": {
+        "stoneBanking_app_gateway_http_account_vo_output.OutputError": {
             "type": "object",
             "properties": {
                 "error": {
@@ -401,7 +401,7 @@ var doc = `{
                 }
             }
         },
-        "stoneBanking_app_gateway_web_transfer_vo_output.OutputError": {
+        "stoneBanking_app_gateway_http_transfer_vo_output.OutputError": {
             "type": "object",
             "properties": {
                 "error": {
