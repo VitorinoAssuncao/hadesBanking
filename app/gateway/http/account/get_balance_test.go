@@ -153,8 +153,6 @@ func Test_GetBalance(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			controller := New(test.fields.accountUsecase, test.fields.authenticator, test.fields.logger)
 
-			middleware := middleware.NewMiddleware(test.fields.logger, test.fields.authenticator)
-
 			req := test.args.request
 
 			if test.runBefore != nil {
@@ -162,6 +160,7 @@ func Test_GetBalance(t *testing.T) {
 			}
 
 			router := mux.NewRouter()
+			middleware := middleware.NewMiddleware(test.fields.logger, test.fields.authenticator)
 			router.Use(middleware.GetAccountIDFromTokenLogRoutes)
 			router.HandleFunc(routePattern, controller.GetBalance).Methods("GET")
 
