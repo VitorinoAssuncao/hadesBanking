@@ -36,13 +36,19 @@ func (controller *Controller) GetBalance(w http.ResponseWriter, r *http.Request)
 
 	balance, err := controller.usecase.GetBalance(r.Context(), tokenID)
 	if err != nil {
+		if errors.Is(err, customError.ErrorAccountIDNotFound) {
+			controller.log.LogError(operation, err.Error())
+			resp.BadRequest(output.OutputError{Error: err.Error()})
+			return
+		}
+
 		controller.log.LogError(operation, err.Error())
 		resp.InternalError(output.OutputError{Error: err.Error()})
 		return
 	}
 
 	balanceOutput := output.AccountBalanceVO{
-		Balance: balance,
+		Balance: balance.ToFloat(),
 	}
 
 	resp.Ok(balanceOutput)

@@ -21,7 +21,7 @@ func Test_Create(t *testing.T) {
 		wantErr   bool
 	}{
 		{
-			name: "with the right input data, create the account sucessfully",
+			name: "with the right input data, create the transfer sucessfully",
 			input: transfer.Transfer{
 				AccountOriginID:      1,
 				AccountDestinationID: 1,

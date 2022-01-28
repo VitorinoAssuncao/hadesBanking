@@ -5,11 +5,12 @@ import (
 	"stoneBanking/app/domain/entities/account"
 	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
+	"stoneBanking/app/domain/types"
 )
 
 type Usecase interface {
 	Create(ctx context.Context, accountData account.Account) (account.Account, error)
-	GetBalance(ctx context.Context, accountID string) (float64, error)
+	GetBalance(ctx context.Context, accountID string) (types.Money, error)
 	GetAll(ctx context.Context) ([]account.Account, error)
 	LoginUser(ctx context.Context, loginInput account.Account) (string, error)
 }
