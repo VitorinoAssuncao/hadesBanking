@@ -14,10 +14,12 @@ func (m *Middleware) GetAccountIDFromTokenLogRoutes(h http.Handler) http.Handler
 		headerToken := r.Header.Get("Authorization")
 		if headerToken == "" {
 			resp.Unauthorized(output.NewError(customError.ErrorServerTokenNotFound))
+			return
 		}
 		accountExternalID, err := m.t.ExtractAccountIDFromToken(headerToken)
 		if err != nil {
 			resp.BadRequest(output.NewError(err))
+			return
 		}
 
 		ctx := r.Context()
