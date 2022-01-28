@@ -31,7 +31,7 @@ func New(usecase *UseCaseWrapper, token token.Authenticator, logger logHelper.Lo
 	account.HandleFunc("", controller_account.GetAll).Methods("GET")
 	account.HandleFunc("", controller_account.Create).Methods("POST")
 
-	balance := account.PathPrefix("/balance").Subrouter()
+	balance := account.PathPrefix("/{account_id}/balance").Subrouter()
 	balance.Use(m.GetAccountIDFromTokenLogRoutes)
 	balance.HandleFunc("", controller_account.GetBalance).Methods("GET")
 
