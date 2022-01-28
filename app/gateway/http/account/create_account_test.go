@@ -16,46 +16,61 @@ import (
 
 	"testing"
 
+	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/assert"
 )
 
 func Test_Create(t *testing.T) {
-	testCases := []struct {
-		name           string
+	const routePattern = "/accounts"
+
+	type fields struct {
 		accountUsecase usecase.Usecase
 		authenticator  token.Authenticator
 		logger         logHelper.Logger
-		input          input.CreateAccountVO
-		wantCode       int
-		wantBody       map[string]interface{}
+	}
+
+	type args struct {
+		input input.CreateAccountVO
+	}
+
+	testCases := []struct {
+		name     string
+		fields   fields
+		args     args
+		wantCode int
+		wantBody map[string]interface{}
 	}{
 		{
-			name: "with the right data, account is created sucessfully",
-			accountUsecase: usecase.New(
-				&account.RepositoryMock{
-					CreateFunc: func(ctx context.Context, accountData account.Account) (account.Account, error) {
-						return account.Account{
-							ID:         1,
-							Name:       "Joao do Rio",
-							ExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
-							CPF:        "761.647.810-78",
-							Secret:     "J0@0doR10",
-							Balance:    0,
-						}, nil
+			name: "with the right data, account is created successfully",
+			fields: fields{
+				accountUsecase: usecase.New(
+					&account.RepositoryMock{
+						CreateFunc: func(ctx context.Context, accountData account.Account) (account.Account, error) {
+							return account.Account{
+								ID:         1,
+								Name:       "Joao do Rio",
+								ExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
+								CPF:        "761.647.810-78",
+								Secret:     "J0@0doR10",
+								Balance:    0,
+							}, nil
+						},
+						GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
+							return account.Account{}, customError.ErrorAccountCPFNotFound
+						},
 					},
-					GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
-						return account.Account{}, customError.ErrorAccountCPFNotFound
-					},
+					&token.RepositoryMock{},
+					&logHelper.RepositoryMock{}),
+				authenticator: &token.RepositoryMock{},
+				logger:        &logHelper.RepositoryMock{},
+			},
+			args: args{
+				input: input.CreateAccountVO{
+					Name:    "Joao",
+					CPF:     "761.647.810-78",
+					Secret:  "J0@0doR10",
+					Balance: 100,
 				},
-				&token.RepositoryMock{},
-				&logHelper.RepositoryMock{}),
-			authenticator: &token.RepositoryMock{},
-			logger:        &logHelper.RepositoryMock{},
-			input: input.CreateAccountVO{
-				Name:    "Joao",
-				CPF:     "761.647.810-78",
-				Secret:  "J0@0doR10",
-				Balance: 100,
 			},
 			wantCode: http.StatusCreated,
 			wantBody: map[string]interface{}{
@@ -67,32 +82,36 @@ func Test_Create(t *testing.T) {
 			},
 		},
 		{
-			name: "data from input withouth name, generating error in validation",
-			accountUsecase: usecase.New(
-				&account.RepositoryMock{
-					CreateFunc: func(ctx context.Context, accountData account.Account) (account.Account, error) {
-						return account.Account{
-							ID:         1,
-							Name:       "Joao do Rio",
-							ExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
-							CPF:        "761.647.810-78",
-							Secret:     "J0@0doR10",
-							Balance:    0,
-						}, nil
+			name: "data from input without name, generating error in validation",
+			fields: fields{
+				accountUsecase: usecase.New(
+					&account.RepositoryMock{
+						CreateFunc: func(ctx context.Context, accountData account.Account) (account.Account, error) {
+							return account.Account{
+								ID:         1,
+								Name:       "Joao do Rio",
+								ExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
+								CPF:        "761.647.810-78",
+								Secret:     "J0@0doR10",
+								Balance:    0,
+							}, nil
+						},
+						GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
+							return account.Account{}, sql.ErrNoRows
+						},
 					},
-					GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
-						return account.Account{}, sql.ErrNoRows
-					},
+					&token.RepositoryMock{},
+					&logHelper.RepositoryMock{}),
+				authenticator: &token.RepositoryMock{},
+				logger:        &logHelper.RepositoryMock{},
+			},
+			args: args{
+				input: input.CreateAccountVO{
+					Name:    "",
+					CPF:     "761.647.810-78",
+					Secret:  "J0@0doR10",
+					Balance: 100,
 				},
-				&token.RepositoryMock{},
-				&logHelper.RepositoryMock{}),
-			authenticator: &token.RepositoryMock{},
-			logger:        &logHelper.RepositoryMock{},
-			input: input.CreateAccountVO{
-				Name:    "",
-				CPF:     "761.647.810-78",
-				Secret:  "J0@0doR10",
-				Balance: 100,
 			},
 			wantCode: http.StatusBadRequest,
 			wantBody: map[string]interface{}{
@@ -100,25 +119,29 @@ func Test_Create(t *testing.T) {
 			},
 		},
 		{
-			name: "data from input with a negative ammount in origin, generating error in validation",
-			accountUsecase: usecase.New(
-				&account.RepositoryMock{
-					CreateFunc: func(ctx context.Context, accountData account.Account) (account.Account, error) {
-						return account.Account{}, nil
+			name: "data from input with a negative amount in origin, generating error in validation",
+			fields: fields{
+				accountUsecase: usecase.New(
+					&account.RepositoryMock{
+						CreateFunc: func(ctx context.Context, accountData account.Account) (account.Account, error) {
+							return account.Account{}, nil
+						},
+						GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
+							return account.Account{}, sql.ErrNoRows
+						},
 					},
-					GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
-						return account.Account{}, sql.ErrNoRows
-					},
+					&token.RepositoryMock{},
+					&logHelper.RepositoryMock{}),
+				authenticator: &token.RepositoryMock{},
+				logger:        &logHelper.RepositoryMock{},
+			},
+			args: args{
+				input: input.CreateAccountVO{
+					Name:    "Joao do Rio",
+					CPF:     "761.647.810-78",
+					Secret:  "J0@0doR10",
+					Balance: -100,
 				},
-				&token.RepositoryMock{},
-				&logHelper.RepositoryMock{}),
-			authenticator: &token.RepositoryMock{},
-			logger:        &logHelper.RepositoryMock{},
-			input: input.CreateAccountVO{
-				Name:    "Joao do Rio",
-				CPF:     "761.647.810-78",
-				Secret:  "J0@0doR10",
-				Balance: -100,
 			},
 			wantCode: http.StatusBadRequest,
 			wantBody: map[string]interface{}{
@@ -127,24 +150,28 @@ func Test_Create(t *testing.T) {
 		},
 		{
 			name: "with correct data, but have a error when creating the account in database",
-			accountUsecase: usecase.New(
-				&account.RepositoryMock{
-					CreateFunc: func(ctx context.Context, accountData account.Account) (account.Account, error) {
-						return account.Account{}, customError.ErrorCreateAccount
+			fields: fields{
+				accountUsecase: usecase.New(
+					&account.RepositoryMock{
+						CreateFunc: func(ctx context.Context, accountData account.Account) (account.Account, error) {
+							return account.Account{}, customError.ErrorCreateAccount
+						},
+						GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
+							return account.Account{}, sql.ErrNoRows
+						},
 					},
-					GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
-						return account.Account{}, sql.ErrNoRows
-					},
+					&token.RepositoryMock{},
+					&logHelper.RepositoryMock{}),
+				authenticator: &token.RepositoryMock{},
+				logger:        &logHelper.RepositoryMock{},
+			},
+			args: args{
+				input: input.CreateAccountVO{
+					Name:    "Joao do Rio",
+					CPF:     "761.647.810-78",
+					Secret:  "J0@0doR10",
+					Balance: 100,
 				},
-				&token.RepositoryMock{},
-				&logHelper.RepositoryMock{}),
-			authenticator: &token.RepositoryMock{},
-			logger:        &logHelper.RepositoryMock{},
-			input: input.CreateAccountVO{
-				Name:    "Joao do Rio",
-				CPF:     "761.647.810-78",
-				Secret:  "J0@0doR10",
-				Balance: 100,
 			},
 			wantCode: http.StatusInternalServerError,
 			wantBody: map[string]interface{}{
@@ -155,12 +182,16 @@ func Test_Create(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
+			controller := New(test.fields.accountUsecase, test.fields.authenticator, test.fields.logger)
 
-			body, _ := json.Marshal(test.input)
+			body, _ := json.Marshal(test.args.input)
+			req := httptest.NewRequest(http.MethodPost, "/accounts", bytes.NewReader(body))
+
+			router := mux.NewRouter()
+			router.HandleFunc(routePattern, controller.Create)
+
 			rec := httptest.NewRecorder()
-			req := httptest.NewRequest(http.MethodPost, "/account", bytes.NewReader(body))
-			controller := New(test.accountUsecase, test.authenticator, test.logger)
-			controller.Create(rec, req)
+			router.ServeHTTP(rec, req)
 
 			assert.Equal(t, test.wantCode, rec.Code)
 

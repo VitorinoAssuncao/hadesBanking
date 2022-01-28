@@ -22,7 +22,7 @@ func LoadConfig() Config {
 		DBPort:     os.Getenv("POSTGRES_PORT"),
 		DBSSLMode:  os.Getenv("POSTGRES_SSLMODE"),
 		SigningKey: os.Getenv("SIGN_KEY"),
-		Enviroment: os.Getenv("Enviroment"),
+		Enviroment: os.Getenv("ENVIROMENT"),
 	}
 	return config
 }

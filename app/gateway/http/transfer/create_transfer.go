@@ -29,7 +29,7 @@ func (controller Controller) Create(w http.ResponseWriter, r *http.Request) {
 	resp := response.NewResponse(w)
 
 	controller.log.LogInfo(operation, "getting the account id from the token in the header")
-	accountID, err := middleware.GetAccountIDFromToken(r, controller.token)
+	accountID, err := middleware.GetAccountIDFromContext(r.Context())
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
 		resp.BadRequest(output.OutputError{Error: err.Error()})

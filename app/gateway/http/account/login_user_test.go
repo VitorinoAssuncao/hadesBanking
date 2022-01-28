@@ -14,46 +14,61 @@ import (
 	"stoneBanking/app/gateway/http/account/vo/input"
 	"testing"
 
+	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/assert"
 )
 
 func Test_LoginUser(t *testing.T) {
-	testCases := []struct {
-		name           string
+	const routePattern = "/login"
+
+	type fields struct {
 		accountUsecase usecase.Usecase
 		authenticator  token.Authenticator
 		logger         logHelper.Logger
-		input          input.CreateAccountVO
-		wantCode       int
-		wantBody       map[string]interface{}
+	}
+
+	type args struct {
+		input input.LoginVO
+	}
+
+	testCases := []struct {
+		name     string
+		fields   fields
+		args     args
+		wantCode int
+		wantBody map[string]interface{}
 	}{
 		{
 			name: "with the correct data, log the user and return the authorization token",
-			accountUsecase: usecase.New(
-				&account.RepositoryMock{
-					GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
-						return account.Account{
-							ID:         1,
-							Name:       "Joao do Rio",
-							ExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
-							CPF:        "761.647.810-78",
-							Secret:     "$2a$14$zmq6uXNuf.1ZwUHHDDAnR.ggIYn0YEnWF/1HeeZrf8d8B55mkk.aq",
-							Balance:    0,
-						}, nil
+			fields: fields{
+				accountUsecase: usecase.New(
+					&account.RepositoryMock{
+						GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
+							return account.Account{
+								ID:         1,
+								Name:       "Joao do Rio",
+								ExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
+								CPF:        "761.647.810-78",
+								Secret:     "$2a$14$zmq6uXNuf.1ZwUHHDDAnR.ggIYn0YEnWF/1HeeZrf8d8B55mkk.aq",
+								Balance:    0,
+							}, nil
+						},
 					},
-				},
-				&token.RepositoryMock{
-					GenerateTokenFunc: func(accountExternalID string) (signedToken string, err error) {
-						signedToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI"
-						return signedToken, nil
+					&token.RepositoryMock{
+						GenerateTokenFunc: func(accountExternalID string) (signedToken string, err error) {
+							signedToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI"
+							return signedToken, nil
+						},
 					},
+					&logHelper.RepositoryMock{}),
+				authenticator: &token.RepositoryMock{},
+				logger:        &logHelper.RepositoryMock{},
+			},
+			args: args{
+				input: input.LoginVO{
+					CPF:    "761.647.810-78",
+					Secret: "12344",
 				},
-				&logHelper.RepositoryMock{}),
-			authenticator: &token.RepositoryMock{},
-			logger:        &logHelper.RepositoryMock{},
-			input: input.CreateAccountVO{
-				CPF:    "761.647.810-78",
-				Secret: "12344",
 			},
 			wantCode: http.StatusOK,
 			wantBody: map[string]interface{}{
@@ -61,32 +76,36 @@ func Test_LoginUser(t *testing.T) {
 			},
 		},
 		{
-			name: "with the login data withouth cpf, when validating the data return a error",
-			accountUsecase: usecase.New(
-				&account.RepositoryMock{
-					GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
-						return account.Account{
-							ID:         1,
-							Name:       "Joao do Rio",
-							ExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
-							CPF:        "761.647.810-78",
-							Secret:     "$2a$14$zmq6uXNuf.1ZwUHHDDAnR.ggIYn0YEnWF/1HeeZrf8d8B55mkk.aq",
-							Balance:    0,
-						}, nil
+			name: "with the login data without cpf, when validating the data return a error",
+			fields: fields{
+				accountUsecase: usecase.New(
+					&account.RepositoryMock{
+						GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
+							return account.Account{
+								ID:         1,
+								Name:       "Joao do Rio",
+								ExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
+								CPF:        "761.647.810-78",
+								Secret:     "$2a$14$zmq6uXNuf.1ZwUHHDDAnR.ggIYn0YEnWF/1HeeZrf8d8B55mkk.aq",
+								Balance:    0,
+							}, nil
+						},
 					},
-				},
-				&token.RepositoryMock{
-					GenerateTokenFunc: func(accountExternalID string) (signedToken string, err error) {
-						signedToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI"
-						return signedToken, nil
+					&token.RepositoryMock{
+						GenerateTokenFunc: func(accountExternalID string) (signedToken string, err error) {
+							signedToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI"
+							return signedToken, nil
+						},
 					},
+					&logHelper.RepositoryMock{}),
+				authenticator: &token.RepositoryMock{},
+				logger:        &logHelper.RepositoryMock{},
+			},
+			args: args{
+				input: input.LoginVO{
+					CPF:    "",
+					Secret: "12344",
 				},
-				&logHelper.RepositoryMock{}),
-			authenticator: &token.RepositoryMock{},
-			logger:        &logHelper.RepositoryMock{},
-			input: input.CreateAccountVO{
-				CPF:    "",
-				Secret: "12344",
 			},
 			wantCode: http.StatusBadRequest,
 			wantBody: map[string]interface{}{
@@ -95,31 +114,35 @@ func Test_LoginUser(t *testing.T) {
 		},
 		{
 			name: "with the correct cpf but the wrong password, try to log, but return a error",
-			accountUsecase: usecase.New(
-				&account.RepositoryMock{
-					GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
-						return account.Account{
-							ID:         1,
-							Name:       "Joao do Rio",
-							ExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
-							CPF:        "761.647.810-78",
-							Secret:     "$2a$14$zmq6uXNuf.1ZwUHHDDAnR.ggIYn0YEnWF/1HeeZrf8d8B55mkk.aq",
-							Balance:    0,
-						}, nil
+			fields: fields{
+				accountUsecase: usecase.New(
+					&account.RepositoryMock{
+						GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
+							return account.Account{
+								ID:         1,
+								Name:       "Joao do Rio",
+								ExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
+								CPF:        "761.647.810-78",
+								Secret:     "$2a$14$zmq6uXNuf.1ZwUHHDDAnR.ggIYn0YEnWF/1HeeZrf8d8B55mkk.aq",
+								Balance:    0,
+							}, nil
+						},
 					},
-				},
-				&token.RepositoryMock{
-					GenerateTokenFunc: func(accountExternalID string) (signedToken string, err error) {
-						signedToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI"
-						return signedToken, nil
+					&token.RepositoryMock{
+						GenerateTokenFunc: func(accountExternalID string) (signedToken string, err error) {
+							signedToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI"
+							return signedToken, nil
+						},
 					},
+					&logHelper.RepositoryMock{}),
+				authenticator: &token.RepositoryMock{},
+				logger:        &logHelper.RepositoryMock{},
+			},
+			args: args{
+				input: input.LoginVO{
+					CPF:    "761.647.810-78",
+					Secret: "12345",
 				},
-				&logHelper.RepositoryMock{}),
-			authenticator: &token.RepositoryMock{},
-			logger:        &logHelper.RepositoryMock{},
-			input: input.CreateAccountVO{
-				CPF:    "761.647.810-78",
-				Secret: "12345",
 			},
 			wantCode: http.StatusBadRequest,
 			wantBody: map[string]interface{}{
@@ -128,30 +151,34 @@ func Test_LoginUser(t *testing.T) {
 		},
 		{
 			name: "with the correct data, but happens a error when generating the token, and return error",
-			accountUsecase: usecase.New(
-				&account.RepositoryMock{
-					GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
-						return account.Account{
-							ID:         1,
-							Name:       "Joao do Rio",
-							ExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
-							CPF:        "761.647.810-78",
-							Secret:     "$2a$14$zmq6uXNuf.1ZwUHHDDAnR.ggIYn0YEnWF/1HeeZrf8d8B55mkk.aq",
-							Balance:    0,
-						}, nil
+			fields: fields{
+				accountUsecase: usecase.New(
+					&account.RepositoryMock{
+						GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
+							return account.Account{
+								ID:         1,
+								Name:       "Joao do Rio",
+								ExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
+								CPF:        "761.647.810-78",
+								Secret:     "$2a$14$zmq6uXNuf.1ZwUHHDDAnR.ggIYn0YEnWF/1HeeZrf8d8B55mkk.aq",
+								Balance:    0,
+							}, nil
+						},
 					},
-				},
-				&token.RepositoryMock{
-					GenerateTokenFunc: func(accountExternalID string) (signedToken string, err error) {
-						return "", customError.ErrorAccountTokenGeneration
+					&token.RepositoryMock{
+						GenerateTokenFunc: func(accountExternalID string) (signedToken string, err error) {
+							return "", customError.ErrorAccountTokenGeneration
+						},
 					},
+					&logHelper.RepositoryMock{}),
+				authenticator: &token.RepositoryMock{},
+				logger:        &logHelper.RepositoryMock{},
+			},
+			args: args{
+				input: input.LoginVO{
+					CPF:    "761.647.810-78",
+					Secret: "12344",
 				},
-				&logHelper.RepositoryMock{}),
-			authenticator: &token.RepositoryMock{},
-			logger:        &logHelper.RepositoryMock{},
-			input: input.CreateAccountVO{
-				CPF:    "761.647.810-78",
-				Secret: "12344",
 			},
 			wantCode: http.StatusInternalServerError,
 			wantBody: map[string]interface{}{
@@ -161,11 +188,16 @@ func Test_LoginUser(t *testing.T) {
 	}
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			body, _ := json.Marshal(test.input)
+			controller := New(test.fields.accountUsecase, test.fields.authenticator, test.fields.logger)
+
+			body, _ := json.Marshal(test.args.input)
+			req := httptest.NewRequest(http.MethodPost, "/login", bytes.NewReader(body))
+
+			router := mux.NewRouter()
+			router.HandleFunc(routePattern, controller.LoginUser)
+
 			rec := httptest.NewRecorder()
-			req := httptest.NewRequest(http.MethodPost, "/account/login", bytes.NewReader(body))
-			controller := New(test.accountUsecase, test.authenticator, test.logger)
-			controller.LoginUser(rec, req)
+			router.ServeHTTP(rec, req)
 
 			assert.Equal(t, test.wantCode, rec.Code)
 
