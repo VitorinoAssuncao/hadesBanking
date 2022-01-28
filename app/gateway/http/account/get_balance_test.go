@@ -11,37 +11,55 @@ import (
 	"stoneBanking/app/domain/entities/token"
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
+	"stoneBanking/app/gateway/http/middleware"
 	"testing"
 
+	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/assert"
 )
 
+const routePattern = "/account/{account_id}/balance"
+
+type fields struct {
+	accountUsecase usecase.Usecase
+	authenticator  token.Authenticator
+	logger         logHelper.Logger
+}
+
+type args struct {
+	request *http.Request
+}
+
 func Test_GetBalance(t *testing.T) {
 	testCases := []struct {
-		name           string
-		accountUsecase usecase.Usecase
-		authenticator  token.Authenticator
-		logger         logHelper.Logger
-		runBefore      func(req http.Request)
-		wantCode       int
-		wantBody       map[string]interface{}
+		name      string
+		fields    fields
+		runBefore func(req http.Request)
+		args      args
+		wantCode  int
+		wantBody  map[string]interface{}
 	}{
 		{
 			name: "with a token of login, return the correct value of the account",
-			accountUsecase: usecase.New(
-				&account.RepositoryMock{
-					GetBalanceByAccountIDFunc: func(ctx context.Context, accountID types.ExternalID) (types.Money, error) {
-						return 0, nil
+			fields: fields{
+				accountUsecase: usecase.New(
+					&account.RepositoryMock{
+						GetBalanceByAccountIDFunc: func(ctx context.Context, accountID types.ExternalID) (types.Money, error) {
+							return 0, nil
+						},
+					},
+					&token.RepositoryMock{},
+					&logHelper.RepositoryMock{}),
+				authenticator: &token.RepositoryMock{
+					ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
+						return "c036475f-b7a0-4f34-8f1f-c43515d31724", nil
 					},
 				},
-				&token.RepositoryMock{},
-				&logHelper.RepositoryMock{}),
-			authenticator: &token.RepositoryMock{
-				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
-					return "94b9c27e-2880-42e3-8988-62dceb6b6463", nil
-				},
+				logger: &logHelper.RepositoryMock{},
 			},
-			logger: &logHelper.RepositoryMock{},
+			args: args{
+				request: httptest.NewRequest(http.MethodGet, "/account/c036475f-b7a0-4f34-8f1f-c43515d31724/balance", nil),
+			},
 			runBefore: func(req http.Request) {
 				req.Header.Set("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI")
 			},
@@ -52,20 +70,21 @@ func Test_GetBalance(t *testing.T) {
 		},
 		{
 			name: "without a token of login, return a error",
-			accountUsecase: usecase.New(
-				&account.RepositoryMock{
-					GetByIDFunc: func(ctx context.Context, accountID types.ExternalID) (account.Account, error) {
-						return account.Account{}, nil
+			fields: fields{
+				accountUsecase: usecase.New(
+					&account.RepositoryMock{
+						GetByIDFunc: func(ctx context.Context, accountID types.ExternalID) (account.Account, error) {
+							return account.Account{}, nil
+						},
 					},
-				},
-				&token.RepositoryMock{},
-				&logHelper.RepositoryMock{}),
-			authenticator: &token.RepositoryMock{
-				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
-					return "", customError.ErrorServerTokenNotFound
-				},
+					&token.RepositoryMock{},
+					&logHelper.RepositoryMock{}),
+				authenticator: &token.RepositoryMock{},
+				logger:        &logHelper.RepositoryMock{},
 			},
-			logger:   &logHelper.RepositoryMock{},
+			args: args{
+				request: httptest.NewRequest(http.MethodGet, "/account/c036475f-b7a0-4f34-8f1f-c43515d31724/balance", nil),
+			},
 			wantCode: http.StatusUnauthorized,
 			wantBody: map[string]interface{}{
 				"error": "authorization token invalid",
@@ -73,23 +92,28 @@ func Test_GetBalance(t *testing.T) {
 		},
 		{
 			name: "with a token of login, but request for a id that not exist, and return a negative value and error",
-			accountUsecase: usecase.New(
-				&account.RepositoryMock{
-					GetBalanceByAccountIDFunc: func(ctx context.Context, accountID types.ExternalID) (types.Money, error) {
-						return -1, customError.ErrorAccountIDNotFound
+			fields: fields{
+				accountUsecase: usecase.New(
+					&account.RepositoryMock{
+						GetBalanceByAccountIDFunc: func(ctx context.Context, accountID types.ExternalID) (types.Money, error) {
+							return -1, customError.ErrorAccountIDNotFound
+						},
+					},
+					&token.RepositoryMock{},
+					&logHelper.RepositoryMock{}),
+				authenticator: &token.RepositoryMock{
+					ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
+						return "c036475f-b7a0-4f34-8f1f-c43515d31724", nil
 					},
 				},
-				&token.RepositoryMock{},
-				&logHelper.RepositoryMock{}),
-			authenticator: &token.RepositoryMock{
-				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
-					return "94b9c27e-2880-42e3-8988-62dceb6b6463", nil
-				},
+				logger: &logHelper.RepositoryMock{},
+			},
+			args: args{
+				request: httptest.NewRequest(http.MethodGet, "/account/c036475f-b7a0-4f34-8f1f-c43515d31724/balance", nil),
 			},
 			runBefore: func(req http.Request) {
 				req.Header.Set("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI")
 			},
-			logger:   &logHelper.RepositoryMock{},
 			wantCode: 400,
 			wantBody: map[string]interface{}{
 				"error": "account not found, please validate the ID informed",
@@ -97,23 +121,28 @@ func Test_GetBalance(t *testing.T) {
 		},
 		{
 			name: "with a token of login, but a error happens when trying to find the account in the database, and return a error",
-			accountUsecase: usecase.New(
-				&account.RepositoryMock{
-					GetBalanceByAccountIDFunc: func(ctx context.Context, accountID types.ExternalID) (types.Money, error) {
-						return -1, customError.ErrorAccountIDSearching
+			fields: fields{
+				accountUsecase: usecase.New(
+					&account.RepositoryMock{
+						GetBalanceByAccountIDFunc: func(ctx context.Context, accountID types.ExternalID) (types.Money, error) {
+							return -1, customError.ErrorAccountIDSearching
+						},
+					},
+					&token.RepositoryMock{},
+					&logHelper.RepositoryMock{}),
+				authenticator: &token.RepositoryMock{
+					ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
+						return "c036475f-b7a0-4f34-8f1f-c43515d31724", nil
 					},
 				},
-				&token.RepositoryMock{},
-				&logHelper.RepositoryMock{}),
-			authenticator: &token.RepositoryMock{
-				ExtractAccountIDFromTokenFunc: func(token string) (accountExternalID string, err error) {
-					return "94b9c27e-2880-42e3-8988-62dceb6b6463", nil
-				},
+				logger: &logHelper.RepositoryMock{},
+			},
+			args: args{
+				request: httptest.NewRequest(http.MethodGet, "/account/c036475f-b7a0-4f34-8f1f-c43515d31724/balance", nil),
 			},
 			runBefore: func(req http.Request) {
 				req.Header.Set("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI")
 			},
-			logger:   &logHelper.RepositoryMock{},
 			wantCode: http.StatusInternalServerError,
 			wantBody: map[string]interface{}{
 				"error": "error when searching for the account",
@@ -122,16 +151,22 @@ func Test_GetBalance(t *testing.T) {
 	}
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
+			controller := New(test.fields.accountUsecase, test.fields.authenticator, test.fields.logger)
 
-			rec := httptest.NewRecorder()
-			req := httptest.NewRequest(http.MethodGet, "/account/balance", nil)
+			middleware := middleware.NewMiddleware(test.fields.logger, test.fields.authenticator)
+
+			req := test.args.request
 
 			if test.runBefore != nil {
 				test.runBefore(*req)
 			}
 
-			controller := New(test.accountUsecase, test.authenticator, test.logger)
-			controller.GetBalance(rec, req)
+			router := mux.NewRouter()
+			router.Use(middleware.GetAccountIDFromTokenLogRoutes)
+			router.HandleFunc(routePattern, controller.GetBalance).Methods("GET")
+
+			rec := httptest.NewRecorder()
+			router.ServeHTTP(rec, req)
 
 			assert.Equal(t, test.wantCode, rec.Code)
 
