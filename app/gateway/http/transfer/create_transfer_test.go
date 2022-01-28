@@ -66,7 +66,7 @@ func Test_Create(t *testing.T) {
 			runBefore: func(req http.Request) {
 				req.Header.Set("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI")
 			},
-			wantCode: 200,
+			wantCode: http.StatusCreated,
 			wantBody: map[string]interface{}{
 				"id":                     "cb34f1f3-24ba-4a70-981b-cdc5d77a7347",
 				"account_origin_id":      "65d56316-39ad-4937-b41d-be2f103b0bd9",
@@ -112,7 +112,7 @@ func Test_Create(t *testing.T) {
 			runBefore: func(req http.Request) {
 				req.Header.Set("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI")
 			},
-			wantCode: 400,
+			wantCode: http.StatusBadRequest,
 			wantBody: map[string]interface{}{
 				"error": "authorization token invalid",
 			},
@@ -153,7 +153,7 @@ func Test_Create(t *testing.T) {
 			runBefore: func(req http.Request) {
 				req.Header.Set("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI")
 			},
-			wantCode: 400,
+			wantCode: http.StatusBadRequest,
 			wantBody: map[string]interface{}{
 				"error": "field account_destination_id is required",
 			},
@@ -195,7 +195,7 @@ func Test_Create(t *testing.T) {
 			runBefore: func(req http.Request) {
 				req.Header.Set("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI")
 			},
-			wantCode: 400,
+			wantCode: http.StatusBadRequest,
 			wantBody: map[string]interface{}{
 				"error": "origin account and destiny account cannot by the same",
 			},
@@ -237,7 +237,7 @@ func Test_Create(t *testing.T) {
 			runBefore: func(req http.Request) {
 				req.Header.Set("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI")
 			},
-			wantCode: 400,
+			wantCode: http.StatusBadRequest,
 			wantBody: map[string]interface{}{
 				"error": "transfer amount should be greater than 0",
 			},
@@ -279,7 +279,7 @@ func Test_Create(t *testing.T) {
 			runBefore: func(req http.Request) {
 				req.Header.Set("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI")
 			},
-			wantCode: 400,
+			wantCode: http.StatusBadRequest,
 			wantBody: map[string]interface{}{
 				"error": "insuficient funds",
 			},
@@ -315,7 +315,7 @@ func Test_Create(t *testing.T) {
 			runBefore: func(req http.Request) {
 				req.Header.Set("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI")
 			},
-			wantCode: 500,
+			wantCode: http.StatusInternalServerError,
 			wantBody: map[string]interface{}{
 				"error": "error when creating transfer, please try again",
 			},

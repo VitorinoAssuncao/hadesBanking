@@ -2,12 +2,12 @@ package transfer
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"net/http"
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
 	"stoneBanking/app/gateway/http/middleware"
+	"stoneBanking/app/gateway/http/response"
 	"stoneBanking/app/gateway/http/transfer/vo/output"
 )
 
@@ -22,30 +22,27 @@ import (
 //@Router /transfer [GET]
 func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Transfer.GetAllByAccountID"
+	resp := response.NewResponse(w)
 
 	accountID, err := middleware.GetAccountIDFromToken(r, controller.token)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode([]output.OutputError{{Error: err.Error()}}) //nolint: errorlint
+		resp.BadRequest([]output.OutputError{{Error: err.Error()}})
 		return
 	}
 	transfers, err := controller.usecase.GetAllByAccountID(context.Background(), types.ExternalID(accountID))
 
 	controller.log.LogInfo(operation, "creating the objects to by listed")
 	transfersOutput := output.ToTransfersOutput(transfers)
-
 	if err != nil {
 		if errors.Is(err, customError.ErrorTransferAccountNotFound) {
-			w.WriteHeader(http.StatusBadRequest)
-			json.NewEncoder(w).Encode([]output.OutputError{{Error: err.Error()}}) //nolint: errorlint
+			resp.BadRequest([]output.OutputError{{Error: err.Error()}})
 			return
 		}
 
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode([]output.OutputError{{Error: err.Error()}}) //nolint: errorlint
+		resp.InternalError([]output.OutputError{{Error: err.Error()}})
 		return
 	}
 
 	controller.log.LogInfo(operation, "transfers listed sucessfully")
-	json.NewEncoder(w).Encode(transfersOutput) //nolint: errorlint
+	resp.Ok(transfersOutput)
 }

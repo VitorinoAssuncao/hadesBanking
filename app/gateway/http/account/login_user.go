@@ -12,6 +12,7 @@ import (
 	"stoneBanking/app/gateway/http/account/vo/input"
 	validations "stoneBanking/app/gateway/http/account/vo/input/validations"
 	"stoneBanking/app/gateway/http/account/vo/output"
+	"stoneBanking/app/gateway/http/response"
 )
 
 //@Sumary Log in the account
@@ -25,12 +26,12 @@ import (
 //@Router /account/login [POST]
 func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Account.GetBalance"
+	resp := response.NewResponse(w)
 
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()}) //nolint: errorlint
+		resp.BadRequest(output.OutputError{Error: err.Error()})
 		return
 	}
 	defer r.Body.Close()
@@ -40,8 +41,7 @@ func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) 
 	err = json.Unmarshal(reqBody, &loginData)
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()}) //nolint: errorlint
+		resp.BadRequest(output.OutputError{Error: err.Error()})
 		return
 	}
 
@@ -49,8 +49,7 @@ func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) 
 	err = validations.ValidateLoginInputData(loginData)
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()}) //nolint: errorlint
+		resp.BadRequest(output.OutputError{Error: err.Error()})
 		return
 	}
 
@@ -64,14 +63,12 @@ func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) 
 	if err != nil {
 		if errors.Is(err, customError.ErrorAccountTokenGeneration) {
 			controller.log.LogError(operation, err.Error())
-			w.WriteHeader(http.StatusInternalServerError)
-			json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()}) //nolint: errorlint
+			resp.InternalError(output.OutputError{Error: err.Error()})
 			return
 		}
 
 		controller.log.LogError(operation, err.Error())
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(output.OutputError{Error: err.Error()}) //nolint: errorlint
+		resp.BadRequest(output.OutputError{Error: err.Error()})
 		return
 	}
 
@@ -79,5 +76,5 @@ func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) 
 		Authorization: token,
 	}
 
-	json.NewEncoder(w).Encode(loginOutput) //nolint: errorlint
+	resp.Ok(loginOutput)
 }

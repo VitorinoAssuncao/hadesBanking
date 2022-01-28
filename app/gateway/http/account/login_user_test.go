@@ -55,7 +55,7 @@ func Test_LoginUser(t *testing.T) {
 				CPF:    "761.647.810-78",
 				Secret: "12344",
 			},
-			wantCode: 200,
+			wantCode: http.StatusOK,
 			wantBody: map[string]interface{}{
 				"authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJjMDM2NDc1Zi1iN2EwLTRmMzQtOGYxZi1jNDM1MTVkMzE3MjQifQ.Vzl8gI6gYbDMTDPhq878f_Wq_b8J0xz81do8XmHeIFI",
 			},
@@ -88,7 +88,7 @@ func Test_LoginUser(t *testing.T) {
 				CPF:    "",
 				Secret: "12344",
 			},
-			wantCode: 400,
+			wantCode: http.StatusBadRequest,
 			wantBody: map[string]interface{}{
 				"error": "cpf or secret invalid, please validate then",
 			},
@@ -121,7 +121,7 @@ func Test_LoginUser(t *testing.T) {
 				CPF:    "761.647.810-78",
 				Secret: "12345",
 			},
-			wantCode: 400,
+			wantCode: http.StatusBadRequest,
 			wantBody: map[string]interface{}{
 				"error": "cpf or secret invalid, please validate then",
 			},
@@ -153,7 +153,7 @@ func Test_LoginUser(t *testing.T) {
 				CPF:    "761.647.810-78",
 				Secret: "12344",
 			},
-			wantCode: 500,
+			wantCode: http.StatusInternalServerError,
 			wantBody: map[string]interface{}{
 				"error": "error when generating the authorization token",
 			},
