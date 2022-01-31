@@ -2,6 +2,7 @@ package account
 
 import (
 	"context"
+	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
 )
 
@@ -14,10 +15,15 @@ func (repository accountRepository) UpdateBalance(ctx context.Context, value int
 	WHERE
 			external_id = $2
 	`
-	_, err := repository.db.Exec(sqlQuery, value, external_id)
-
+	result, err := repository.db.Exec(sqlQuery, value, external_id)
 	if err != nil {
 		return err
 	}
+
+	affected, _ := result.RowsAffected()
+	if affected == 0 {
+		return customError.ErrorAccountIDNotFound
+	}
+
 	return nil
 }
