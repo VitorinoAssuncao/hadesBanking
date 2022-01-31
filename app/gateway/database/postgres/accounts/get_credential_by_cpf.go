@@ -8,7 +8,7 @@ import (
 	customError "stoneBanking/app/domain/errors"
 )
 
-func (repository accountRepository) GetByCPF(ctx context.Context, accountCPF string) (account.Account, error) {
+func (repository accountRepository) GetCredentialByCPF(ctx context.Context, accountCPF string) (account.Account, error) {
 
 	const sqlQuery = `
 	SELECT 
