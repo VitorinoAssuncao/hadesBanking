@@ -6,6 +6,7 @@ import (
 	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
 	accounts "stoneBanking/app/gateway/http/account"
+	auth "stoneBanking/app/gateway/http/authentication"
 	"stoneBanking/app/gateway/http/middleware"
 	transfers "stoneBanking/app/gateway/http/transfer"
 
@@ -25,6 +26,7 @@ func New(usecase *UseCaseWrapper, token token.Authenticator, logger logHelper.Lo
 	router.Use(m.LogRoutes)
 	router.PathPrefix("/documentation/").Handler(httpSwagger.WrapHandler)
 	controller_account := accounts.New(usecase.Accounts, token, logger)
+	controller_auth := auth.New(usecase.Auth, token, logger)
 	controller_transfer := transfers.New(usecase.Transfer, token, logger)
 
 	account := router.PathPrefix("/accounts").Subrouter()
@@ -36,7 +38,7 @@ func New(usecase *UseCaseWrapper, token token.Authenticator, logger logHelper.Lo
 	balance.HandleFunc("", controller_account.GetBalance).Methods("GET")
 
 	login := router.PathPrefix("/login").Subrouter()
-	login.HandleFunc("", controller_account.LoginUser).Methods("POST")
+	login.HandleFunc("", controller_auth.LoginUser).Methods("POST")
 
 	transfer := router.PathPrefix("/transfers").Subrouter()
 	transfer.Use(m.GetAccountIDFromTokenLogRoutes)

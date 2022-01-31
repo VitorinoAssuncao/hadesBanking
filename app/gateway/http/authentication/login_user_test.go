@@ -1,4 +1,4 @@
-package account
+package authentication
 
 import (
 	"bytes"
@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
-	usecase "stoneBanking/app/application/usecase/account"
+	usecase "stoneBanking/app/application/usecase/authentication"
 	"stoneBanking/app/domain/entities/account"
 	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
@@ -22,9 +22,9 @@ func Test_LoginUser(t *testing.T) {
 	const routePattern = "/login"
 
 	type fields struct {
-		accountUsecase usecase.Usecase
-		authenticator  token.Authenticator
-		logger         logHelper.Logger
+		authUsecase   usecase.Usecase
+		authenticator token.Authenticator
+		logger        logHelper.Logger
 	}
 
 	type args struct {
@@ -41,7 +41,7 @@ func Test_LoginUser(t *testing.T) {
 		{
 			name: "with the correct data, log the user and return the authorization token",
 			fields: fields{
-				accountUsecase: usecase.New(
+				authUsecase: usecase.New(
 					&account.RepositoryMock{
 						GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 							return account.Account{
@@ -78,7 +78,7 @@ func Test_LoginUser(t *testing.T) {
 		{
 			name: "with the login data without cpf, when validating the data return a error",
 			fields: fields{
-				accountUsecase: usecase.New(
+				authUsecase: usecase.New(
 					&account.RepositoryMock{
 						GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 							return account.Account{
@@ -115,7 +115,7 @@ func Test_LoginUser(t *testing.T) {
 		{
 			name: "with the correct cpf but the wrong password, try to log, but return a error",
 			fields: fields{
-				accountUsecase: usecase.New(
+				authUsecase: usecase.New(
 					&account.RepositoryMock{
 						GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 							return account.Account{
@@ -152,7 +152,7 @@ func Test_LoginUser(t *testing.T) {
 		{
 			name: "with the correct data, but happens a error when generating the token, and return error",
 			fields: fields{
-				accountUsecase: usecase.New(
+				authUsecase: usecase.New(
 					&account.RepositoryMock{
 						GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 							return account.Account{
@@ -188,7 +188,7 @@ func Test_LoginUser(t *testing.T) {
 	}
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			controller := New(test.fields.accountUsecase, test.fields.authenticator, test.fields.logger)
+			controller := New(test.fields.authUsecase, test.fields.authenticator, test.fields.logger)
 
 			body, _ := json.Marshal(test.args.input)
 			req := httptest.NewRequest(http.MethodPost, "/login", bytes.NewReader(body))
