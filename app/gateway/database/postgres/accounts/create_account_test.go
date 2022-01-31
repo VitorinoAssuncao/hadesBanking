@@ -22,7 +22,7 @@ func Test_Create(t *testing.T) {
 		wantErr   bool
 	}{
 		{
-			name: "with right data, account is created sucessfully",
+			name: "with right data, account is created successfully",
 			input: account.Account{
 				Name:      "Joao da Silva",
 				CPF:       "38330499912",

@@ -23,12 +23,12 @@ func Test_Create(t *testing.T) {
 		wantErr     error
 	}{
 		{
-			name: "with the right data, create account sucessfully",
+			name: "with the right data, create account successfully",
 			accountMock: &account.RepositoryMock{
 				CreateFunc: func(ctx context.Context, account account.Account) (account.Account, error) {
 					return account, nil
 				},
-				GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
+				GetCredentialByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 					return account.Account{}, customError.ErrorAccountCPFNotFound
 				},
 			},
@@ -57,7 +57,7 @@ func Test_Create(t *testing.T) {
 				CreateFunc: func(ctx context.Context, account account.Account) (account.Account, error) {
 					return account, nil
 				},
-				GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
+				GetCredentialByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 					return account.Account{}, customError.ErrorAccountCPFNotFound
 				},
 			},
@@ -79,7 +79,7 @@ func Test_Create(t *testing.T) {
 				CreateFunc: func(ctx context.Context, account account.Account) (account.Account, error) {
 					return account, nil
 				},
-				GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
+				GetCredentialByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 					return account.Account{
 						ID:         1,
 						Name:       "Joao do Rio",
@@ -108,7 +108,7 @@ func Test_Create(t *testing.T) {
 				CreateFunc: func(ctx context.Context, account account.Account) (account.Account, error) {
 					return account, nil
 				},
-				GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
+				GetCredentialByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 					return account.Account{}, sql.ErrConnDone
 				},
 			},
@@ -130,7 +130,7 @@ func Test_Create(t *testing.T) {
 				CreateFunc: func(ctx context.Context, account account.Account) (account.Account, error) {
 					return account, customError.ErrorCreateAccount
 				},
-				GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
+				GetCredentialByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 					return account.Account{}, customError.ErrorAccountCPFNotFound
 				},
 			},
