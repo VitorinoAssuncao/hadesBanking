@@ -16,8 +16,8 @@ import (
 //@Produce json
 //@Param authorization header string true "Authorization Token"
 //@Success 200 {object} output.AccountBalanceVO
-//@Failure	400 {object} output.OutputError
-//@Failure 500 {object} output.OutputError
+//@Failure	400 {object} response.OutputError
+//@Failure 500 {object} response.OutputError
 //@Router /accounts/{account_id}/balance [GET]
 func (controller *Controller) GetBalance(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Account.GetBalance"

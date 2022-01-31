@@ -16,7 +16,7 @@ definitions:
     type: object
   input.CreateTransferVO:
     properties:
-      account_destiny_id:
+      account_destination_id:
         example: "3"
         type: string
       account_origin_id:
@@ -67,7 +67,7 @@ definitions:
     type: object
   output.TransferOutputVO:
     properties:
-      account_destiny_id:
+      account_destination_id:
         example: bf89f445-70d3-442f-9821-55699a868704
         type: string
       account_origin_id:
@@ -83,13 +83,7 @@ definitions:
         example: 123.32
         type: number
     type: object
-  stoneBanking_app_gateway_http_account_vo_output.OutputError:
-    properties:
-      error:
-        example: error
-        type: string
-    type: object
-  stoneBanking_app_gateway_http_transfer_vo_output.OutputError:
+  response.OutputError:
     properties:
       error:
         example: error
@@ -122,16 +116,17 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/stoneBanking_app_gateway_http_account_vo_output.OutputError'
+            $ref: '#/definitions/response.OutputError'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/stoneBanking_app_gateway_http_account_vo_output.OutputError'
+            $ref: '#/definitions/response.OutputError'
+      summary: Get All Accounts
     post:
       consumes:
       - application/json
       description: With the data received, validate her and if all is correct, and
-        dont exist a account with that document, create a new account
+        don't exist a account with that document, create a new account
       parameters:
       - description: Account Creation Data
         in: body
@@ -149,12 +144,13 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/stoneBanking_app_gateway_http_account_vo_output.OutputError'
+            $ref: '#/definitions/response.OutputError'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/stoneBanking_app_gateway_http_account_vo_output.OutputError'
-  /accounts/balance:
+            $ref: '#/definitions/response.OutputError'
+      summary: Create a account
+  /accounts/{account_id}/balance:
     get:
       description: With a authorization token valid, return the balance of a account
       parameters:
@@ -173,11 +169,12 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/stoneBanking_app_gateway_http_account_vo_output.OutputError'
+            $ref: '#/definitions/response.OutputError'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/stoneBanking_app_gateway_http_account_vo_output.OutputError'
+            $ref: '#/definitions/response.OutputError'
+      summary: Get the balance of a account
   /login:
     post:
       consumes:
@@ -201,12 +198,42 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/stoneBanking_app_gateway_http_account_vo_output.OutputError'
+            $ref: '#/definitions/response.OutputError'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/stoneBanking_app_gateway_http_account_vo_output.OutputError'
-  /transfer:
+            $ref: '#/definitions/response.OutputError'
+      summary: Log in the account
+  /transfers:
+    get:
+      consumes:
+      - application/json
+      description: With a valid Authorization Token, get all the transfers that has
+        made or received by the account
+      parameters:
+      - description: Authorization Token
+        in: header
+        name: authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/output.TransferOutputVO'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.OutputError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.OutputError'
+      summary: Get all transfers
     post:
       consumes:
       - application/json
@@ -234,38 +261,10 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/stoneBanking_app_gateway_http_transfer_vo_output.OutputError'
+            $ref: '#/definitions/response.OutputError'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/stoneBanking_app_gateway_http_transfer_vo_output.OutputError'
-  /transfers:
-    get:
-      consumes:
-      - application/json
-      description: With a valid Authorization Token, get all the transfers that has
-        made or received by the account
-      parameters:
-      - description: Authorization Token
-        in: header
-        name: authorization
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/output.TransferOutputVO'
-            type: array
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/stoneBanking_app_gateway_http_transfer_vo_output.OutputError'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/stoneBanking_app_gateway_http_transfer_vo_output.OutputError'
+            $ref: '#/definitions/response.OutputError'
+      summary: Create a transfer
 swagger: "2.0"
