@@ -12,7 +12,7 @@ func (repository accountRepository) GetByCPF(ctx context.Context, accountCPF str
 
 	const sqlQuery = `
 	SELECT 
-		id, external_id, name, cpf, secret, balance, created_at
+		external_id,cpf, secret
 	FROM
 		accounts
 	WHERE
@@ -25,7 +25,7 @@ func (repository accountRepository) GetByCPF(ctx context.Context, accountCPF str
 
 	var newAccount = account.Account{}
 
-	err := result.Scan(&newAccount.ID, &newAccount.ExternalID, &newAccount.Name, &newAccount.CPF, &newAccount.Secret, &newAccount.Balance, &newAccount.CreatedAt)
+	err := result.Scan(&newAccount.ExternalID, &newAccount.CPF, &newAccount.Secret)
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
