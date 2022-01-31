@@ -10,8 +10,8 @@ import (
 	"stoneBanking/app/gateway/http/response"
 )
 
-//@Sumary Create a account
-//@Description With the data received, validate her and if all is correct, and dont exist a account with that document, create a new account
+//@Summary Create a account
+//@Description With the data received, validate her and if all is correct, and don't exist a account with that document, create a new account
 //@Accept json
 //@Produce json
 //@Param account body input.CreateAccountVO true "Account Creation Data"
@@ -26,7 +26,7 @@ func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
-		resp.BadRequest(output.OutputError{Error: err.Error()})
+		resp.BadRequest(response.NewError(err))
 		return
 	}
 	defer r.Body.Close()
@@ -36,7 +36,7 @@ func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(reqBody, &accountInput)
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
-		resp.BadRequest(output.OutputError{Error: err.Error()})
+		resp.BadRequest(response.NewError(err))
 		return
 	}
 
@@ -46,7 +46,7 @@ func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
 	accountInput, err = validations.ValidateAccountInput(accountInput)
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
-		resp.BadRequest(output.OutputError{Error: err.Error()})
+		resp.BadRequest(response.NewError(err))
 		return
 	}
 
@@ -54,7 +54,7 @@ func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
 	account, err := controller.usecase.Create(r.Context(), accountData)
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
-		resp.InternalError(output.OutputError{Error: err.Error()})
+		resp.InternalError(response.NewError(err))
 		return
 	}
 

@@ -5,7 +5,6 @@ import (
 	"net/http"
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/gateway/http/response"
-	"stoneBanking/app/gateway/http/transfer/vo/output"
 )
 
 func (m *Middleware) GetAccountIDFromTokenLogRoutes(h http.Handler) http.Handler {
@@ -13,12 +12,12 @@ func (m *Middleware) GetAccountIDFromTokenLogRoutes(h http.Handler) http.Handler
 		resp := response.NewResponse(w)
 		headerToken := r.Header.Get("Authorization")
 		if headerToken == "" {
-			resp.Unauthorized(output.NewError(customError.ErrorServerTokenNotFound))
+			resp.Unauthorized(response.NewError(customError.ErrorServerTokenNotFound))
 			return
 		}
 		accountExternalID, err := m.t.ExtractAccountIDFromToken(headerToken)
 		if err != nil {
-			resp.BadRequest(output.NewError(err))
+			resp.BadRequest(response.NewError(err))
 			return
 		}
 

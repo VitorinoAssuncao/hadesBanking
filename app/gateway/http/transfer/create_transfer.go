@@ -32,7 +32,7 @@ func (controller Controller) Create(w http.ResponseWriter, r *http.Request) {
 	accountID, err := middleware.GetAccountIDFromContext(r.Context())
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
-		resp.BadRequest(output.OutputError{Error: err.Error()})
+		resp.BadRequest(response.NewError(err))
 		return
 	}
 	defer r.Body.Close()
@@ -41,7 +41,7 @@ func (controller Controller) Create(w http.ResponseWriter, r *http.Request) {
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
-		resp.BadRequest(output.OutputError{Error: err.Error()})
+		resp.BadRequest(response.NewError(err))
 		return
 	}
 
@@ -54,7 +54,7 @@ func (controller Controller) Create(w http.ResponseWriter, r *http.Request) {
 	transferData, err = validations.ValidateTransferData(transferData)
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
-		resp.BadRequest(output.OutputError{Error: err.Error()})
+		resp.BadRequest(response.NewError(err))
 		return
 	}
 
@@ -64,16 +64,16 @@ func (controller Controller) Create(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		if !errors.Is(err, customError.ErrorTransferCreate) {
 			controller.log.LogError(operation, err.Error())
-			resp.BadRequest(output.OutputError{Error: err.Error()})
+			resp.BadRequest(response.NewError(err))
 			return
 		}
 
 		controller.log.LogError(operation, err.Error())
-		resp.InternalError(output.OutputError{Error: err.Error()})
+		resp.InternalError(response.NewError(err))
 		return
 	}
 
 	transferOutput := output.ToTransferOutput(newTransfer)
-	controller.log.LogInfo(operation, "transfer created sucessfully")
+	controller.log.LogInfo(operation, "transfer created successfully")
 	resp.Created(transferOutput)
 }

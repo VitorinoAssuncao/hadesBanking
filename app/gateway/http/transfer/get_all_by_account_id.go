@@ -27,7 +27,7 @@ func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Re
 	accountID, err := middleware.GetAccountIDFromContext(r.Context())
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
-		resp.BadRequest(output.OutputError{Error: err.Error()})
+		resp.BadRequest(response.NewError(err))
 		return
 	}
 	transfers, err := controller.usecase.GetAllByAccountID(context.Background(), types.ExternalID(accountID))
@@ -36,11 +36,11 @@ func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Re
 	transfersOutput := output.ToTransfersOutput(transfers)
 	if err != nil {
 		if errors.Is(err, customError.ErrorTransferAccountNotFound) {
-			resp.BadRequest(output.OutputError{Error: err.Error()})
+			resp.BadRequest(response.NewError(err))
 			return
 		}
 
-		resp.InternalError(output.OutputError{Error: err.Error()})
+		resp.InternalError(response.NewError(err))
 		return
 	}
 

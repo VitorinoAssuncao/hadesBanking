@@ -31,7 +31,7 @@ func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) 
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
-		resp.BadRequest(output.OutputError{Error: err.Error()})
+		resp.BadRequest(response.NewError(err))
 		return
 	}
 	defer r.Body.Close()
@@ -41,7 +41,7 @@ func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) 
 	err = json.Unmarshal(reqBody, &loginData)
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
-		resp.BadRequest(output.OutputError{Error: err.Error()})
+		resp.BadRequest(response.NewError(err))
 		return
 	}
 
@@ -49,7 +49,7 @@ func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) 
 	err = validations.ValidateLoginInputData(loginData)
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
-		resp.BadRequest(output.OutputError{Error: err.Error()})
+		resp.BadRequest(response.NewError(err))
 		return
 	}
 
@@ -63,12 +63,12 @@ func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) 
 	if err != nil {
 		if errors.Is(err, customError.ErrorAccountTokenGeneration) {
 			controller.log.LogError(operation, err.Error())
-			resp.InternalError(output.OutputError{Error: err.Error()})
+			resp.InternalError(response.NewError(err))
 			return
 		}
 
 		controller.log.LogError(operation, err.Error())
-		resp.BadRequest(output.OutputError{Error: err.Error()})
+		resp.BadRequest(response.NewError(err))
 		return
 	}
 
