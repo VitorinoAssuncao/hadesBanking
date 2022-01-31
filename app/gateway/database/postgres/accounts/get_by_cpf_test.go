@@ -3,6 +3,7 @@ package account
 import (
 	"context"
 	"stoneBanking/app/domain/entities/account"
+	customError "stoneBanking/app/domain/errors"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -17,7 +18,7 @@ func Test_GetByCPF(t *testing.T) {
 		input     string
 		runBefore func() (value string)
 		want      account.Account
-		wantErr   bool
+		wantErr   error
 	}{
 		{
 			name: "with the right cpf input, return the account data",
@@ -25,6 +26,7 @@ func Test_GetByCPF(t *testing.T) {
 				input := account.Account{
 					Name:    "Joao da Silva",
 					CPF:     "38330499912",
+					Secret:  "12345",
 					Balance: 10000,
 				}
 				created, err := accountRepository.Create(ctx, input)
@@ -36,18 +38,16 @@ func Test_GetByCPF(t *testing.T) {
 				return value
 			},
 			want: account.Account{
-				ExternalID: "d3280f8c-570a-450d-89f7-3509bc84980d",
-				Name:       "Joao da Silva",
-				CPF:        "38330499912",
-				Balance:    10000,
+				CPF:    "38330499912",
+				Secret: "12345",
 			},
-			wantErr: false,
+			wantErr: nil,
 		},
 		{
 			name:    "when trying to find a account that not exist, return a error",
 			input:   "38330499999",
 			want:    account.Account{},
-			wantErr: true,
+			wantErr: customError.ErrorAccountCPFNotFound,
 		},
 	}
 
@@ -64,11 +64,10 @@ func Test_GetByCPF(t *testing.T) {
 			got, err := accountRepository.GetByCPF(ctx, test.input)
 
 			if err == nil {
-				test.want.CreatedAt = got.CreatedAt
 				test.want.ExternalID = got.ExternalID
-				test.want.ID = got.ID
 			}
-			assert.Equal(t, (err != nil), test.wantErr)
+
+			assert.Equal(t, test.wantErr, err)
 			assert.Equal(t, test.want, got)
 		})
 	}
