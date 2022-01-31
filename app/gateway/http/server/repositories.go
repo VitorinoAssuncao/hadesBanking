@@ -11,15 +11,15 @@ import (
 	webToken "stoneBanking/app/gateway/http/token"
 )
 
-type RepositorieWrapper struct {
+type RepositoryWrapper struct {
 	Account  account.Repository
 	Transfer transfer.Repository
 	Token    token.Authenticator
 	Log      logHelper.Logger
 }
 
-func NewPostgresRepositoryWrapper(db *sql.DB, signKey string, log logHelper.Logger) *RepositorieWrapper {
-	return &RepositorieWrapper{
+func NewPostgresRepositoryWrapper(db *sql.DB, signKey string, log logHelper.Logger) *RepositoryWrapper {
+	return &RepositoryWrapper{
 		Account:  postgresAccount.NewAccountRepository(db),
 		Transfer: postgresTransfer.NewTransferRepository(db),
 		Token:    webToken.NewTokenAuthenticator(signKey),
