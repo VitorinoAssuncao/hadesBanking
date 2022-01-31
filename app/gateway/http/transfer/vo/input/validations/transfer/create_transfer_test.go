@@ -1,10 +1,11 @@
 package transfer
 
 import (
-	"stoneBanking/app/gateway/http/transfer/vo/input"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"stoneBanking/app/gateway/http/transfer/vo/input"
 )
 
 func Test_ValidateTransferData(t *testing.T) {

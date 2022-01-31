@@ -6,6 +6,7 @@ import (
 	"errors"
 	"io/ioutil"
 	"net/http"
+
 	"stoneBanking/app/domain/entities/account"
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"

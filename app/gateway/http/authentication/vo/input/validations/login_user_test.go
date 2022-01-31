@@ -1,11 +1,12 @@
 package input
 
 import (
-	customError "stoneBanking/app/domain/errors"
-	"stoneBanking/app/gateway/http/authentication/vo/input"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	customError "stoneBanking/app/domain/errors"
+	"stoneBanking/app/gateway/http/authentication/vo/input"
 )
 
 func Test_ValidateLoginInputData(t *testing.T) {

@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"net/http"
+
 	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
 	"stoneBanking/app/domain/types"

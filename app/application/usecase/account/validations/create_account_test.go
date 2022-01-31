@@ -2,11 +2,12 @@ package account
 
 import (
 	"database/sql"
-	"stoneBanking/app/domain/entities/account"
-	customError "stoneBanking/app/domain/errors"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"stoneBanking/app/domain/entities/account"
+	customError "stoneBanking/app/domain/errors"
 )
 
 func Test_ValidateAccountData(t *testing.T) {

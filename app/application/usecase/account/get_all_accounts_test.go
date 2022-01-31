@@ -2,13 +2,14 @@ package account
 
 import (
 	"context"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	"stoneBanking/app/domain/entities/account"
 	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
 	customError "stoneBanking/app/domain/errors"
-	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
 func Test_GetAll(t *testing.T) {
@@ -42,7 +43,7 @@ func Test_GetAll(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "when trying to list all the accounts in the database, as a error in the querry",
+			name: "when trying to list all the accounts in the database, as a error in the query",
 			accountMock: &account.RepositoryMock{
 				GetAllFunc: func(ctx context.Context) ([]account.Account, error) {
 					return []account.Account{}, customError.ErrorAccountsListing

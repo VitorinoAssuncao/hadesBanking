@@ -4,13 +4,14 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"stoneBanking/app/domain/entities/transfer"
-	customError "stoneBanking/app/domain/errors"
-	"stoneBanking/app/domain/types"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/assert"
+
+	"stoneBanking/app/domain/entities/transfer"
+	customError "stoneBanking/app/domain/errors"
+	"stoneBanking/app/domain/types"
 )
 
 func Test_GetAllByID(t *testing.T) {

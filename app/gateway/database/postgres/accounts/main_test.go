@@ -5,11 +5,12 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"stoneBanking/app/gateway/database/postgres"
 	"testing"
 	"time"
 
 	"github.com/ory/dockertest"
+
+	"stoneBanking/app/gateway/database/postgres"
 )
 
 var databaseTest *sql.DB
@@ -17,7 +18,7 @@ var databaseTest *sql.DB
 func TestMain(m *testing.M) {
 	pool, err := dockertest.NewPool("")
 	if err != nil {
-		log.Fatalf("Erro ao conectar ao docker")
+		log.Fatalf("error when trying to connect to docker")
 	}
 	SetupTests(*pool)
 
@@ -38,7 +39,7 @@ func SetupTests(pool dockertest.Pool) dockertest.Resource {
 		},
 	})
 	if err != nil {
-		log.Fatalf("Não foi possível inicializar o recurso %s", err)
+		log.Fatalf("has not possible to connect to resource: %s", err)
 	}
 
 	hostAndPort := resource.GetHostPort("5432/tcp")
@@ -66,7 +67,7 @@ func setDatabase(resource dockertest.Resource) {
 	migrationPath := "file:../migrations"
 	err := postgres.Migrate(migrationPath, dbUrl)
 	if err != nil {
-		log.Fatalf("erro na migração %v", err)
+		log.Fatalf("error during migration %v", err)
 	}
 }
 

@@ -2,6 +2,7 @@ package transfer
 
 import (
 	"database/sql"
+
 	"stoneBanking/app/domain/entities/transfer"
 )
 

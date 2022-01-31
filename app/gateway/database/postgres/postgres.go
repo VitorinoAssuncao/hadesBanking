@@ -4,14 +4,15 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"stoneBanking/app/common/utils/config"
 
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+
+	"stoneBanking/app/common/utils/config"
 )
 
-func InitiliazeDatabase(config config.Config) (*sql.DB, error) {
+func InitializeDatabase(config config.Config) (*sql.DB, error) {
 	const migrationPath = "file://app/gateway/database/postgres/migrations"
 
 	dbUrl := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s",

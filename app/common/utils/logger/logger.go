@@ -1,11 +1,11 @@
 package logHelper
 
 import (
-	"stoneBanking/app/common/utils/config"
-	logHelper "stoneBanking/app/domain/entities/logger"
-
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+
+	"stoneBanking/app/common/utils/config"
+	logHelper "stoneBanking/app/domain/entities/logger"
 )
 
 type Log struct {

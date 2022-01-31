@@ -2,12 +2,13 @@ package account
 
 import (
 	"context"
-	"stoneBanking/app/domain/entities/account"
-	customError "stoneBanking/app/domain/errors"
-	"stoneBanking/app/domain/types"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"stoneBanking/app/domain/entities/account"
+	customError "stoneBanking/app/domain/errors"
+	"stoneBanking/app/domain/types"
 )
 
 func Test_UpdateBalance(t *testing.T) {

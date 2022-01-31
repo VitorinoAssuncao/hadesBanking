@@ -3,6 +3,7 @@ package account
 import (
 	"context"
 	"errors"
+
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
 )
@@ -21,6 +22,6 @@ func (usecase *usecase) GetBalance(ctx context.Context, accountID string) (types
 		return -1, customError.ErrorAccountIDSearching
 	}
 
-	usecase.logger.LogInfo(operation, "balance sucessfully listed")
+	usecase.logger.LogInfo(operation, "balance successfully listed")
 	return balance, nil
 }

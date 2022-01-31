@@ -1,9 +1,10 @@
 package input
 
 import (
+	"time"
+
 	"stoneBanking/app/domain/entities/account"
 	"stoneBanking/app/domain/types"
-	"time"
 )
 
 type CreateAccountVO struct {

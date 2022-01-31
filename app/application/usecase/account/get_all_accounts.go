@@ -2,6 +2,7 @@ package account
 
 import (
 	"context"
+
 	"stoneBanking/app/domain/entities/account"
 	customError "stoneBanking/app/domain/errors"
 )
@@ -16,6 +17,6 @@ func (usecase *usecase) GetAll(ctx context.Context) ([]account.Account, error) {
 		return nil, customError.ErrorAccountsListing
 	}
 
-	usecase.logger.LogInfo(operation, "listing data sucessfully")
+	usecase.logger.LogInfo(operation, "listing data successfully")
 	return accounts, nil
 }

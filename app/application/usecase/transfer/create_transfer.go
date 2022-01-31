@@ -2,6 +2,7 @@ package transfer
 
 import (
 	"context"
+
 	"stoneBanking/app/domain/entities/transfer"
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
@@ -45,6 +46,6 @@ func (usecase *usecase) Create(ctx context.Context, transferData transfer.Transf
 		return transfer.Transfer{}, customError.ErrorTransferCreate
 	}
 
-	usecase.logger.LogInfo(operation, "transfer created sucessfully")
+	usecase.logger.LogInfo(operation, "transfer created successfully")
 	return newTransfer, nil
 }
