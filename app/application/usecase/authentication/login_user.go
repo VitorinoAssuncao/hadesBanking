@@ -30,6 +30,6 @@ func (usecase *usecase) LoginUser(ctx context.Context, loginInput account.Accoun
 		return "", customError.ErrorAccountTokenGeneration
 	}
 
-	usecase.logger.LogInfo(operation, "account logged sucessfully")
+	usecase.logger.LogInfo(operation, "account logged successfully")
 	return token, nil
 }
