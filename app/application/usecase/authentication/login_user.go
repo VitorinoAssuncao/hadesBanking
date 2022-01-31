@@ -10,7 +10,7 @@ func (usecase *usecase) LoginUser(ctx context.Context, loginInput account.Accoun
 	const operation = "Usecase.Account.LoginUser"
 
 	usecase.logger.LogInfo(operation, "trying to find the account")
-	tempAccount, err := usecase.accountRepository.GetByCPF(context.Background(), loginInput.CPF.ToString())
+	tempAccount, err := usecase.accountRepository.GetCredentialByCPF(context.Background(), loginInput.CPF.ToString())
 	if err != nil {
 		usecase.logger.LogError(operation, err.Error())
 		return "", customError.ErrorAccountLogin
