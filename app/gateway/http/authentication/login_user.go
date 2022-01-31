@@ -21,8 +21,8 @@ import (
 //@Produce json
 //@Param account body input.LoginVO true "Account Login Data"
 //@Success 200 {object} output.LoginOutputVO
-//@Failure	400 {object} output.OutputError
-//@Failure 500 {object} output.OutputError
+//@Failure	400 {object} response.OutputError
+//@Failure 500 {object} response.OutputError
 //@Router /login [POST]
 func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Account.GetBalance"

@@ -16,8 +16,8 @@ import (
 //@Produce json
 //@Param account body input.CreateAccountVO true "Account Creation Data"
 //@Success 200 {object} output.AccountOutputVO
-//@Failure	400 {object} output.OutputError
-//@Failure 500 {object} output.OutputError
+//@Failure	400 {object} response.OutputError
+//@Failure 500 {object} response.OutputError
 //@Router /accounts [POST]
 func (controller *Controller) Create(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Account.Create"

@@ -10,8 +10,8 @@ import (
 //@Description Get all accounts actually in the system
 //@Produce json
 //@Success 200 {object} []output.AccountOutputVO
-//@Failure	400 {object} output.OutputError
-//@Failure 500 {object} output.OutputError
+//@Failure	400 {object} response.OutputError
+//@Failure 500 {object} response.OutputError
 //@Router /accounts [GET]
 func (controller *Controller) GetAll(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Account.GetAll"
