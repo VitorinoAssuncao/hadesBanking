@@ -3,14 +3,15 @@ package account
 import (
 	"context"
 	"database/sql"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	"stoneBanking/app/domain/entities/account"
 	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
-	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
 func Test_GetBalance(t *testing.T) {
@@ -48,7 +49,7 @@ func Test_GetBalance(t *testing.T) {
 			wantErr: customError.ErrorAccountIDNotFound,
 		},
 		{
-			name: "with the correct id, have a sudenly error in database and return a error",
+			name: "with the correct id, have a suddenly error in database and return a error",
 			accountMock: &account.RepositoryMock{
 				GetBalanceByAccountIDFunc: func(ctx context.Context, accountID types.ExternalID) (types.Money, error) {
 					return -1, sql.ErrConnDone

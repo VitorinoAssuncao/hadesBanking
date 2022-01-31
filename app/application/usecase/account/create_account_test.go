@@ -3,13 +3,14 @@ package account
 import (
 	"context"
 	"database/sql"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	"stoneBanking/app/domain/entities/account"
 	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
 	customError "stoneBanking/app/domain/errors"
-	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
 func Test_Create(t *testing.T) {

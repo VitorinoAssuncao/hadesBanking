@@ -17,7 +17,7 @@ var databaseTest *sql.DB
 func TestMain(m *testing.M) {
 	pool, err := dockertest.NewPool("")
 	if err != nil {
-		log.Fatalf("Erro ao conectar ao docker")
+		log.Fatalf("error when connecting to docker")
 	}
 	resource := setupTests(*pool)
 
@@ -39,7 +39,7 @@ func setupTests(pool dockertest.Pool) dockertest.Resource {
 		},
 	})
 	if err != nil {
-		log.Fatalf("Não foi possível inicializar o recurso %s", err)
+		log.Fatalf("has not possible to initialize the resource %s", err)
 	}
 
 	hostAndPort := resource.GetHostPort("5432/tcp")
@@ -54,7 +54,7 @@ func setupTests(pool dockertest.Pool) dockertest.Resource {
 		}
 		return databaseTest.Ping()
 	}); err != nil {
-		log.Fatalf("Não foi possível conectar ao docker: %s", err)
+		log.Fatalf("has not possible to connect to docker: %s", err)
 	}
 	setDatabase(*resource)
 	return *resource
@@ -67,13 +67,13 @@ func setDatabase(resource dockertest.Resource) {
 	migrationPath := "file:../migrations"
 	err := postgres.Migrate(migrationPath, dbUrl)
 	if err != nil {
-		log.Fatalf("erro na migração %v", err)
+		log.Fatalf("error during migration %v", err)
 	}
 }
 
 func dropTests(pool dockertest.Pool, resource *dockertest.Resource) {
 	if err := pool.Purge(resource); err != nil {
-		log.Fatalf("Não foi possível limpar o banco - %s", err)
+		log.Fatalf("has not possible to drop the database - %s", err)
 	}
 }
 

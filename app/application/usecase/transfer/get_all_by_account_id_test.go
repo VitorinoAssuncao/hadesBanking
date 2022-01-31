@@ -2,14 +2,15 @@ package transfer
 
 import (
 	"context"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	"stoneBanking/app/domain/entities/account"
 	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/transfer"
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
-	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
 func Test_GetAllByAccountID(t *testing.T) {

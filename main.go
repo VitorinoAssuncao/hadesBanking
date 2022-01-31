@@ -3,12 +3,13 @@ package main
 import (
 	"fmt"
 	"log"
+
+	"github.com/joho/godotenv"
+
 	"stoneBanking/app/common/utils/config"
 	commonLog "stoneBanking/app/common/utils/logger"
 	"stoneBanking/app/gateway/database/postgres"
 	"stoneBanking/app/gateway/http/server"
-
-	"github.com/joho/godotenv"
 )
 
 // @title           stoneBanking API
@@ -30,12 +31,12 @@ func main() {
 	// Load the env variables
 	cfg := config.LoadConfig()
 
-	// Initiliaze the logger
+	// Initialize the logger
 	logger := commonLog.NewLogger(cfg)
 
 	// Initialize the database and return him to a variable
 
-	db, err := postgres.InitiliazeDatabase(cfg)
+	db, err := postgres.InitializeDatabase(cfg)
 	if err != nil {
 		log.Fatal(err) //TODO trocar por função de log após melhorar a inicialização dela
 	}

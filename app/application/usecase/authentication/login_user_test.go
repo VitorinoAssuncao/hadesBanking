@@ -3,14 +3,15 @@ package authentication
 import (
 	"context"
 	"errors"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	"stoneBanking/app/domain/entities/account"
 	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
-	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
 func Test_LoginUser(t *testing.T) {

@@ -3,10 +3,11 @@ package transfer
 import (
 	"context"
 	"database/sql"
-	"stoneBanking/app/domain/entities/transfer"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"stoneBanking/app/domain/entities/transfer"
 )
 
 func Test_Create(t *testing.T) {
@@ -21,7 +22,7 @@ func Test_Create(t *testing.T) {
 		wantErr   bool
 	}{
 		{
-			name: "with the right input data, create the transfer sucessfully",
+			name: "with the right input data, create the transfer successfully",
 			input: transfer.Transfer{
 				AccountOriginID:      1,
 				AccountDestinationID: 1,

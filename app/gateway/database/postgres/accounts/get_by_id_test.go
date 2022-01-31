@@ -3,11 +3,12 @@ package account
 import (
 	"context"
 	"database/sql"
-	"stoneBanking/app/domain/entities/account"
-	"stoneBanking/app/domain/types"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"stoneBanking/app/domain/entities/account"
+	"stoneBanking/app/domain/types"
 )
 
 func Test_GetByID(t *testing.T) {

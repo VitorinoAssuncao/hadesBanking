@@ -2,10 +2,11 @@ package account
 
 import (
 	"context"
-	"stoneBanking/app/domain/entities/account"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"stoneBanking/app/domain/entities/account"
 )
 
 func Test_GetAll(t *testing.T) {

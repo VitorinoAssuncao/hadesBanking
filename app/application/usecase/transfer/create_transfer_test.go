@@ -2,14 +2,15 @@ package transfer
 
 import (
 	"context"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	"stoneBanking/app/domain/entities/account"
 	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/transfer"
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
-	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
 func Test_Create(t *testing.T) {
@@ -23,7 +24,7 @@ func Test_Create(t *testing.T) {
 		wantErr      error
 	}{
 		{
-			name: "with the correct data, sucessfully create a transfer and update the accounts",
+			name: "with the correct data, successfully create a transfer and update the accounts",
 			accountMock: &account.RepositoryMock{
 				GetByIDFunc: func(ctx context.Context, accountID types.ExternalID) (account.Account, error) {
 					return account.Account{

@@ -4,15 +4,16 @@ import (
 	"context"
 	"net/http"
 	"net/http/httptest"
+	"testing"
+
+	"github.com/gorilla/mux"
+	"github.com/stretchr/testify/assert"
+
 	usecase "stoneBanking/app/application/usecase/account"
 	"stoneBanking/app/domain/entities/account"
 	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
 	customError "stoneBanking/app/domain/errors"
-	"testing"
-
-	"github.com/gorilla/mux"
-	"github.com/stretchr/testify/assert"
 )
 
 func Test_GetAll(t *testing.T) {

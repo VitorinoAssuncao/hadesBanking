@@ -6,6 +6,11 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"testing"
+
+	"github.com/gorilla/mux"
+	"github.com/stretchr/testify/assert"
+
 	usecase "stoneBanking/app/application/usecase/transfer"
 	"stoneBanking/app/domain/entities/account"
 	logHelper "stoneBanking/app/domain/entities/logger"
@@ -14,10 +19,6 @@ import (
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
 	"stoneBanking/app/gateway/http/middleware"
-	"testing"
-
-	"github.com/gorilla/mux"
-	"github.com/stretchr/testify/assert"
 )
 
 func Test_Create(t *testing.T) {

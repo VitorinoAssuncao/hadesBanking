@@ -3,17 +3,17 @@ package server
 import (
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
+	httpSwagger "github.com/swaggo/http-swagger"
+
 	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
 	accounts "stoneBanking/app/gateway/http/account"
 	auth "stoneBanking/app/gateway/http/authentication"
 	"stoneBanking/app/gateway/http/middleware"
 	transfers "stoneBanking/app/gateway/http/transfer"
-
 	_ "stoneBanking/docs"
-
-	"github.com/gorilla/mux"
-	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 type Server struct {

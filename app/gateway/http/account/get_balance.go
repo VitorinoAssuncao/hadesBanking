@@ -3,12 +3,13 @@ package account
 import (
 	"errors"
 	"net/http"
+
+	"github.com/gorilla/mux"
+
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/gateway/http/account/vo/output"
 	"stoneBanking/app/gateway/http/middleware"
 	"stoneBanking/app/gateway/http/response"
-
-	"github.com/gorilla/mux"
 )
 
 //@Summary Get the balance of a account

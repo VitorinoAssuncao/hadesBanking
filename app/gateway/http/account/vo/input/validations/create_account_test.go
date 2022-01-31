@@ -1,10 +1,11 @@
 package input
 
 import (
-	"stoneBanking/app/gateway/http/account/vo/input"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"stoneBanking/app/gateway/http/account/vo/input"
 )
 
 func Test_ValidateAccountInput(t *testing.T) {
