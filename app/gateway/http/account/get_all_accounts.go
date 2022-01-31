@@ -6,7 +6,7 @@ import (
 	"stoneBanking/app/gateway/http/response"
 )
 
-//@Sumary Get All Accounts
+//@Summary Get All Accounts
 //@Description Get all accounts actually in the system
 //@Produce json
 //@Success 200 {object} []output.AccountOutputVO
@@ -20,7 +20,7 @@ func (controller *Controller) GetAll(w http.ResponseWriter, r *http.Request) {
 	accounts, err := controller.usecase.GetAll(r.Context())
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
-		resp.InternalError(output.OutputError{Error: err.Error()})
+		resp.InternalError(response.NewError(err))
 		return
 	}
 

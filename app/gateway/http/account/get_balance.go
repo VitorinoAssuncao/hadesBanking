@@ -11,7 +11,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-//@Sumary Get the balance of a account
+//@Summary Get the balance of a account
 //@Description With a authorization token valid, return the balance of a account
 //@Produce json
 //@Param authorization header string true "Authorization Token"
@@ -27,7 +27,7 @@ func (controller *Controller) GetBalance(w http.ResponseWriter, r *http.Request)
 	accountIDToken, err := middleware.GetAccountIDFromContext(r.Context())
 	if err != nil {
 		controller.log.LogError(operation, err.Error())
-		resp.BadRequest(output.OutputError{Error: err.Error()})
+		resp.BadRequest(response.NewError(err))
 		return
 	}
 
@@ -35,7 +35,7 @@ func (controller *Controller) GetBalance(w http.ResponseWriter, r *http.Request)
 	accountIDRoute := vars["account_id"]
 
 	if accountIDToken != accountIDRoute {
-		resp.Unauthorized(output.OutputError{Error: customError.ErrorAccountAcessUnauthorized.Error()})
+		resp.Unauthorized(response.NewError(err))
 		return
 	}
 
@@ -43,12 +43,12 @@ func (controller *Controller) GetBalance(w http.ResponseWriter, r *http.Request)
 	if err != nil {
 		if errors.Is(err, customError.ErrorAccountIDNotFound) {
 			controller.log.LogError(operation, err.Error())
-			resp.BadRequest(output.OutputError{Error: err.Error()})
+			resp.BadRequest(response.NewError(err))
 			return
 		}
 
 		controller.log.LogError(operation, err.Error())
-		resp.InternalError(output.OutputError{Error: err.Error()})
+		resp.InternalError(response.NewError(err))
 		return
 	}
 

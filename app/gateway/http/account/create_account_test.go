@@ -55,7 +55,7 @@ func Test_Create(t *testing.T) {
 								Balance:    0,
 							}, nil
 						},
-						GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
+						GetCredentialByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 							return account.Account{}, customError.ErrorAccountCPFNotFound
 						},
 					},
@@ -96,7 +96,7 @@ func Test_Create(t *testing.T) {
 								Balance:    0,
 							}, nil
 						},
-						GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
+						GetCredentialByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 							return account.Account{}, sql.ErrNoRows
 						},
 					},
@@ -126,7 +126,7 @@ func Test_Create(t *testing.T) {
 						CreateFunc: func(ctx context.Context, accountData account.Account) (account.Account, error) {
 							return account.Account{}, nil
 						},
-						GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
+						GetCredentialByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 							return account.Account{}, sql.ErrNoRows
 						},
 					},
@@ -156,7 +156,7 @@ func Test_Create(t *testing.T) {
 						CreateFunc: func(ctx context.Context, accountData account.Account) (account.Account, error) {
 							return account.Account{}, customError.ErrorCreateAccount
 						},
-						GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
+						GetCredentialByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 							return account.Account{}, sql.ErrNoRows
 						},
 					},
