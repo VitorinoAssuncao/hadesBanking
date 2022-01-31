@@ -44,7 +44,7 @@ func Test_LoginUser(t *testing.T) {
 			fields: fields{
 				authUsecase: usecase.New(
 					&account.RepositoryMock{
-						GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
+						GetCredentialByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 							return account.Account{
 								ExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
 								CPF:        "761.647.810-78",
@@ -78,7 +78,7 @@ func Test_LoginUser(t *testing.T) {
 			fields: fields{
 				authUsecase: usecase.New(
 					&account.RepositoryMock{
-						GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
+						GetCredentialByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 							return account.Account{
 								ExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
 								CPF:        "761.647.810-78",
@@ -112,7 +112,7 @@ func Test_LoginUser(t *testing.T) {
 			fields: fields{
 				authUsecase: usecase.New(
 					&account.RepositoryMock{
-						GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
+						GetCredentialByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 							return account.Account{
 								ExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
 								CPF:        "761.647.810-78",
@@ -146,7 +146,7 @@ func Test_LoginUser(t *testing.T) {
 			fields: fields{
 				authUsecase: usecase.New(
 					&account.RepositoryMock{
-						GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
+						GetCredentialByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 							return account.Account{
 								ExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
 								CPF:        "761.647.810-78",

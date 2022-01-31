@@ -18,7 +18,7 @@ func (usecase *usecase) Create(ctx context.Context, accountData account.Account)
 		return account.Account{}, err
 	}
 
-	_, err = usecase.accountRepository.GetByCPF(ctx, accountData.CPF.ToString())
+	_, err = usecase.accountRepository.GetCredentialByCPF(ctx, accountData.CPF.ToString())
 	//validate if account with that cpf exist, if not continue the creation of a new account
 	if err == nil {
 		usecase.logger.LogError(operation, customError.ErrorAccountCPFExists.Error())
@@ -38,6 +38,6 @@ func (usecase *usecase) Create(ctx context.Context, accountData account.Account)
 		return account.Account{}, customError.ErrorCreateAccount
 	}
 
-	usecase.logger.LogInfo(operation, "account created sucessfully")
+	usecase.logger.LogInfo(operation, "account created successfully")
 	return accountResult, nil
 }
