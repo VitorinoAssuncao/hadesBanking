@@ -6,16 +6,17 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"testing"
+
+	"github.com/gorilla/mux"
+	"github.com/stretchr/testify/assert"
+
 	usecase "stoneBanking/app/application/usecase/authentication"
 	"stoneBanking/app/domain/entities/account"
 	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
 	customError "stoneBanking/app/domain/errors"
-	"stoneBanking/app/gateway/http/account/vo/input"
-	"testing"
-
-	"github.com/gorilla/mux"
-	"github.com/stretchr/testify/assert"
+	"stoneBanking/app/gateway/http/authentication/vo/input"
 )
 
 func Test_LoginUser(t *testing.T) {
@@ -45,12 +46,9 @@ func Test_LoginUser(t *testing.T) {
 					&account.RepositoryMock{
 						GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 							return account.Account{
-								ID:         1,
-								Name:       "Joao do Rio",
 								ExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
 								CPF:        "761.647.810-78",
 								Secret:     "$2a$14$zmq6uXNuf.1ZwUHHDDAnR.ggIYn0YEnWF/1HeeZrf8d8B55mkk.aq",
-								Balance:    0,
 							}, nil
 						},
 					},
@@ -82,12 +80,9 @@ func Test_LoginUser(t *testing.T) {
 					&account.RepositoryMock{
 						GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 							return account.Account{
-								ID:         1,
-								Name:       "Joao do Rio",
 								ExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
 								CPF:        "761.647.810-78",
 								Secret:     "$2a$14$zmq6uXNuf.1ZwUHHDDAnR.ggIYn0YEnWF/1HeeZrf8d8B55mkk.aq",
-								Balance:    0,
 							}, nil
 						},
 					},
@@ -119,12 +114,9 @@ func Test_LoginUser(t *testing.T) {
 					&account.RepositoryMock{
 						GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 							return account.Account{
-								ID:         1,
-								Name:       "Joao do Rio",
 								ExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
 								CPF:        "761.647.810-78",
 								Secret:     "$2a$14$zmq6uXNuf.1ZwUHHDDAnR.ggIYn0YEnWF/1HeeZrf8d8B55mkk.aq",
-								Balance:    0,
 							}, nil
 						},
 					},
@@ -156,12 +148,9 @@ func Test_LoginUser(t *testing.T) {
 					&account.RepositoryMock{
 						GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 							return account.Account{
-								ID:         1,
-								Name:       "Joao do Rio",
 								ExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
 								CPF:        "761.647.810-78",
 								Secret:     "$2a$14$zmq6uXNuf.1ZwUHHDDAnR.ggIYn0YEnWF/1HeeZrf8d8B55mkk.aq",
-								Balance:    0,
 							}, nil
 						},
 					},

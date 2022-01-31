@@ -9,13 +9,13 @@ import (
 	"stoneBanking/app/domain/entities/account"
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
-	"stoneBanking/app/gateway/http/account/vo/input"
-	validations "stoneBanking/app/gateway/http/account/vo/input/validations"
-	"stoneBanking/app/gateway/http/account/vo/output"
+	"stoneBanking/app/gateway/http/authentication/vo/input"
+	validations "stoneBanking/app/gateway/http/authentication/vo/input/validations"
+	"stoneBanking/app/gateway/http/authentication/vo/output"
 	"stoneBanking/app/gateway/http/response"
 )
 
-//@Sumary Log in the account
+//@Summary Log in the account
 //@Description With the data received, validate if is correct, and log the user, returning a token of authorization
 //@Accept json
 //@Produce json
