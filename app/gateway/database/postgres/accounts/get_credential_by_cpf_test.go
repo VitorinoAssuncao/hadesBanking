@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_GetByCPF(t *testing.T) {
+func Test_GetCredentialByCPF(t *testing.T) {
 	ctx := context.Background()
 	database := databaseTest
 	accountRepository := NewAccountRepository(database)
@@ -61,7 +61,7 @@ func Test_GetByCPF(t *testing.T) {
 				test.input = test.runBefore()
 			}
 
-			got, err := accountRepository.GetByCPF(ctx, test.input)
+			got, err := accountRepository.GetCredentialByCPF(ctx, test.input)
 
 			if err == nil {
 				test.want.ExternalID = got.ExternalID

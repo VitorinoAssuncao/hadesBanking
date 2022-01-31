@@ -8,7 +8,7 @@ import (
 type Repository interface {
 	Create(ctx context.Context, account Account) (Account, error)
 	GetByID(ctx context.Context, accountID types.ExternalID) (Account, error)
-	GetByCPF(ctx context.Context, accountCPF string) (Account, error)
+	GetCredentialByCPF(ctx context.Context, accountCPF string) (Account, error)
 	GetBalanceByAccountID(ctx context.Context, accountID types.ExternalID) (types.Money, error)
 	GetAll(ctx context.Context) ([]Account, error)
 	UpdateBalance(ctx context.Context, value int, externalID types.ExternalID) error
