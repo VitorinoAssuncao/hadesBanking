@@ -13,7 +13,7 @@ type Log struct {
 }
 
 func NewLogger(config config.Config) logHelper.Logger {
-	tempLogger := createLogger(config.Enviroment)
+	tempLogger := createLogger(config.Environment)
 	logger := &Log{tempLogger}
 	return logger
 }
@@ -27,7 +27,7 @@ func createLogger(env string) *zap.Logger {
 	config.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
 	config.DisableStacktrace = true
 	logger, _ := config.Build()
-	newLogger := logger.With(zap.String("enviroment", env))
+	newLogger := logger.With(zap.String("environment", env))
 	return newLogger
 
 }
