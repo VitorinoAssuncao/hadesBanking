@@ -1,4 +1,4 @@
-package output
+package response
 
 type OutputError struct {
 	Error string `json:"error" example:"error"`
