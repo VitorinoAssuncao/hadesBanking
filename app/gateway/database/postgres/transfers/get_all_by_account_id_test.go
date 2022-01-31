@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"stoneBanking/app/domain/entities/transfer"
+	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
 	"testing"
 	"time"
@@ -20,8 +21,8 @@ func Test_GetAllByID(t *testing.T) {
 		name      string
 		runBefore func(db *sql.DB) (value types.InternalID)
 		input     int
-		want      int
-		wantErr   bool
+		want      []transfer.Transfer
+		wantErr   error
 	}{
 		{
 			name: "with a valid id in the input, find the transfers and return without errors",
@@ -51,14 +52,21 @@ func Test_GetAllByID(t *testing.T) {
 				}
 				return created.ID
 			},
-			want:    1,
-			wantErr: false,
+			want: []transfer.Transfer{
+				{
+					AccountOriginID:      1,
+					AccountDestinationID: 1,
+					Amount:               100,
+					CreatedAt:            time.Now(),
+				},
+			},
+			wantErr: nil,
 		},
 		{
 			name:    "with a id that not exist, return a error that the account not exist",
 			input:   91,
-			want:    0,
-			wantErr: false,
+			want:    []transfer.Transfer{},
+			wantErr: customError.ErrorTransferAccountNotFound,
 		},
 	}
 
@@ -73,8 +81,16 @@ func Test_GetAllByID(t *testing.T) {
 				test.input = 1
 			}
 			got, err := transferRepository.GetAllByAccountID(ctx, types.InternalID(test.input))
-			assert.Equal(t, (err != nil), test.wantErr)
-			assert.Equal(t, test.want, len(got))
+			for index, result := range got {
+				test.want[index].ID = result.ID
+				test.want[index].ExternalID = result.ExternalID
+				test.want[index].AccountOriginExternalID = result.AccountOriginExternalID
+				test.want[index].AccountDestinationExternalID = result.AccountDestinationExternalID
+				test.want[index].CreatedAt = result.CreatedAt
+			}
+
+			assert.Equal(t, test.wantErr, err)
+			assert.Equal(t, test.want, got)
 		})
 	}
 }

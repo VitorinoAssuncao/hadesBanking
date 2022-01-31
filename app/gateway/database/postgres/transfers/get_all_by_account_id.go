@@ -3,6 +3,7 @@ package transfer
 import (
 	"context"
 	"stoneBanking/app/domain/entities/transfer"
+	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
 )
 
@@ -43,6 +44,10 @@ func (r transferRepository) GetAllByAccountID(ctx context.Context, acccountID ty
 		}
 
 		transfers = append(transfers, tempTransfer)
+	}
+
+	if len(transfers) <= 0 {
+		return []transfer.Transfer{}, customError.ErrorTransferAccountNotFound
 	}
 
 	return transfers, nil
