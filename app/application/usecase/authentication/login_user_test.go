@@ -26,7 +26,7 @@ func Test_LoginUser(t *testing.T) {
 		{
 			name: "with the right login and secret, return a authorization token",
 			accountMock: &account.RepositoryMock{
-				GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
+				GetCredentialByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 					return account.Account{
 						ID:         1,
 						Name:       "Joao do Rio",
@@ -54,7 +54,7 @@ func Test_LoginUser(t *testing.T) {
 		{
 			name: "with a invalid cpf return a error for trying to login",
 			accountMock: &account.RepositoryMock{
-				GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
+				GetCredentialByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 					return account.Account{}, errors.New("test error")
 				},
 			},
@@ -75,7 +75,7 @@ func Test_LoginUser(t *testing.T) {
 		{
 			name: "with a invalid secret, return a error when trying to login",
 			accountMock: &account.RepositoryMock{
-				GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
+				GetCredentialByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 					return account.Account{
 						ID:         1,
 						Name:       "Joao do Rio",
@@ -103,7 +103,7 @@ func Test_LoginUser(t *testing.T) {
 		{
 			name: "with the right login data, return a error when generating the authorization token",
 			accountMock: &account.RepositoryMock{
-				GetByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
+				GetCredentialByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
 					return account.Account{
 						ID:         1,
 						Name:       "Joao do Rio",
