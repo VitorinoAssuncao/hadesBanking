@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	logHelper "stoneBanking/app/common/utils/logger"
 	"stoneBanking/app/domain/entities/account"
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
@@ -14,6 +15,8 @@ import (
 	validations "stoneBanking/app/gateway/http/authentication/vo/input/validations"
 	"stoneBanking/app/gateway/http/authentication/vo/output"
 	"stoneBanking/app/gateway/http/response"
+
+	"github.com/google/uuid"
 )
 
 //@Summary Log in the account
@@ -36,7 +39,7 @@ func (c *Controller) LoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer r.Body.Close()
-
+	log := logHelper.SetTracerID(c.log, uuid.New().String())
 	c.log.LogInfo(operation, "unmarshal the data to a internal object")
 	var loginData input.LoginVO
 	err = json.Unmarshal(reqBody, &loginData)
