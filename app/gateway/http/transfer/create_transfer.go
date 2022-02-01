@@ -46,7 +46,7 @@ func (c Controller) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	c.log.LogInfo(operation, "unmarshalling the data to a input object")
+	c.log.LogDebug(operation, "unmarshalling the data to a input object")
 	json.Unmarshal(reqBody, &transferData) //nolint: errorlint
 
 	transferData.AccountOriginID = accountID
@@ -54,7 +54,7 @@ func (c Controller) Create(w http.ResponseWriter, r *http.Request) {
 	c.log.LogInfo(operation, "validating the data")
 	transferData, err = validations.ValidateTransferData(transferData)
 	if err != nil {
-		c.log.LogError(operation, err.Error())
+		c.log.LogWarn(operation, err.Error())
 		resp.BadRequest(response.NewError(err))
 		return
 	}
@@ -64,7 +64,7 @@ func (c Controller) Create(w http.ResponseWriter, r *http.Request) {
 	newTransfer, err := c.usecase.Create(context.Background(), transfer)
 	if err != nil {
 		if !errors.Is(err, customError.ErrorTransferCreate) {
-			c.log.LogError(operation, err.Error())
+			c.log.LogWarn(operation, err.Error())
 			resp.BadRequest(response.NewError(err))
 			return
 		}
@@ -75,6 +75,6 @@ func (c Controller) Create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	transferOutput := output.ToTransferOutput(newTransfer)
-	c.log.LogInfo(operation, "transfer created successfully")
+	c.log.LogDebug(operation, "transfer created successfully")
 	resp.Created(transferOutput)
 }
