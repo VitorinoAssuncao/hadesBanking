@@ -37,7 +37,6 @@ func Migrate(migration_string, db_string string) error {
 	}
 
 	err = migration.Up()
-
 	if err != nil {
 		return err
 	}
