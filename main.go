@@ -38,7 +38,7 @@ func main() {
 
 	db, err := postgres.InitializeDatabase(cfg)
 	if err != nil {
-		log.Fatal(err) //TODO trocar por função de log após melhorar a inicialização dela
+		logger.LogError("Main.Initialization", err.Error())
 	}
 
 	// Create the repositories and usecase repositories
