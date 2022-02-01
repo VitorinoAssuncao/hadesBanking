@@ -7,7 +7,6 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	logHelper "stoneBanking/app/common/utils/logger"
 	"stoneBanking/app/domain/entities/account"
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
@@ -15,8 +14,6 @@ import (
 	validations "stoneBanking/app/gateway/http/authentication/vo/input/validations"
 	"stoneBanking/app/gateway/http/authentication/vo/output"
 	"stoneBanking/app/gateway/http/response"
-
-	"github.com/google/uuid"
 )
 
 //@Summary Log in the account
@@ -34,25 +31,25 @@ func (c *Controller) LoginUser(w http.ResponseWriter, r *http.Request) {
 
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		c.log.LogError(operation, err.Error())
+		log.LogError(operation, err.Error())
 		resp.BadRequest(response.NewError(err))
 		return
 	}
 	defer r.Body.Close()
-	log := logHelper.SetTracerID(c.log, uuid.New().String())
-	c.log.LogInfo(operation, "unmarshal the data to a internal object")
+
+	log.LogInfo(operation, "unmarshal the data to a internal object")
 	var loginData input.LoginVO
 	err = json.Unmarshal(reqBody, &loginData)
 	if err != nil {
-		c.log.LogError(operation, err.Error())
+		log.LogError(operation, err.Error())
 		resp.BadRequest(response.NewError(err))
 		return
 	}
 
-	c.log.LogInfo(operation, "validating the input data")
+	log.LogInfo(operation, "validating the input data")
 	err = validations.ValidateLoginInputData(loginData)
 	if err != nil {
-		c.log.LogError(operation, err.Error())
+		log.LogError(operation, err.Error())
 		resp.BadRequest(response.NewError(err))
 		return
 	}
@@ -62,16 +59,16 @@ func (c *Controller) LoginUser(w http.ResponseWriter, r *http.Request) {
 		Secret: types.Password(loginData.Secret),
 	}
 
-	c.log.LogInfo(operation, "trying to log in the system")
+	log.LogInfo(operation, "trying to log in the system")
 	token, err := c.usecase.LoginUser(context.Background(), account)
 	if err != nil {
 		if errors.Is(err, customError.ErrorAccountTokenGeneration) {
-			c.log.LogError(operation, err.Error())
+			log.LogError(operation, err.Error())
 			resp.InternalError(response.NewError(err))
 			return
 		}
 
-		c.log.LogError(operation, err.Error())
+		log.LogError(operation, err.Error())
 		resp.BadRequest(response.NewError(err))
 		return
 	}
