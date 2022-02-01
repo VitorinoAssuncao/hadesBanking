@@ -1,11 +1,14 @@
 package logHelper
 
 import (
+	"context"
+
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 
 	"stoneBanking/app/common/utils/config"
 	logHelper "stoneBanking/app/domain/entities/logger"
+	"stoneBanking/app/gateway/http/middleware"
 )
 
 type Log struct {
@@ -16,12 +19,6 @@ func NewLogger(config config.Config) logHelper.Logger {
 	tempLogger := createLogger(config.Environment)
 	logger := &Log{tempLogger}
 	return logger
-}
-
-func SetTracerID(l Log, requestID string) *Log {
-	newLogger := l.logger.With(zap.String("requestID", requestID))
-	newLog := &Log{logger: newLogger}
-	return newLog
 }
 
 func createLogger(env string) *zap.Logger {
@@ -37,6 +34,13 @@ func createLogger(env string) *zap.Logger {
 	return newLogger
 
 }
+
+func (l Log) SetRequestIDFromContext(ctx context.Context) logHelper.Logger {
+	requestID, _ := middleware.GetRequestIDFromContext(ctx)
+	l.logger = l.logger.With(zap.String("requestID", requestID))
+	return l
+}
+
 func (l Log) LogInfo(operation string, msg string) {
 	l.logger.Info(msg, zap.String("operation:", operation))
 }
