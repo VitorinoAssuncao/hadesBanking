@@ -18,6 +18,12 @@ func NewLogger(config config.Config) logHelper.Logger {
 	return logger
 }
 
+func SetTracerID(l Log, requestID string) *Log {
+	newLogger := l.logger.With(zap.String("requestID", requestID))
+	newLog := &Log{logger: newLogger}
+	return newLog
+}
+
 func createLogger(env string) *zap.Logger {
 	config := zap.NewProductionConfig()
 	if env == "development" {
