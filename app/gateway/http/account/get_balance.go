@@ -20,14 +20,14 @@ import (
 //@Failure	400 {object} response.OutputError
 //@Failure 500 {object} response.OutputError
 //@Router /accounts/{account_id}/balance [GET]
-func (controller *Controller) GetBalance(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) GetBalance(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Account.GetBalance"
 	resp := response.NewResponse(w)
 
-	controller.log.LogInfo(operation, "take the value from the token")
+	c.log.LogInfo(operation, "take the value from the token")
 	accountIDToken, err := middleware.GetAccountIDFromContext(r.Context())
 	if err != nil {
-		controller.log.LogError(operation, err.Error())
+		c.log.LogError(operation, err.Error())
 		resp.BadRequest(response.NewError(err))
 		return
 	}
@@ -40,15 +40,15 @@ func (controller *Controller) GetBalance(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	balance, err := controller.usecase.GetBalance(r.Context(), accountIDToken)
+	balance, err := c.usecase.GetBalance(r.Context(), accountIDToken)
 	if err != nil {
 		if errors.Is(err, customError.ErrorAccountIDNotFound) {
-			controller.log.LogError(operation, err.Error())
+			c.log.LogError(operation, err.Error())
 			resp.BadRequest(response.NewError(err))
 			return
 		}
 
-		controller.log.LogError(operation, err.Error())
+		c.log.LogError(operation, err.Error())
 		resp.InternalError(response.NewError(err))
 		return
 	}

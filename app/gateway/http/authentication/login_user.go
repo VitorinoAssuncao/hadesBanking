@@ -25,31 +25,31 @@ import (
 //@Failure	400 {object} response.OutputError
 //@Failure 500 {object} response.OutputError
 //@Router /login [POST]
-func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) LoginUser(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Account.GetBalance"
 	resp := response.NewResponse(w)
 
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		controller.log.LogError(operation, err.Error())
+		c.log.LogError(operation, err.Error())
 		resp.BadRequest(response.NewError(err))
 		return
 	}
 	defer r.Body.Close()
 
-	controller.log.LogInfo(operation, "unmarshal the data to a internal object")
+	c.log.LogInfo(operation, "unmarshal the data to a internal object")
 	var loginData input.LoginVO
 	err = json.Unmarshal(reqBody, &loginData)
 	if err != nil {
-		controller.log.LogError(operation, err.Error())
+		c.log.LogError(operation, err.Error())
 		resp.BadRequest(response.NewError(err))
 		return
 	}
 
-	controller.log.LogInfo(operation, "validating the input data")
+	c.log.LogInfo(operation, "validating the input data")
 	err = validations.ValidateLoginInputData(loginData)
 	if err != nil {
-		controller.log.LogError(operation, err.Error())
+		c.log.LogError(operation, err.Error())
 		resp.BadRequest(response.NewError(err))
 		return
 	}
@@ -59,16 +59,16 @@ func (controller *Controller) LoginUser(w http.ResponseWriter, r *http.Request) 
 		Secret: types.Password(loginData.Secret),
 	}
 
-	controller.log.LogInfo(operation, "trying to log in the system")
-	token, err := controller.usecase.LoginUser(context.Background(), account)
+	c.log.LogInfo(operation, "trying to log in the system")
+	token, err := c.usecase.LoginUser(context.Background(), account)
 	if err != nil {
 		if errors.Is(err, customError.ErrorAccountTokenGeneration) {
-			controller.log.LogError(operation, err.Error())
+			c.log.LogError(operation, err.Error())
 			resp.InternalError(response.NewError(err))
 			return
 		}
 
-		controller.log.LogError(operation, err.Error())
+		c.log.LogError(operation, err.Error())
 		resp.BadRequest(response.NewError(err))
 		return
 	}

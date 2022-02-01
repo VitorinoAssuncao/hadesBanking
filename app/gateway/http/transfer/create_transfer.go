@@ -25,14 +25,14 @@ import (
 //@Failure	400 {object} response.OutputError
 //@Failure 500 {object} response.OutputError
 //@Router /transfers [POST]
-func (controller Controller) Create(w http.ResponseWriter, r *http.Request) {
+func (c Controller) Create(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Transfer.Create"
 	resp := response.NewResponse(w)
 
-	controller.log.LogInfo(operation, "getting the account id from the token in the header")
+	c.log.LogInfo(operation, "getting the account id from the token in the header")
 	accountID, err := middleware.GetAccountIDFromContext(r.Context())
 	if err != nil {
-		controller.log.LogError(operation, err.Error())
+		c.log.LogError(operation, err.Error())
 		resp.BadRequest(response.NewError(err))
 		return
 	}
@@ -41,40 +41,40 @@ func (controller Controller) Create(w http.ResponseWriter, r *http.Request) {
 	var transferData = input.CreateTransferVO{}
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		controller.log.LogError(operation, err.Error())
+		c.log.LogError(operation, err.Error())
 		resp.BadRequest(response.NewError(err))
 		return
 	}
 
-	controller.log.LogInfo(operation, "unmarshalling the data to a input object")
+	c.log.LogInfo(operation, "unmarshalling the data to a input object")
 	json.Unmarshal(reqBody, &transferData) //nolint: errorlint
 
 	transferData.AccountOriginID = accountID
 
-	controller.log.LogInfo(operation, "validating the data")
+	c.log.LogInfo(operation, "validating the data")
 	transferData, err = validations.ValidateTransferData(transferData)
 	if err != nil {
-		controller.log.LogError(operation, err.Error())
+		c.log.LogError(operation, err.Error())
 		resp.BadRequest(response.NewError(err))
 		return
 	}
 
-	controller.log.LogInfo(operation, "transforming in a internal object")
+	c.log.LogInfo(operation, "transforming in a internal object")
 	transfer := transferData.ToEntity()
-	newTransfer, err := controller.usecase.Create(context.Background(), transfer)
+	newTransfer, err := c.usecase.Create(context.Background(), transfer)
 	if err != nil {
 		if !errors.Is(err, customError.ErrorTransferCreate) {
-			controller.log.LogError(operation, err.Error())
+			c.log.LogError(operation, err.Error())
 			resp.BadRequest(response.NewError(err))
 			return
 		}
 
-		controller.log.LogError(operation, err.Error())
+		c.log.LogError(operation, err.Error())
 		resp.InternalError(response.NewError(err))
 		return
 	}
 
 	transferOutput := output.ToTransferOutput(newTransfer)
-	controller.log.LogInfo(operation, "transfer created successfully")
+	c.log.LogInfo(operation, "transfer created successfully")
 	resp.Created(transferOutput)
 }

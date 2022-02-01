@@ -21,24 +21,24 @@ import (
 //@Failure	400 {object} response.OutputError
 //@Failure 500 {object} response.OutputError
 //@Router /transfers [GET]
-func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Request) {
+func (c Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Transfer.GetAllByAccountID"
 	resp := response.NewResponse(w)
 
 	accountID, err := middleware.GetAccountIDFromContext(r.Context())
 	if err != nil {
 		if errors.Is(err, customError.ErrorTransferAccountNotFound) {
-			controller.log.LogError(operation, err.Error())
+			c.log.LogError(operation, err.Error())
 			resp.BadRequest(response.NewError(err))
 		}
 
-		controller.log.LogError(operation, err.Error())
+		c.log.LogError(operation, err.Error())
 		resp.InternalError(response.NewError(err))
 		return
 	}
-	transfers, err := controller.usecase.GetAllByAccountID(context.Background(), types.ExternalID(accountID))
+	transfers, err := c.usecase.GetAllByAccountID(context.Background(), types.ExternalID(accountID))
 
-	controller.log.LogInfo(operation, "creating the objects to by listed")
+	c.log.LogInfo(operation, "creating the objects to by listed")
 	transfersOutput := output.ToTransfersOutput(transfers)
 	if err != nil {
 		if errors.Is(err, customError.ErrorTransferAccountNotFound) {
@@ -50,6 +50,6 @@ func (controller Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	controller.log.LogInfo(operation, "transfers listed successfully")
+	c.log.LogInfo(operation, "transfers listed successfully")
 	resp.Ok(transfersOutput)
 }
