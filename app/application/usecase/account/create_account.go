@@ -9,36 +9,36 @@ import (
 	customError "stoneBanking/app/domain/errors"
 )
 
-func (usecase *usecase) Create(ctx context.Context, accountData account.Account) (account.Account, error) {
+func (u *usecase) Create(ctx context.Context, accountData account.Account) (account.Account, error) {
 	const operation = "Usecase.Account.Create"
 
-	usecase.logger.LogInfo(operation, "begin validation of the received data")
+	u.logger.LogInfo(operation, "begin validation of the received data")
 	err := validations.ValidateAccountData(accountData)
 	if err != nil {
-		usecase.logger.LogError(operation, err.Error())
+		u.logger.LogError(operation, err.Error())
 		return account.Account{}, err
 	}
 
-	_, err = usecase.accountRepository.GetCredentialByCPF(ctx, accountData.CPF.ToString())
+	_, err = u.accountRepository.GetCredentialByCPF(ctx, accountData.CPF.ToString())
 	//validate if account with that cpf exist, if not continue the creation of a new account
 	if err == nil {
-		usecase.logger.LogError(operation, customError.ErrorAccountCPFExists.Error())
+		u.logger.LogError(operation, customError.ErrorAccountCPFExists.Error())
 		return account.Account{}, customError.ErrorAccountCPFExists
 	}
 
 	if !errors.Is(err, customError.ErrorAccountCPFNotFound) {
-		usecase.logger.LogError(operation, err.Error())
+		u.logger.LogError(operation, err.Error())
 		return account.Account{}, customError.ErrorCreateAccount
 	}
 
-	usecase.logger.LogInfo(operation, "create the account in database")
-	accountResult, err := usecase.accountRepository.Create(ctx, accountData)
+	u.logger.LogInfo(operation, "create the account in database")
+	accountResult, err := u.accountRepository.Create(ctx, accountData)
 
 	if err != nil {
-		usecase.logger.LogError(operation, err.Error())
+		u.logger.LogError(operation, err.Error())
 		return account.Account{}, customError.ErrorCreateAccount
 	}
 
-	usecase.logger.LogInfo(operation, "account created successfully")
+	u.logger.LogInfo(operation, "account created successfully")
 	return accountResult, nil
 }
