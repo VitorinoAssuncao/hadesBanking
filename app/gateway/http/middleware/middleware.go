@@ -1,11 +1,14 @@
 package middleware
 
 import (
+	"context"
 	"net/http"
 
 	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
 	"stoneBanking/app/domain/types"
+
+	"github.com/google/uuid"
 )
 
 type Middleware struct {
@@ -13,7 +16,7 @@ type Middleware struct {
 	t token.Authenticator
 }
 
-const AccountContextKey = types.ContextKey("account_id")
+const RequestContextID = types.ContextKey("request_id")
 
 func NewMiddleware(log logHelper.Logger, token token.Authenticator) *Middleware {
 	return &Middleware{
@@ -24,7 +27,15 @@ func NewMiddleware(log logHelper.Logger, token token.Authenticator) *Middleware 
 
 func (m *Middleware) LogRoutes(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+		newCtx := context.WithValue(ctx, RequestContextID, uuid.New().String())
 		m.l.LogInfo("request", "received request in url: "+r.URL.Path)
-		h.ServeHTTP(w, r)
+		h.ServeHTTP(w, r.WithContext(newCtx))
 	})
+}
+
+func GetRequestIDFromContext(ctx context.Context) (string, error) {
+	requestID := ctx.Value(RequestContextID)
+	value, _ := requestID.(string)
+	return value, nil
 }
