@@ -8,26 +8,26 @@ import (
 	"stoneBanking/app/domain/types"
 )
 
-func (usecase *usecase) Create(ctx context.Context, transferData transfer.Transfer) (transfer.Transfer, error) {
+func (u *usecase) Create(ctx context.Context, transferData transfer.Transfer) (transfer.Transfer, error) {
 	const operation = "Usecase.Transfer.Create"
 
-	usecase.logger.LogInfo(operation, "searching for account of origin")
-	accountOrigin, err := usecase.accountRepository.GetByID(ctx, types.ExternalID(transferData.AccountOriginExternalID))
+	u.logger.LogInfo(operation, "searching for account of origin")
+	accountOrigin, err := u.accountRepository.GetByID(ctx, types.ExternalID(transferData.AccountOriginExternalID))
 	if err != nil {
-		usecase.logger.LogError(operation, err.Error())
+		u.logger.LogError(operation, err.Error())
 		return transfer.Transfer{}, customError.ErrorTransferCreateOriginError
 	}
 
-	usecase.logger.LogInfo(operation, "searching for account of destiny")
-	accountDestiny, err := usecase.accountRepository.GetByID(ctx, types.ExternalID(transferData.AccountDestinationExternalID))
+	u.logger.LogInfo(operation, "searching for account of destiny")
+	accountDestiny, err := u.accountRepository.GetByID(ctx, types.ExternalID(transferData.AccountDestinationExternalID))
 	if err != nil {
-		usecase.logger.LogError(operation, err.Error())
+		u.logger.LogError(operation, err.Error())
 		return transfer.Transfer{}, customError.ErrorTransferCreateDestinyError
 	}
 
-	usecase.logger.LogInfo(operation, "validating if the funds is sufficient")
+	u.logger.LogInfo(operation, "validating if the funds is sufficient")
 	if accountOrigin.Balance < types.Money(transferData.Amount) {
-		usecase.logger.LogError(operation, customError.ErrorTransferCreateInsufficientFunds.Error())
+		u.logger.LogError(operation, customError.ErrorTransferCreateInsufficientFunds.Error())
 		return transfer.Transfer{}, customError.ErrorTransferCreateInsufficientFunds
 	}
 
@@ -39,13 +39,13 @@ func (usecase *usecase) Create(ctx context.Context, transferData transfer.Transf
 		Amount:                       types.Money(transferData.Amount),
 	}
 
-	usecase.logger.LogInfo(operation, "creating the transfer and updating the balances")
-	newTransfer, err = usecase.transferRepository.Create(ctx, newTransfer)
+	u.logger.LogInfo(operation, "creating the transfer and updating the balances")
+	newTransfer, err = u.transferRepository.Create(ctx, newTransfer)
 	if err != nil {
-		usecase.logger.LogError(operation, err.Error())
+		u.logger.LogError(operation, err.Error())
 		return transfer.Transfer{}, customError.ErrorTransferCreate
 	}
 
-	usecase.logger.LogInfo(operation, "transfer created successfully")
+	u.logger.LogInfo(operation, "transfer created successfully")
 	return newTransfer, nil
 }

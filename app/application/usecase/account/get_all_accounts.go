@@ -7,16 +7,16 @@ import (
 	customError "stoneBanking/app/domain/errors"
 )
 
-func (usecase *usecase) GetAll(ctx context.Context) ([]account.Account, error) {
+func (u *usecase) GetAll(ctx context.Context) ([]account.Account, error) {
 	const operation = "Usecase.Account.GetAll"
 
 	var accounts []account.Account
-	accounts, err := usecase.accountRepository.GetAll(ctx)
+	accounts, err := u.accountRepository.GetAll(ctx)
 	if err != nil {
-		usecase.logger.LogError(operation, err.Error())
+		u.logger.LogError(operation, err.Error())
 		return nil, customError.ErrorAccountsListing
 	}
 
-	usecase.logger.LogInfo(operation, "listing data successfully")
+	u.logger.LogInfo(operation, "listing data successfully")
 	return accounts, nil
 }
