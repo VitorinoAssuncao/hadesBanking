@@ -1,7 +1,6 @@
 package authentication
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"io/ioutil"
@@ -60,7 +59,7 @@ func (c *Controller) LoginUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	log.LogInfo(operation, "trying to log in the system")
-	token, err := c.usecase.LoginUser(context.Background(), account)
+	token, err := c.usecase.LoginUser(r.Context(), account)
 	if err != nil {
 		if errors.Is(err, customError.ErrorAccountTokenGeneration) {
 			log.LogError(operation, err.Error())
