@@ -41,8 +41,12 @@ func (l Log) SetRequestIDFromContext(ctx context.Context) logHelper.Logger {
 	return l
 }
 
-func (l Log) LogInfo(operation string, msg string) {
+func (l Log) LogDebug(operation string, msg string) {
 	l.logger.Debug(msg, zap.String("operation:", operation))
+}
+
+func (l Log) LogInfo(operation string, msg string) {
+	l.logger.Info(msg, zap.String("operation:", operation))
 }
 
 func (l Log) LogWarn(operation string, msg string) {
