@@ -5,8 +5,11 @@ import (
 	"net/http"
 
 	customError "stoneBanking/app/domain/errors"
+	"stoneBanking/app/domain/types"
 	"stoneBanking/app/gateway/http/response"
 )
+
+const AccountContextKey = types.ContextKey("account_id")
 
 func (m *Middleware) GetAccountIDFromTokenLogRoutes(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
