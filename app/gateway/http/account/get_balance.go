@@ -34,7 +34,6 @@ func (c *Controller) GetBalance(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 	accountIDRoute := vars["account_id"]
-
 	if accountIDToken != accountIDRoute {
 		resp.Unauthorized(response.NewError(err))
 		return
