@@ -26,6 +26,6 @@ func (c *Controller) GetAll(w http.ResponseWriter, r *http.Request) {
 	}
 
 	accountsOutput := output.ToAccountsOutput(accounts)
-	c.log.LogInfo(operation, "accounts created successfully")
+	c.log.LogDebug(operation, "accounts created successfully")
 	resp.Ok(accountsOutput)
 }

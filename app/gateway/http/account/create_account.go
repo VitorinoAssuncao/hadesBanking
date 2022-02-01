@@ -26,7 +26,7 @@ func (c *Controller) Create(w http.ResponseWriter, r *http.Request) {
 
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		c.log.LogError(operation, err.Error())
+		c.log.LogWarn(operation, err.Error())
 		resp.BadRequest(response.NewError(err))
 		return
 	}
@@ -36,7 +36,7 @@ func (c *Controller) Create(w http.ResponseWriter, r *http.Request) {
 	var accountInput = input.CreateAccountVO{}
 	err = json.Unmarshal(reqBody, &accountInput)
 	if err != nil {
-		c.log.LogError(operation, err.Error())
+		c.log.LogWarn(operation, err.Error())
 		resp.BadRequest(response.NewError(err))
 		return
 	}
@@ -45,7 +45,8 @@ func (c *Controller) Create(w http.ResponseWriter, r *http.Request) {
 
 	c.log.LogInfo(operation, "begin the validation of the input data")
 	errs := validations.ValidateAccountInput(accountInput)
-	if errs != nil {
+	if err != nil {
+		c.log.LogWarn(operation, err.Error())
 		resp.BadRequest(response.NewErrors(errs))
 		return
 	}

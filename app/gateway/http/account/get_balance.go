@@ -27,7 +27,7 @@ func (c *Controller) GetBalance(w http.ResponseWriter, r *http.Request) {
 	c.log.LogInfo(operation, "take the value from the token")
 	accountIDToken, err := middleware.GetAccountIDFromContext(r.Context())
 	if err != nil {
-		c.log.LogError(operation, err.Error())
+		c.log.LogWarn(operation, err.Error())
 		resp.BadRequest(response.NewError(err))
 		return
 	}
@@ -35,6 +35,7 @@ func (c *Controller) GetBalance(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	accountIDRoute := vars["account_id"]
 	if accountIDToken != accountIDRoute {
+		c.log.LogWarn(operation, err.Error())
 		resp.Unauthorized(response.NewError(err))
 		return
 	}
@@ -42,7 +43,7 @@ func (c *Controller) GetBalance(w http.ResponseWriter, r *http.Request) {
 	balance, err := c.usecase.GetBalance(r.Context(), accountIDToken)
 	if err != nil {
 		if errors.Is(err, customError.ErrorAccountIDNotFound) {
-			c.log.LogError(operation, err.Error())
+			c.log.LogWarn(operation, err.Error())
 			resp.BadRequest(response.NewError(err))
 			return
 		}

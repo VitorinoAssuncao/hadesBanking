@@ -30,7 +30,7 @@ func (c *Controller) LoginUser(w http.ResponseWriter, r *http.Request) {
 
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		log.LogError(operation, err.Error())
+		log.LogWarn(operation, err.Error())
 		resp.BadRequest(response.NewError(err))
 		return
 	}
@@ -40,7 +40,7 @@ func (c *Controller) LoginUser(w http.ResponseWriter, r *http.Request) {
 	var loginData input.LoginVO
 	err = json.Unmarshal(reqBody, &loginData)
 	if err != nil {
-		log.LogError(operation, err.Error())
+		log.LogWarn(operation, err.Error())
 		resp.BadRequest(response.NewError(err))
 		return
 	}
@@ -48,7 +48,7 @@ func (c *Controller) LoginUser(w http.ResponseWriter, r *http.Request) {
 	log.LogInfo(operation, "validating the input data")
 	err = validations.ValidateLoginInputData(loginData)
 	if err != nil {
-		log.LogError(operation, err.Error())
+		log.LogWarn(operation, err.Error())
 		resp.BadRequest(response.NewError(err))
 		return
 	}
@@ -62,7 +62,7 @@ func (c *Controller) LoginUser(w http.ResponseWriter, r *http.Request) {
 	token, err := c.usecase.LoginUser(r.Context(), account)
 	if err != nil {
 		if errors.Is(err, customError.ErrorAccountTokenGeneration) {
-			log.LogError(operation, err.Error())
+			log.LogWarn(operation, err.Error())
 			resp.InternalError(response.NewError(err))
 			return
 		}
