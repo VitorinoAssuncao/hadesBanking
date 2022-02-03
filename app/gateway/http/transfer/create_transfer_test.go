@@ -364,7 +364,7 @@ func Test_Create(t *testing.T) {
 	}
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-
+			t.Parallel()
 			body, _ := json.Marshal(test.args.input)
 			req := httptest.NewRequest(http.MethodPost, "/transfers", bytes.NewReader(body))
 

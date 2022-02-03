@@ -187,6 +187,7 @@ func Test_Create(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
 			controller := New(test.fields.accountUsecase, test.fields.authenticator, test.fields.logger)
 
 			body, _ := json.Marshal(test.args.input)
