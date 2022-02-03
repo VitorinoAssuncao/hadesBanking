@@ -2,11 +2,11 @@ package transfer
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 	"testing"
 	"time"
 
+	"github.com/jackc/pgx/v4"
 	"github.com/stretchr/testify/assert"
 
 	"stoneBanking/app/domain/entities/transfer"
@@ -20,7 +20,7 @@ func Test_GetAllByID(t *testing.T) {
 	transferRepository := NewTransferRepository(database)
 	testCases := []struct {
 		name      string
-		runBefore func(db *sql.DB) (value types.InternalID)
+		runBefore func(db *pgx.Conn) (value types.InternalID)
 		input     int
 		want      []transfer.Transfer
 		wantErr   error
@@ -28,7 +28,7 @@ func Test_GetAllByID(t *testing.T) {
 		{
 			name: "with a valid id in the input, find the transfers and return without errors",
 
-			runBefore: func(db *sql.DB) (value types.InternalID) {
+			runBefore: func(db *pgx.Conn) (value types.InternalID) {
 				sqlQuery :=
 					`
 				INSERT INTO
@@ -36,7 +36,7 @@ func Test_GetAllByID(t *testing.T) {
 				VALUES
 					('Joao da Silva', '38330499912', 'password', 100)
 				`
-				_, err := db.Exec(sqlQuery)
+				_, err := db.Exec(ctx, sqlQuery)
 				if err != nil {
 					t.Errorf(err.Error())
 				}
@@ -73,7 +73,7 @@ func Test_GetAllByID(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			if TruncateTable(database) != nil {
+			if TruncateTable(ctx, database) != nil {
 				t.Errorf("has not possible clean the databases")
 			}
 

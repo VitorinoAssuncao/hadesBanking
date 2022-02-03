@@ -1,8 +1,6 @@
 package server
 
 import (
-	"database/sql"
-
 	"stoneBanking/app/domain/entities/account"
 	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/token"
@@ -10,6 +8,8 @@ import (
 	postgresAccount "stoneBanking/app/gateway/database/postgres/accounts"
 	postgresTransfer "stoneBanking/app/gateway/database/postgres/transfers"
 	webToken "stoneBanking/app/gateway/http/token"
+
+	"github.com/jackc/pgx/v4"
 )
 
 type RepositoryWrapper struct {
@@ -19,7 +19,7 @@ type RepositoryWrapper struct {
 	Log      logHelper.Logger
 }
 
-func NewPostgresRepositoryWrapper(db *sql.DB, signKey string, log logHelper.Logger) *RepositoryWrapper {
+func NewPostgresRepositoryWrapper(db *pgx.Conn, signKey string, log logHelper.Logger) *RepositoryWrapper {
 	return &RepositoryWrapper{
 		Account:  postgresAccount.NewAccountRepository(db),
 		Transfer: postgresTransfer.NewTransferRepository(db),

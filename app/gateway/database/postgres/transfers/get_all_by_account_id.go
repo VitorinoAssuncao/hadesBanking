@@ -22,7 +22,7 @@ func (r transferRepository) GetAllByAccountID(ctx context.Context, acccountID ty
 	WHERE
 		(t.account_origin_id = $1 or t.account_destiny_id = $1)`
 
-	result, err := r.db.Query(sqlQuery, acccountID)
+	result, err := r.db.Query(ctx, sqlQuery, acccountID)
 	if err != nil {
 		return transfers, err
 	}
