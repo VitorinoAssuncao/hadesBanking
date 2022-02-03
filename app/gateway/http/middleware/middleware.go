@@ -30,7 +30,7 @@ func (m *Middleware) LogRoutes(h http.Handler) http.Handler {
 		ctx := r.Context()
 		newCtx := context.WithValue(ctx, RequestContextID, uuid.New().String())
 		log := m.l.SetRequestIDFromContext(newCtx)
-		log.LogInfo("request", "received request in url: "+r.URL.Path)
+		log.LogInfo("Middleware.LogRoutes", "received request in url: "+r.URL.Path)
 		h.ServeHTTP(w, r.WithContext(newCtx))
 	})
 }
