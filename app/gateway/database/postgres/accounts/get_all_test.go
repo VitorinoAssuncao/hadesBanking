@@ -39,7 +39,7 @@ func Test_GetAll(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			if TruncateTable(database) != nil {
+			if TruncateTable(ctx, database) != nil {
 				t.Errorf("has not possible clean the databases")
 			}
 

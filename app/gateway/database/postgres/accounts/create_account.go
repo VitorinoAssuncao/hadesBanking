@@ -16,6 +16,7 @@ func (repository accountRepository) Create(ctx context.Context, newAccount accou
 			id, external_id, created_at
 	`
 	row := repository.db.QueryRow(
+		ctx,
 		sqlQuery,
 		newAccount.Name,
 		newAccount.CPF,

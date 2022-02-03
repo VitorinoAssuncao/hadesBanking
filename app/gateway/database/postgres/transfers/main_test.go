@@ -1,6 +1,7 @@
 package transfer
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"log"
@@ -9,10 +10,11 @@ import (
 	"testing"
 	"time"
 
+	"github.com/jackc/pgx/v4"
 	"github.com/ory/dockertest"
 )
 
-var databaseTest *sql.DB
+var databaseTest *pgx.Conn
 
 func TestMain(m *testing.M) {
 	pool, err := dockertest.NewPool("")
@@ -63,7 +65,7 @@ func setupTests(pool dockertest.Pool) dockertest.Resource {
 func setDatabase(resource dockertest.Resource) {
 	hostAndPort := resource.GetHostPort("5432/tcp")
 	dbUrl := fmt.Sprintf("postgres://user_name:secret@%s/dbname?sslmode=disable", hostAndPort)
-	databaseTest, _ = sql.Open("postgres", dbUrl)
+	databaseTest, _ = pgx.Connect(context.Background(), dbUrl)
 	migrationPath := "file:../migrations"
 	err := postgres.Migrate(migrationPath, dbUrl)
 	if err != nil {
@@ -77,9 +79,9 @@ func dropTests(pool dockertest.Pool, resource *dockertest.Resource) {
 	}
 }
 
-func TruncateTable(db *sql.DB) error {
+func TruncateTable(ctx context.Context, db *pgx.Conn) error {
 	sqlQuery := `TRUNCATE transfers, accounts RESTART IDENTITY cascade`
-	_, err := db.Exec(sqlQuery)
+	_, err := db.Exec(ctx, sqlQuery)
 	if err != nil {
 		return err
 	}

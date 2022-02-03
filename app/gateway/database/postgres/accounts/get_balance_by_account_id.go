@@ -21,6 +21,7 @@ func (repository accountRepository) GetBalanceByAccountID(ctx context.Context, a
 	`
 
 	result := repository.db.QueryRow(
+		ctx,
 		sqlQuery,
 		accountExternalID,
 	)

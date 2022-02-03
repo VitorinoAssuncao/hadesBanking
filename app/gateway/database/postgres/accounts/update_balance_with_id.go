@@ -16,12 +16,12 @@ func (repository accountRepository) UpdateBalance(ctx context.Context, value int
 	WHERE
 			external_id = $2
 	`
-	result, err := repository.db.Exec(sqlQuery, value, external_id)
+	result, err := repository.db.Exec(ctx, sqlQuery, value, external_id)
 	if err != nil {
 		return err
 	}
 
-	affected, _ := result.RowsAffected()
+	affected := result.RowsAffected()
 	if affected == 0 {
 		return customError.ErrorAccountIDNotFound
 	}

@@ -4,6 +4,8 @@ import (
 	"context"
 
 	"stoneBanking/app/domain/entities/transfer"
+
+	"github.com/jackc/pgx/v4"
 )
 
 func (r transferRepository) Create(ctx context.Context, transferData transfer.Transfer) (transfer.Transfer, error) {
@@ -34,13 +36,14 @@ func (r transferRepository) Create(ctx context.Context, transferData transfer.Tr
 		id = $1
 	`
 
-	tx, err := r.db.BeginTx(ctx, nil)
+	tx, err := r.db.BeginTx(ctx, pgx.TxOptions{})
 	if err != nil {
 		return transfer.Transfer{}, err
 	}
 
-	defer tx.Rollback() //nolint: errorlint
+	defer tx.Rollback(ctx) //nolint: errorlint
 	row := tx.QueryRow(
+		ctx,
 		sqlQueryCreate,
 		transferData.AccountOriginID,
 		transferData.AccountDestinationID,
@@ -51,17 +54,17 @@ func (r transferRepository) Create(ctx context.Context, transferData transfer.Tr
 		return transfer.Transfer{}, err
 	}
 
-	_, err = tx.Exec(sqlQueryUpdateOrigin, transferData.AccountOriginID, transferData.Amount)
+	_, err = tx.Exec(ctx, sqlQueryUpdateOrigin, transferData.AccountOriginID, transferData.Amount)
 	if err != nil {
 		return transfer.Transfer{}, err
 	}
 
-	_, err = tx.Exec(sqlQueryUpdateDestiny, transferData.AccountDestinationID, transferData.Amount)
+	_, err = tx.Exec(ctx, sqlQueryUpdateDestiny, transferData.AccountDestinationID, transferData.Amount)
 	if err != nil {
 		return transfer.Transfer{}, err
 	}
 
-	err = tx.Commit()
+	err = tx.Commit(ctx)
 	if err != nil {
 		return transfer.Transfer{}, err
 	}

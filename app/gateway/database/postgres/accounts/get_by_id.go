@@ -20,6 +20,7 @@ func (repository accountRepository) GetByID(ctx context.Context, accountExternal
 	var newAccount = account.Account{}
 
 	result := repository.db.QueryRow(
+		ctx,
 		sqlQuery,
 		accountExternalID,
 	)

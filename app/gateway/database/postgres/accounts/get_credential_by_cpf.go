@@ -20,6 +20,7 @@ func (repository accountRepository) GetCredentialByCPF(ctx context.Context, acco
 			cpf = $1
 	`
 	result := repository.db.QueryRow(
+		ctx,
 		sqlQuery,
 		accountCPF,
 	)
