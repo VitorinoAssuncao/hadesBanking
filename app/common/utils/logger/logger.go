@@ -12,12 +12,13 @@ import (
 )
 
 type Log struct {
-	logger *zap.Logger
+	logger    *zap.Logger
+	requestID string
 }
 
 func NewLogger(config config.Config) logHelper.Logger {
 	tempLogger := createLogger(config.Environment)
-	logger := &Log{tempLogger}
+	logger := &Log{logger: tempLogger}
 	return logger
 }
 
@@ -35,24 +36,23 @@ func createLogger(env string) *zap.Logger {
 
 }
 
-func (l Log) SetRequestIDFromContext(ctx context.Context) logHelper.Logger {
+func (l *Log) SetRequestIDFromContext(ctx context.Context) {
 	requestID, _ := middleware.GetRequestIDFromContext(ctx)
-	l.logger = l.logger.With(zap.String("requestID", requestID))
-	return l
+	l.requestID = requestID
 }
 
 func (l Log) LogDebug(operation string, msg string) {
-	l.logger.Debug(msg, zap.String("operation:", operation))
+	l.logger.Debug(msg, zap.String("request_id", l.requestID), zap.String("operation", operation))
 }
 
 func (l Log) LogInfo(operation string, msg string) {
-	l.logger.Info(msg, zap.String("operation:", operation))
+	l.logger.Info(msg, zap.String("request_id", l.requestID), zap.String("operation", operation))
 }
 
 func (l Log) LogWarn(operation string, msg string) {
-	l.logger.Warn(msg, zap.String("operation:", operation))
+	l.logger.Warn(msg, zap.String("request_id", l.requestID), zap.String("operation", operation))
 }
 
 func (l Log) LogError(operation string, msg string) {
-	l.logger.Error(msg, zap.String("operation:", operation))
+	l.logger.Error(msg, zap.String("request_id", l.requestID), zap.String("operation", operation))
 }
