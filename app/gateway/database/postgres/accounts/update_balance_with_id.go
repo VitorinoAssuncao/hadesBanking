@@ -16,7 +16,11 @@ func (repository accountRepository) UpdateBalance(ctx context.Context, value int
 	WHERE
 			external_id = $2
 	`
-	result, err := repository.db.Exec(ctx, sqlQuery, value, external_id)
+	result, err := repository.db.Exec(
+		ctx,
+		sqlQuery,
+		value,
+		external_id.ToUUID())
 	if err != nil {
 		return err
 	}

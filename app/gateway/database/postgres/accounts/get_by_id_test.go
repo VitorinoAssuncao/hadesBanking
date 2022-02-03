@@ -2,12 +2,12 @@ package account
 
 import (
 	"context"
-	"database/sql"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 
 	"stoneBanking/app/domain/entities/account"
+	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
 )
 
@@ -49,7 +49,7 @@ func Test_GetByID(t *testing.T) {
 			name:    "when trying to find a account with the wrong id (or the account not exist), return a error and a void object",
 			want:    account.Account{},
 			input:   "d3280f8c-570a-450d-89f7-3509bc849899",
-			wantErr: sql.ErrNoRows,
+			wantErr: customError.ErrorAccountIDNotFound,
 		},
 	}
 
