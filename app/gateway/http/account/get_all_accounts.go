@@ -16,6 +16,8 @@ import (
 //@Router /accounts [GET]
 func (c *Controller) GetAll(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Account.GetAll"
+	c.log.SetRequestIDFromContext(r.Context())
+
 	resp := response.NewResponse(w)
 
 	accounts, err := c.usecase.GetAll(r.Context())

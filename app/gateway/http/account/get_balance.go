@@ -22,9 +22,11 @@ import (
 //@Router /accounts/{account_id}/balance [GET]
 func (c *Controller) GetBalance(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Account.GetBalance"
+	c.log.SetRequestIDFromContext(r.Context())
+
 	resp := response.NewResponse(w)
 
-	c.log.LogInfo(operation, "take the value from the token")
+	c.log.LogDebug(operation, "take the value from the token")
 	accountIDToken, err := middleware.GetAccountIDFromContext(r.Context())
 	if err != nil {
 		c.log.LogWarn(operation, err.Error())

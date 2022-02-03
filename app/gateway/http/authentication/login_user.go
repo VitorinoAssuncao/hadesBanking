@@ -26,29 +26,31 @@ import (
 //@Router /login [POST]
 func (c *Controller) LoginUser(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Authorization.Login"
+	c.log.SetRequestIDFromContext(r.Context())
+
 	resp := response.NewResponse(w)
 
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		log.LogWarn(operation, err.Error())
+		c.log.LogWarn(operation, err.Error())
 		resp.BadRequest(response.NewError(err))
 		return
 	}
 	defer r.Body.Close()
 
-	log.LogInfo(operation, "unmarshal the data to a internal object")
+	c.log.LogDebug(operation, "unmarshal the data to a internal object")
 	var loginData input.LoginVO
 	err = json.Unmarshal(reqBody, &loginData)
 	if err != nil {
-		log.LogWarn(operation, err.Error())
+		c.log.LogWarn(operation, err.Error())
 		resp.BadRequest(response.NewError(err))
 		return
 	}
 
-	log.LogInfo(operation, "validating the input data")
+	c.log.LogDebug(operation, "validating the input data")
 	err = validations.ValidateLoginInputData(loginData)
 	if err != nil {
-		log.LogWarn(operation, err.Error())
+		c.log.LogWarn(operation, err.Error())
 		resp.BadRequest(response.NewError(err))
 		return
 	}
@@ -58,16 +60,16 @@ func (c *Controller) LoginUser(w http.ResponseWriter, r *http.Request) {
 		Secret: types.Password(loginData.Secret),
 	}
 
-	log.LogInfo(operation, "trying to log in the system")
+	c.log.LogDebug(operation, "trying to log in the system")
 	token, err := c.usecase.LoginUser(r.Context(), account)
 	if err != nil {
 		if errors.Is(err, customError.ErrorAccountTokenGeneration) {
-			log.LogWarn(operation, err.Error())
+			c.log.LogWarn(operation, err.Error())
 			resp.InternalError(response.NewError(err))
 			return
 		}
 
-		log.LogError(operation, err.Error())
+		c.log.LogError(operation, err.Error())
 		resp.BadRequest(response.NewError(err))
 		return
 	}
@@ -75,6 +77,6 @@ func (c *Controller) LoginUser(w http.ResponseWriter, r *http.Request) {
 	loginOutput := output.LoginOutputVO{
 		Authorization: token,
 	}
-
+	c.log.LogInfo(operation, "account logged successfully")
 	resp.Ok(loginOutput)
 }

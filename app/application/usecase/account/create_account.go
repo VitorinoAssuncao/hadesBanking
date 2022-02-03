@@ -12,7 +12,7 @@ import (
 func (u *usecase) Create(ctx context.Context, accountData account.Account) (account.Account, error) {
 	const operation = "Usecase.Account.Create"
 
-	u.logger.LogInfo(operation, "begin validation of the received data")
+	u.logger.LogDebug(operation, "begin validation of the received data")
 	err := validations.ValidateAccountData(accountData)
 	if err != nil {
 		u.logger.LogError(operation, err.Error())
@@ -31,7 +31,7 @@ func (u *usecase) Create(ctx context.Context, accountData account.Account) (acco
 		return account.Account{}, customError.ErrorCreateAccount
 	}
 
-	u.logger.LogInfo(operation, "create the account in database")
+	u.logger.LogDebug(operation, "create the account in database")
 	accountResult, err := u.accountRepository.Create(ctx, accountData)
 
 	if err != nil {
@@ -39,6 +39,6 @@ func (u *usecase) Create(ctx context.Context, accountData account.Account) (acco
 		return account.Account{}, customError.ErrorCreateAccount
 	}
 
-	u.logger.LogInfo(operation, "account created successfully")
+	u.logger.LogDebug(operation, "account created successfully")
 	return accountResult, nil
 }

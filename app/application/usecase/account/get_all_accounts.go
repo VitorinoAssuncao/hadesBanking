@@ -17,6 +17,6 @@ func (u *usecase) GetAll(ctx context.Context) ([]account.Account, error) {
 		return nil, customError.ErrorAccountsListing
 	}
 
-	u.logger.LogInfo(operation, "listing data successfully")
+	u.logger.LogDebug(operation, "listing data successfully")
 	return accounts, nil
 }
