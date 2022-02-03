@@ -5,28 +5,33 @@ import (
 	"stoneBanking/app/gateway/http/account/vo/input"
 )
 
-func ValidateAccountInput(accountData input.CreateAccountVO) (input.CreateAccountVO, error) {
+func ValidateAccountInput(accountData input.CreateAccountVO) []error {
 	_, err := validateName(accountData.Name)
+	var errs = make([]error, 0)
 	if err != nil {
-		return input.CreateAccountVO{}, err
+		errs = append(errs, err)
 	}
 
 	_, err = validateCPF(accountData.CPF.ToString())
 	if err != nil {
-		return input.CreateAccountVO{}, err
+		errs = append(errs, err)
 	}
 
 	_, err = validateSecret(accountData.Secret.ToString())
 	if err != nil {
-		return input.CreateAccountVO{}, err
+		errs = append(errs, err)
 	}
 
 	_, err = validateBalance(accountData.Balance)
 	if err != nil {
-		return input.CreateAccountVO{}, err
+		errs = append(errs, err)
 	}
 
-	return accountData, nil
+	if len(errs) > 0 {
+		return errs
+	}
+
+	return nil
 }
 
 func validateName(name string) (bool, error) {
