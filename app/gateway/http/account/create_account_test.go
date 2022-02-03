@@ -38,7 +38,7 @@ func Test_Create(t *testing.T) {
 		fields   fields
 		args     args
 		wantCode int
-		wantBody map[string]interface{}
+		wantBody string
 	}{
 		{
 			name: "with the right data, account is created successfully",
@@ -73,13 +73,14 @@ func Test_Create(t *testing.T) {
 				},
 			},
 			wantCode: http.StatusCreated,
-			wantBody: map[string]interface{}{
+			wantBody: `
+			{
 				"id":         "94b9c27e-2880-42e3-8988-62dceb6b6463",
 				"name":       "Joao do Rio",
 				"cpf":        "761.647.810-78",
 				"balance":    0,
-				"created_at": "0001-01-01T00:00:00Z",
-			},
+				"created_at": "0001-01-01T00:00:00Z"
+			}`,
 		},
 		{
 			name: "data from input without name, generating error in validation",
@@ -114,9 +115,11 @@ func Test_Create(t *testing.T) {
 				},
 			},
 			wantCode: http.StatusBadRequest,
-			wantBody: map[string]interface{}{
-				"error": "the field 'Name' is required",
-			},
+			wantBody: `[
+				{
+					"error": "the field 'Name' is required"
+				}
+			]`,
 		},
 		{
 			name: "data from input with a negative amount in origin, generating error in validation",
@@ -144,9 +147,11 @@ func Test_Create(t *testing.T) {
 				},
 			},
 			wantCode: http.StatusBadRequest,
-			wantBody: map[string]interface{}{
-				"error": "the field 'Balance' need to by equal or major than 0(zero)",
-			},
+			wantBody: `[
+				{
+					"error": "the field 'Balance' need to by equal or major than 0(zero)"
+				}
+				]`,
 		},
 		{
 			name: "with correct data, but have a error when creating the account in database",
@@ -174,9 +179,9 @@ func Test_Create(t *testing.T) {
 				},
 			},
 			wantCode: http.StatusInternalServerError,
-			wantBody: map[string]interface{}{
-				"error": "error when creating a new account",
-			},
+			wantBody: `{
+				"error": "error when creating a new account"
+			}`,
 		},
 	}
 
@@ -195,10 +200,7 @@ func Test_Create(t *testing.T) {
 
 			assert.Equal(t, test.wantCode, rec.Code)
 
-			if test.wantBody != nil {
-				wantBodyJson, _ := json.Marshal(test.wantBody)
-				assert.JSONEq(t, string(wantBodyJson), rec.Body.String())
-			}
+			assert.JSONEq(t, test.wantBody, rec.Body.String())
 		})
 	}
 
