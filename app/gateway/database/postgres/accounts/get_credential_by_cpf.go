@@ -2,11 +2,12 @@ package account
 
 import (
 	"context"
-	"database/sql"
 	"errors"
 
 	"stoneBanking/app/domain/entities/account"
 	customError "stoneBanking/app/domain/errors"
+
+	"github.com/jackc/pgx/v4"
 )
 
 func (repository accountRepository) GetCredentialByCPF(ctx context.Context, accountCPF string) (account.Account, error) {
@@ -30,7 +31,7 @@ func (repository accountRepository) GetCredentialByCPF(ctx context.Context, acco
 	err := result.Scan(&newAccount.ExternalID, &newAccount.CPF, &newAccount.Secret)
 
 	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
+		if errors.Is(err, pgx.ErrNoRows) {
 			return account.Account{}, customError.ErrorAccountCPFNotFound
 		}
 

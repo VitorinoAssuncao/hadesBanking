@@ -2,11 +2,12 @@ package account
 
 import (
 	"context"
-	"database/sql"
 	"errors"
 
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
+
+	"github.com/jackc/pgx/v4"
 )
 
 func (repository accountRepository) GetBalanceByAccountID(ctx context.Context, accountExternalID types.ExternalID) (types.Money, error) {
@@ -19,17 +20,17 @@ func (repository accountRepository) GetBalanceByAccountID(ctx context.Context, a
 	WHERE
 		external_id = $1
 	`
-
 	result := repository.db.QueryRow(
 		ctx,
 		sqlQuery,
-		accountExternalID,
+		accountExternalID.ToUUID(),
 	)
+
 	var balanceValue types.Money
 	err := result.Scan(&balanceValue)
 
 	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
+		if errors.Is(err, pgx.ErrNoRows) {
 			return -1, customError.ErrorAccountIDNotFound
 		}
 
