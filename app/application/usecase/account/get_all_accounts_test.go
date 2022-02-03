@@ -56,6 +56,7 @@ func Test_GetAll(t *testing.T) {
 	}
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
 			u := New(test.accountMock, test.tokenMock, test.logMock)
 			got, err := u.GetAll(context.Background())
 			assert.Equal(t, err, test.wantErr)
