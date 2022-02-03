@@ -44,10 +44,9 @@ func (c *Controller) Create(w http.ResponseWriter, r *http.Request) {
 	accountInput.CPF = accountInput.CPF.TrimCPF()
 
 	c.log.LogInfo(operation, "begin the validation of the input data")
-	accountInput, err = validations.ValidateAccountInput(accountInput)
-	if err != nil {
-		c.log.LogError(operation, err.Error())
-		resp.BadRequest(response.NewError(err))
+	errs := validations.ValidateAccountInput(accountInput)
+	if errs != nil {
+		resp.BadRequest(response.NewErrors(errs))
 		return
 	}
 

@@ -112,10 +112,9 @@ func Test_ValidateAccountInput(t *testing.T) {
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
 
-			got, err := ValidateAccountInput(test.input)
+			err := ValidateAccountInput(test.input)
 
 			assert.Equal(t, (err != nil), test.wantErr)
-			assert.Equal(t, test.want, got)
 		})
 	}
 }
