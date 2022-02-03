@@ -22,6 +22,7 @@ import (
 //@Router /accounts [POST]
 func (c *Controller) Create(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Account.Create"
+	c.log.SetRequestIDFromContext(r.Context())
 	resp := response.NewResponse(w)
 
 	reqBody, err := ioutil.ReadAll(r.Body)
@@ -32,7 +33,7 @@ func (c *Controller) Create(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	c.log.LogInfo(operation, "unmarshal the data to a internal object")
+	c.log.LogDebug(operation, "unmarshal the data to a internal object")
 	var accountInput = input.CreateAccountVO{}
 	err = json.Unmarshal(reqBody, &accountInput)
 	if err != nil {
@@ -43,7 +44,7 @@ func (c *Controller) Create(w http.ResponseWriter, r *http.Request) {
 
 	accountInput.CPF = accountInput.CPF.TrimCPF()
 
-	c.log.LogInfo(operation, "begin the validation of the input data")
+	c.log.LogDebug(operation, "begin the validation of the input data")
 	errs := validations.ValidateAccountInput(accountInput)
 	if err != nil {
 		c.log.LogWarn(operation, err.Error())

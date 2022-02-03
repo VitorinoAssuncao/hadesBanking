@@ -29,8 +29,8 @@ func (m *Middleware) LogRoutes(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		newCtx := context.WithValue(ctx, RequestContextID, uuid.New().String())
-		log := m.l.SetRequestIDFromContext(newCtx)
-		log.LogInfo("Middleware.LogRoutes", "received request in url: "+r.URL.Path)
+		m.l.SetRequestIDFromContext(newCtx)
+		m.l.LogInfo("Middleware.LogRoutes", "received request in url: "+r.URL.Path)
 		h.ServeHTTP(w, r.WithContext(newCtx))
 	})
 }

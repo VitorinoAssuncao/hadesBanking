@@ -27,9 +27,10 @@ import (
 //@Router /transfers [POST]
 func (c Controller) Create(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Transfer.Create"
+	c.log.SetRequestIDFromContext(r.Context())
 	resp := response.NewResponse(w)
 
-	c.log.LogInfo(operation, "getting the account id from the token in the header")
+	c.log.LogDebug(operation, "getting the account id from the token in the header")
 	accountID, err := middleware.GetAccountIDFromContext(r.Context())
 	if err != nil {
 		c.log.LogError(operation, err.Error())
@@ -51,7 +52,7 @@ func (c Controller) Create(w http.ResponseWriter, r *http.Request) {
 
 	transferData.AccountOriginID = accountID
 
-	c.log.LogInfo(operation, "validating the data")
+	c.log.LogDebug(operation, "validating the data")
 	transferData, err = validations.ValidateTransferData(transferData)
 	if err != nil {
 		c.log.LogWarn(operation, err.Error())
@@ -59,7 +60,7 @@ func (c Controller) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	c.log.LogInfo(operation, "transforming in a internal object")
+	c.log.LogDebug(operation, "transforming in a internal object")
 	transfer := transferData.ToEntity()
 	newTransfer, err := c.usecase.Create(context.Background(), transfer)
 	if err != nil {

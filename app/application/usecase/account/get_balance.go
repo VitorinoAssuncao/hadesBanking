@@ -22,6 +22,6 @@ func (usecase *usecase) GetBalance(ctx context.Context, accountID string) (types
 		return -1, customError.ErrorAccountIDSearching
 	}
 
-	usecase.logger.LogInfo(operation, "balance successfully listed")
+	usecase.logger.LogDebug(operation, "balance successfully listed")
 	return balance, nil
 }

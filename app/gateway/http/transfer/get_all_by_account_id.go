@@ -23,6 +23,7 @@ import (
 //@Router /transfers [GET]
 func (c Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Request) {
 	const operation = "Gateway.Rest.Transfer.GetAllByAccountID"
+	c.log.SetRequestIDFromContext(r.Context())
 	resp := response.NewResponse(w)
 
 	accountID, err := middleware.GetAccountIDFromContext(r.Context())
