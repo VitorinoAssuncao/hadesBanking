@@ -26,7 +26,7 @@ import (
 //@Failure 500 {object} response.OutputError
 //@Router /login [POST]
 func (c *Controller) LoginUser(w http.ResponseWriter, r *http.Request) {
-	const operation = "Gateway.Rest.Account.GetBalance"
+	const operation = "Gateway.Rest.Authorization.Login"
 	resp := response.NewResponse(w)
 
 	reqBody, err := ioutil.ReadAll(r.Body)
