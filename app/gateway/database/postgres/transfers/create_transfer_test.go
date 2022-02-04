@@ -12,6 +12,7 @@ import (
 )
 
 func Test_Create(t *testing.T) {
+	t.Parallel()
 	ctx := context.Background()
 	testCases := []struct {
 		name      string

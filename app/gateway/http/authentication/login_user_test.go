@@ -20,6 +20,8 @@ import (
 )
 
 func Test_LoginUser(t *testing.T) {
+	t.Parallel()
+
 	const routePattern = "/login"
 
 	type fields struct {

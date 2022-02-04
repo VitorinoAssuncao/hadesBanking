@@ -20,6 +20,8 @@ import (
 )
 
 func Test_GetAllByAccountID(t *testing.T) {
+	t.Parallel()
+
 	const routePattern = "/transfers"
 
 	type fields struct {

@@ -15,6 +15,8 @@ import (
 )
 
 func Test_GetBalance(t *testing.T) {
+	t.Parallel()
+
 	testCases := []struct {
 		name        string
 		accountMock account.Repository

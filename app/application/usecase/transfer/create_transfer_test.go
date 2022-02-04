@@ -14,6 +14,8 @@ import (
 )
 
 func Test_Create(t *testing.T) {
+	t.Parallel()
+
 	testCases := []struct {
 		name         string
 		accountMock  account.Repository

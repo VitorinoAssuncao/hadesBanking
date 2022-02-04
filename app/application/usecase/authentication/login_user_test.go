@@ -15,6 +15,8 @@ import (
 )
 
 func Test_LoginUser(t *testing.T) {
+	t.Parallel()
+
 	testCases := []struct {
 		name        string
 		accountMock account.Repository

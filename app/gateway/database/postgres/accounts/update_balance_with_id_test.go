@@ -13,6 +13,7 @@ import (
 )
 
 func Test_UpdateBalance(t *testing.T) {
+	t.Parallel()
 	ctx := context.Background()
 	testCases := []struct {
 		name       string

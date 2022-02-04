@@ -22,6 +22,8 @@ import (
 )
 
 func Test_Create(t *testing.T) {
+	t.Parallel()
+
 	const routePattern = "/transfers"
 
 	type fields struct {

@@ -20,6 +20,8 @@ import (
 )
 
 func Test_GetBalance(t *testing.T) {
+	t.Parallel()
+
 	const routePattern = "/account/{account_id}/balance"
 
 	type fields struct {

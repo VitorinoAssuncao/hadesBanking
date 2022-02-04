@@ -17,6 +17,8 @@ import (
 )
 
 func Test_GetAll(t *testing.T) {
+	t.Parallel()
+
 	const routePattern = "/accounts"
 
 	type fields struct {

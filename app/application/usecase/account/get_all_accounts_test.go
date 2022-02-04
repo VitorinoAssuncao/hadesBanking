@@ -13,6 +13,8 @@ import (
 )
 
 func Test_GetAll(t *testing.T) {
+	t.Parallel()
+
 	testCases := []struct {
 		name        string
 		accountMock account.Repository

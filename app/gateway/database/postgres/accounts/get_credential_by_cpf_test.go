@@ -12,6 +12,7 @@ import (
 )
 
 func Test_GetCredentialByCPF(t *testing.T) {
+	t.Parallel()
 	ctx := context.Background()
 	testCases := []struct {
 		name      string
