@@ -12,15 +12,14 @@ import (
 	"stoneBanking/app/domain/entities/transfer"
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
+	"stoneBanking/app/gateway/database/postgres/pgtest"
 )
 
 func Test_GetAllByID(t *testing.T) {
 	ctx := context.Background()
-	database := testPool
-	transferRepository := NewTransferRepository(database)
 	testCases := []struct {
 		name      string
-		runBefore func(db *pgxpool.Pool) (value types.InternalID)
+		runBefore func(db *pgxpool.Pool, tr transfer.Repository) (value types.InternalID)
 		input     int
 		want      []transfer.Transfer
 		wantErr   error
@@ -28,7 +27,7 @@ func Test_GetAllByID(t *testing.T) {
 		{
 			name: "with a valid id in the input, find the transfers and return without errors",
 
-			runBefore: func(db *pgxpool.Pool) (value types.InternalID) {
+			runBefore: func(db *pgxpool.Pool, tr transfer.Repository) (value types.InternalID) {
 				sqlQuery :=
 					`
 				INSERT INTO
@@ -47,7 +46,7 @@ func Test_GetAllByID(t *testing.T) {
 					Amount:               100,
 					CreatedAt:            time.Now(),
 				}
-				created, err := transferRepository.Create(ctx, input)
+				created, err := tr.Create(ctx, input)
 				if err != nil {
 					t.Errorf("has not possible initialize the test data")
 				}
@@ -74,8 +73,12 @@ func Test_GetAllByID(t *testing.T) {
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
 
+			t.Parallel()
+			database := pgtest.SetDatabase(t, pgtest.GetRandomDBName())
+			transferRepository := NewTransferRepository(database)
+
 			if test.runBefore != nil {
-				fmt.Println("valor:", test.runBefore(database))
+				fmt.Println("valor:", test.runBefore(database, transferRepository))
 				test.input = 1
 			}
 			got, err := transferRepository.GetAllByAccountID(ctx, types.InternalID(test.input))

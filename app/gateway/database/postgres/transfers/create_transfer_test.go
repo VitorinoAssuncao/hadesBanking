@@ -8,12 +8,11 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"stoneBanking/app/domain/entities/transfer"
+	"stoneBanking/app/gateway/database/postgres/pgtest"
 )
 
 func Test_Create(t *testing.T) {
 	ctx := context.Background()
-	database := testPool
-	transferRepository := NewTransferRepository(database)
 	testCases := []struct {
 		name      string
 		input     transfer.Transfer
@@ -52,6 +51,9 @@ func Test_Create(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			database := pgtest.SetDatabase(t, pgtest.GetRandomDBName())
+			transferRepository := NewTransferRepository(database)
 
 			if test.runBefore != nil {
 				test.runBefore(database)
