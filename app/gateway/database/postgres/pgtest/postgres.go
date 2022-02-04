@@ -22,13 +22,13 @@ func GetRandomDBName() string {
 func SetDatabase(t *testing.T, dbName string) *pgxpool.Pool {
 	err := createDB(dbName, testPool)
 	if err != nil {
-		log.Fatalf("has not possible to create the new database error:%s", err.Error())
+		log.Fatalf("was not possible to create the new database error:%s", err.Error())
 	}
 	conn := testPool
 	dbUrl := strings.Replace(conn.Config().ConnString(), conn.Config().ConnConfig.Database, dbName, 1)
 	pgxConn, err := pgxpool.Connect(context.Background(), dbUrl)
 	if err != nil {
-		log.Fatalf("has not possible to connect to database %v", err.Error())
+		log.Fatalf("was not possible to connect to database %v", err.Error())
 	}
 	migrationPath := "file:../migrations"
 
