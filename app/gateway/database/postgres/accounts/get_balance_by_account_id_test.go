@@ -9,28 +9,27 @@ import (
 	"stoneBanking/app/domain/entities/account"
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
+	"stoneBanking/app/gateway/database/postgres/pgtest"
 )
 
 func Test_GetBalanceByAccountID(t *testing.T) {
 	ctx := context.Background()
-	database := testPool
-	accountRepository := NewAccountRepository(database)
 	testCases := []struct {
 		name      string
 		want      types.Money
-		runBefore func() (value types.ExternalID)
+		runBefore func(ac account.Repository) (value types.ExternalID)
 		input     types.ExternalID
 		wantErr   error
 	}{
 		{
 			name: "with the right input id, return the balance from account",
-			runBefore: func() (value types.ExternalID) {
+			runBefore: func(ac account.Repository) (value types.ExternalID) {
 				input := account.Account{
 					Name:    "Joao da Silva",
 					CPF:     "38330499912",
 					Balance: 10000,
 				}
-				created, err := accountRepository.Create(ctx, input)
+				created, err := ac.Create(ctx, input)
 
 				if err == nil {
 					value = created.ExternalID
@@ -51,9 +50,12 @@ func Test_GetBalanceByAccountID(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			database := pgtest.SetDatabase(t, pgtest.GetRandomDBName())
+			accountRepository := NewAccountRepository(database)
 
 			if test.runBefore != nil {
-				test.input = test.runBefore()
+				test.input = test.runBefore(accountRepository)
 			}
 			got, err := accountRepository.GetBalanceByAccountID(ctx, types.ExternalID(test.input))
 

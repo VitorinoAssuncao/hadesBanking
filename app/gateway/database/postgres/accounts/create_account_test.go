@@ -65,7 +65,7 @@ func Test_Create(t *testing.T) {
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
-			database := SetDatabase(t, pgtest.GetRandomDBName())
+			database := pgtest.SetDatabase(t, pgtest.GetRandomDBName())
 			accountRepository := NewAccountRepository(database)
 
 			if test.runBefore != nil {

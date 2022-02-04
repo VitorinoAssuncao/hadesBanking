@@ -40,7 +40,7 @@ func Test_GetAll(t *testing.T) {
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
-			database := SetDatabase(t, pgtest.GetRandomDBName())
+			database := pgtest.SetDatabase(t, pgtest.GetRandomDBName())
 			accountRepository := NewAccountRepository(database)
 
 			_, err := accountRepository.Create(ctx, test.input)
