@@ -43,10 +43,6 @@ func Test_GetAll(t *testing.T) {
 			database := SetDatabase(t, pgtest.GetRandomDBName())
 			accountRepository := NewAccountRepository(database)
 
-			if TruncateTable(context.Background(), database) != nil {
-				t.Errorf("has not possible clean the databases")
-			}
-
 			_, err := accountRepository.Create(ctx, test.input)
 			if err != nil {
 				t.Errorf("error when creating account")

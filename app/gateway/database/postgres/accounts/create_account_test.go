@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/jackc/pgx/v4"
+	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/stretchr/testify/assert"
 
 	"stoneBanking/app/domain/entities/account"
@@ -17,7 +17,7 @@ func Test_Create(t *testing.T) {
 	testCases := []struct {
 		name      string
 		input     account.Account
-		runBefore func(db *pgx.Conn)
+		runBefore func(db *pgxpool.Pool)
 		want      account.Account
 		wantErr   bool
 	}{
@@ -44,7 +44,7 @@ func Test_Create(t *testing.T) {
 				Balance:   10000,
 				CreatedAt: time.Now(),
 			},
-			runBefore: func(db *pgx.Conn) {
+			runBefore: func(db *pgxpool.Pool) {
 				sqlQuery :=
 					`
 				INSERT INTO

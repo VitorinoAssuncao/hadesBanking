@@ -13,8 +13,8 @@ import (
 
 func Test_UpdateBalance(t *testing.T) {
 	ctx := context.Background()
-	database := &testConn
-	accountRepository := NewAccountRepository(*database)
+	database := testPool
+	accountRepository := NewAccountRepository(database)
 	testCases := []struct {
 		name       string
 		want       bool
@@ -54,10 +54,6 @@ func Test_UpdateBalance(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			if TruncateTable(ctx, *database) != nil {
-				t.Errorf("has not possible clean the databases")
-			}
-
 			if test.runBefore != nil {
 				test.inputID = string(test.runBefore())
 			}

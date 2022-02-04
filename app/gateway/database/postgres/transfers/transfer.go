@@ -3,14 +3,14 @@ package transfer
 import (
 	"stoneBanking/app/domain/entities/transfer"
 
-	"github.com/jackc/pgx/v4"
+	"github.com/jackc/pgx/v4/pgxpool"
 )
 
 type transferRepository struct {
-	db *pgx.Conn
+	db *pgxpool.Pool
 }
 
-func NewTransferRepository(database *pgx.Conn) transfer.Repository {
+func NewTransferRepository(database *pgxpool.Pool) transfer.Repository {
 	return &transferRepository{
 		db: database,
 	}

@@ -17,7 +17,7 @@ import (
 	"stoneBanking/app/gateway/database/postgres/pgtest"
 )
 
-var testConn *pgxpool.Pool
+var testPool *pgxpool.Pool
 
 func TestMain(m *testing.M) {
 	os.Exit(SetupTests(m))
@@ -51,11 +51,11 @@ func SetupTests(m *testing.M) int {
 	pool.MaxWait = 120 * time.Second
 
 	if err = pool.Retry(func() error {
-		testConn, err := pgx.Connect(ctx, dbUrl)
+		testPool, err := pgx.Connect(ctx, dbUrl)
 		if err != nil {
 			return err
 		}
-		return testConn.Ping(ctx)
+		return testPool.Ping(ctx)
 	}); err != nil {
 		log.Fatalf("Could not connect to docker: %s", err)
 	}
@@ -63,20 +63,20 @@ func SetupTests(m *testing.M) int {
 	if err != nil {
 		log.Fatalf(err.Error())
 	}
-	testConn = newConn
+	testPool = newConn
 	defer teardown()
 
 	return m.Run()
 }
 
-func SetDatabase(t *testing.T, dbName string) *pgx.Conn {
-	err := CreateDB(dbName, testConn)
+func SetDatabase(t *testing.T, dbName string) *pgxpool.Pool {
+	err := CreateDB(dbName, testPool)
 	if err != nil {
 		log.Fatalf("has not possible to create the new database error:%s", err.Error())
 	}
-	conn := testConn
-	dbUrl := strings.Replace(conn.Config().ConnString(), conn.Config().Database, dbName, 1)
-	pgxConn, err := pgx.Connect(context.Background(), dbUrl)
+	conn := testPool
+	dbUrl := strings.Replace(conn.Config().ConnString(), conn.Config().ConnConfig.Database, dbName, 1)
+	pgxConn, err := pgxpool.Connect(context.Background(), dbUrl)
 	if err != nil {
 		log.Fatalf("has not possible to connect to database %v", err.Error())
 	}
@@ -89,8 +89,8 @@ func SetDatabase(t *testing.T, dbName string) *pgx.Conn {
 	return pgxConn
 }
 
-func GetConn() *pgx.Conn {
-	return testConn
+func GetConn() *pgxpool.Pool {
+	return testPool
 }
 
 func TruncateTable(ctx context.Context, db *pgx.Conn) error {
@@ -102,13 +102,11 @@ func TruncateTable(ctx context.Context, db *pgx.Conn) error {
 	return nil
 }
 
-func CreateDB(dbName string, conn *pgx.Conn) error {
+func CreateDB(dbName string, conn *pgxpool.Pool) error {
 	_, err := conn.Exec(context.Background(), fmt.Sprintf(`CREATE DATABASE %s`, dbName))
 	return err
 }
 
 func teardown() {
-	if err := testConn.Close(context.Background()); err != nil {
-		log.Fatalf("has not possible to close the connection %s", err.Error())
-	}
+	testPool.Close()
 }

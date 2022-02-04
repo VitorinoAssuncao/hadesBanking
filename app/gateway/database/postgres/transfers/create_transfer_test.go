@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/jackc/pgx/v4"
+	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/stretchr/testify/assert"
 
 	"stoneBanking/app/domain/entities/transfer"
@@ -12,12 +12,12 @@ import (
 
 func Test_Create(t *testing.T) {
 	ctx := context.Background()
-	database := databaseTest
+	database := testPool
 	transferRepository := NewTransferRepository(database)
 	testCases := []struct {
 		name      string
 		input     transfer.Transfer
-		runBefore func(db *pgx.Conn)
+		runBefore func(db *pgxpool.Pool)
 		want      transfer.Transfer
 		wantErr   bool
 	}{
@@ -28,7 +28,7 @@ func Test_Create(t *testing.T) {
 				AccountDestinationID: 1,
 				Amount:               100,
 			},
-			runBefore: func(db *pgx.Conn) {
+			runBefore: func(db *pgxpool.Pool) {
 				sqlQuery :=
 					`
 				INSERT INTO
@@ -52,9 +52,6 @@ func Test_Create(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			if TruncateTable(ctx, database) != nil {
-				t.Errorf("has not possible clean the databases")
-			}
 
 			if test.runBefore != nil {
 				test.runBefore(database)
