@@ -60,10 +60,6 @@ func SetupTests(m *testing.M) int {
 	return m.Run()
 }
 
-func GetConn() *pgxpool.Pool {
-	return testPool
-}
-
 func teardown() {
 	testPool.Close()
 }
