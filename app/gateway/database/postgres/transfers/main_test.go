@@ -93,15 +93,6 @@ func GetConn() *pgxpool.Pool {
 	return testPool
 }
 
-func TruncateTable(ctx context.Context, db *pgx.Conn) error {
-	sqlQuery := `truncate accounts RESTART IDENTITY cascade`
-	_, err := db.Exec(ctx, sqlQuery)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
 func CreateDB(dbName string, conn *pgxpool.Pool) error {
 	_, err := conn.Exec(context.Background(), fmt.Sprintf(`CREATE DATABASE %s`, dbName))
 	return err
