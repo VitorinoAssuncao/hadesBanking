@@ -46,8 +46,7 @@ func (c *Controller) Create(w http.ResponseWriter, r *http.Request) {
 
 	c.log.LogDebug(operation, "begin the validation of the input data")
 	errs := validations.ValidateAccountInput(accountInput)
-	if err != nil {
-		c.log.LogWarn(operation, err.Error())
+	if len(errs) > 0 {
 		resp.BadRequest(response.NewErrors(errs))
 		return
 	}
