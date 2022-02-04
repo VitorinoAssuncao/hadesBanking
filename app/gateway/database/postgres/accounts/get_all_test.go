@@ -7,12 +7,12 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"stoneBanking/app/domain/entities/account"
+	"stoneBanking/app/gateway/database/postgres/pgtest"
 )
 
 func Test_GetAll(t *testing.T) {
 	ctx := context.Background()
-	database := databaseTest
-	accountRepository := NewAccountRepository(database)
+
 	testCases := []struct {
 		name    string
 		input   account.Account
@@ -40,7 +40,10 @@ func Test_GetAll(t *testing.T) {
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
-			if TruncateTable(database) != nil {
+			database := SetDatabase(t, pgtest.GetRandomDBName())
+			accountRepository := NewAccountRepository(database)
+
+			if TruncateTable(context.Background(), database) != nil {
 				t.Errorf("has not possible clean the databases")
 			}
 

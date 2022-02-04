@@ -13,8 +13,8 @@ import (
 
 func Test_GetByID(t *testing.T) {
 	ctx := context.Background()
-	database := databaseTest
-	accountRepository := NewAccountRepository(database)
+	database := &testConn
+	accountRepository := NewAccountRepository(*database)
 	testCases := []struct {
 		name      string
 		want      account.Account
@@ -55,7 +55,7 @@ func Test_GetByID(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			if TruncateTable(ctx, database) != nil {
+			if TruncateTable(ctx, *database) != nil {
 				t.Errorf("has not possible clean the databases")
 			}
 

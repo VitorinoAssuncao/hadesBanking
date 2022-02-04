@@ -9,12 +9,11 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"stoneBanking/app/domain/entities/account"
+	"stoneBanking/app/gateway/database/postgres/pgtest"
 )
 
 func Test_Create(t *testing.T) {
 	ctx := context.Background()
-	database := databaseTest
-	accountRepository := NewAccountRepository(database)
 	testCases := []struct {
 		name      string
 		input     account.Account
@@ -65,10 +64,9 @@ func Test_Create(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-
-			if TruncateTable(ctx, database) != nil {
-				t.Errorf("has not possible clean the databases")
-			}
+			t.Parallel()
+			database := SetDatabase(t, pgtest.GetRandomDBName())
+			accountRepository := NewAccountRepository(database)
 
 			if test.runBefore != nil {
 				test.runBefore(database)
