@@ -33,7 +33,7 @@ func SetupTests(m *testing.M) int {
 		},
 	})
 	if err != nil {
-		log.Fatalf("was not possible to connect to resource: %s", err)
+		log.Fatalf("it was not possible to connect to resource: %s", err)
 	}
 
 	hostAndPort := resource.GetHostPort("5432/tcp")
