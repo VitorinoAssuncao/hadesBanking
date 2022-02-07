@@ -21,7 +21,7 @@ func Test_GetAllByID(t *testing.T) {
 	ctx := context.Background()
 	testCases := []struct {
 		name      string
-		runBefore func(db *pgxpool.Pool, tr transfer.Repository) (value types.InternalID)
+		runBefore func(db *pgxpool.Pool) (value types.ExternalID)
 		input     int
 		want      []transfer.Transfer
 		wantErr   error
@@ -29,7 +29,7 @@ func Test_GetAllByID(t *testing.T) {
 		{
 			name: "with a valid id in the input, find the transfers and return without errors",
 
-			runBefore: func(db *pgxpool.Pool, tr transfer.Repository) (value types.InternalID) {
+			runBefore: func(db *pgxpool.Pool) (value types.ExternalID) {
 				sqlQuery :=
 					`
 				INSERT INTO
@@ -42,17 +42,19 @@ func Test_GetAllByID(t *testing.T) {
 					t.Errorf(err.Error())
 				}
 
-				input := transfer.Transfer{
-					AccountOriginID:      1,
-					AccountDestinationID: 1,
-					Amount:               100,
-					CreatedAt:            time.Now(),
-				}
-				created, err := tr.Create(ctx, input)
+				sqlQuery2 := `
+				INSERT INTO
+					transfers (account_origin_id, account_destiny_id, amount)
+				VALUES
+					(1, 1, 100)
+				RETURNING
+					id
+				`
+				created, err := db.Exec(ctx, sqlQuery2)
 				if err != nil {
-					t.Errorf("has not possible initialize the test data")
+					t.Errorf(err.Error())
 				}
-				return created.ID
+				return types.ExternalID(created)
 			},
 			want: []transfer.Transfer{
 				{
@@ -80,7 +82,7 @@ func Test_GetAllByID(t *testing.T) {
 			transferRepository := NewTransferRepository(database)
 
 			if test.runBefore != nil {
-				fmt.Println("valor:", test.runBefore(database, transferRepository))
+				fmt.Println("valor:", test.runBefore(database))
 				test.input = 1
 			}
 			got, err := transferRepository.GetAllByAccountID(ctx, types.InternalID(test.input))
