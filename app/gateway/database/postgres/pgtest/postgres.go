@@ -19,14 +19,14 @@ func GetRandomDBName() string {
 	return fmt.Sprintf("db_%d", n)
 }
 
-func SetDatabase(t *testing.T, dbName string) *pgxpool.Pool {
+func SetDatabase(t *testing.T, dbName string) (pgxConn *pgxpool.Pool, teardownFn func()) {
 	err := createDB(dbName, testPool)
 	if err != nil {
 		log.Fatalf("was not possible to create the new database error:%s", err.Error())
 	}
 	conn := testPool
 	dbUrl := strings.Replace(conn.Config().ConnString(), conn.Config().ConnConfig.Database, dbName, 1)
-	pgxConn, err := pgxpool.Connect(context.Background(), dbUrl)
+	pgxConn, err = pgxpool.Connect(context.Background(), dbUrl)
 	if err != nil {
 		log.Fatalf("was not possible to connect to database %v", err.Error())
 	}
@@ -36,10 +36,20 @@ func SetDatabase(t *testing.T, dbName string) *pgxpool.Pool {
 	if err != nil {
 		log.Fatalf("error during migration %v", err)
 	}
-	return pgxConn
+
+	teardownFn = func() {
+		pgxConn.Close()
+		dropDB(dbName, testPool)
+	}
+
+	return pgxConn, teardownFn
 }
 
 func createDB(dbName string, conn *pgxpool.Pool) error {
 	_, err := conn.Exec(context.Background(), fmt.Sprintf(`CREATE DATABASE %s`, dbName))
 	return err
+}
+
+func dropDB(dbName string, conn *pgxpool.Pool) {
+
 }
