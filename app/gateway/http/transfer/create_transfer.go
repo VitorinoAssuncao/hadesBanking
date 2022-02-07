@@ -1,10 +1,8 @@
 package transfer
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
-	"io/ioutil"
 	"net/http"
 
 	customError "stoneBanking/app/domain/errors"
@@ -39,30 +37,27 @@ func (c Controller) Create(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	var transferData = input.CreateTransferVO{}
-	reqBody, err := ioutil.ReadAll(r.Body)
-	if err != nil {
+	c.log.LogInfo(operation, "receive the body and unmarshal the data")
+	var transferInput input.CreateTransferVO
+	if err = json.NewDecoder(r.Body).Decode(&transferInput); err != nil {
 		c.log.LogError(operation, err.Error())
 		resp.BadRequest(response.NewError(err))
 		return
 	}
 
-	c.log.LogDebug(operation, "unmarshalling the data to a input object")
-	json.Unmarshal(reqBody, &transferData) //nolint: errorlint
+	transferInput.AccountOriginID = accountID
 
-	transferData.AccountOriginID = accountID
+	c.log.LogInfo(operation, "validating the data")
 
-	c.log.LogDebug(operation, "validating the data")
-	transferData, err = validations.ValidateTransferData(transferData)
-	if err != nil {
-		c.log.LogWarn(operation, err.Error())
-		resp.BadRequest(response.NewError(err))
+	if transferInput, err = validations.ValidateTransferData(transferInput); err != nil {
+		c.log.LogError(operation, err.Error())
+		resp.BadRequest(output.OutputError{Error: err.Error()})
 		return
 	}
 
-	c.log.LogDebug(operation, "transforming in a internal object")
-	transfer := transferData.ToEntity()
-	newTransfer, err := c.usecase.Create(context.Background(), transfer)
+	c.log.LogInfo(operation, "transforming in a internal object")
+	transfer := transferInput.ToEntity()
+	newTransfer, err := c.usecase.Create(r.Context(), transfer)
 	if err != nil {
 		if !errors.Is(err, customError.ErrorTransferCreate) {
 			c.log.LogWarn(operation, err.Error())

@@ -1,7 +1,6 @@
 package transfer
 
 import (
-	"context"
 	"errors"
 	"net/http"
 
@@ -37,7 +36,7 @@ func (c Controller) GetAllByAccountID(w http.ResponseWriter, r *http.Request) {
 		resp.InternalError(response.NewError(err))
 		return
 	}
-	transfers, err := c.usecase.GetAllByAccountID(context.Background(), types.ExternalID(accountID))
+	transfers, err := c.usecase.GetAllByAccountID(r.Context(), types.ExternalID(accountID))
 
 	c.log.LogDebug(operation, "creating the objects to by listed")
 	transfersOutput := output.ToTransfersOutput(transfers)
