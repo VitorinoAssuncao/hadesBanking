@@ -4,6 +4,10 @@ import (
 	"context"
 
 	"stoneBanking/app/domain/entities/account"
+	customError "stoneBanking/app/domain/errors"
+	"stoneBanking/app/gateway/database/postgres/pgerrors"
+
+	"github.com/lib/pq"
 )
 
 func (repository accountRepository) Create(ctx context.Context, newAccount account.Account) (account.Account, error) {
@@ -25,8 +29,13 @@ func (repository accountRepository) Create(ctx context.Context, newAccount accou
 	)
 
 	err := row.Scan(&newAccount.ID, &newAccount.ExternalID, &newAccount.CreatedAt)
-
 	if err != nil {
+		if pgErr, ok := err.(*pq.Error); ok {
+			if pgErr.Code == pgerrors.UniqueViolationCode && pgErr.Constraint == "accounts_cpf_uk" {
+				return account.Account{}, customError.ErrorAccountCPFExists
+			}
+		}
+
 		return account.Account{}, err
 	}
 

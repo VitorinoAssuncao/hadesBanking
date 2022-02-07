@@ -78,17 +78,10 @@ func Test_Create(t *testing.T) {
 			name: "with right input data, try to create a account, but is duplicated from one that exist, and return error",
 			accountMock: &account.RepositoryMock{
 				CreateFunc: func(ctx context.Context, account account.Account) (account.Account, error) {
-					return account, nil
+					return account, customError.ErrorAccountCPFExists
 				},
 				GetCredentialByCPFFunc: func(ctx context.Context, accountCPF string) (account.Account, error) {
-					return account.Account{
-						ID:         1,
-						Name:       "Joao do Rio",
-						ExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
-						CPF:        "761.647.810-78",
-						Secret:     "J0@0doR10",
-						Balance:    0,
-					}, nil
+					return account.Account{}, nil
 				},
 			},
 			logMock: &logHelper.RepositoryMock{},
