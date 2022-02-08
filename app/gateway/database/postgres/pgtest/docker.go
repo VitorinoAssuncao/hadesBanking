@@ -13,7 +13,7 @@ import (
 
 var testPool *pgxpool.Pool
 
-func SetupTests() (teardownFn func(), err error) {
+func SetupTests() (teardownFn func()) {
 	dbName := GetRandomDBName()
 	pool, err := dockertest.NewPool("")
 	ctx := context.Background()
@@ -60,5 +60,5 @@ func SetupTests() (teardownFn func(), err error) {
 		dropDB(dbName, testPool)
 
 	}
-	return teardownFN, err
+	return teardownFN
 }

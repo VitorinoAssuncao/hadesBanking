@@ -8,7 +8,7 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	teardown, _ := pgtest.SetupTests()
+	teardown := pgtest.SetupTests()
 	defer teardown()
 	os.Exit(m.Run())
 }
