@@ -40,7 +40,9 @@ type ParallelMock struct {
 
 func (pr *ParallelMock) Create(ctx context.Context, transfer Transfer) (Transfer, error) {
 	atomic.AddInt32(&pr.Count, 1)
-	<-pr.WaitChan
+	if <-pr.WaitChan {
+		close(pr.WaitChan)
+	}
 	return pr.CreateFunc(ctx, transfer)
 }
 
