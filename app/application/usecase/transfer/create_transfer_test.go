@@ -193,8 +193,8 @@ func Test_Create(t *testing.T) {
 			Amount:                       100,
 		}
 		u := New(tRepo, accountRepo, &logHelper.RepositoryMock{})
-		go u.Create(ctx, transfer1)
-		go u.Create(ctx, transfer2)
+		go u.Create(ctx, transfer1) //nolint
+		go u.Create(ctx, transfer2) //nolint
 
 		time.Sleep(10 * time.Millisecond)
 		assert.Equal(t, int32(1), tRepo.Count)
