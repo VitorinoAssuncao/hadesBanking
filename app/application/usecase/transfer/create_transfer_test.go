@@ -2,7 +2,9 @@ package transfer
 
 import (
 	"context"
+	"log"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 
@@ -150,4 +152,41 @@ func Test_Create(t *testing.T) {
 			assert.Equal(t, test.want, got)
 		})
 	}
+
+	t.Run("test if the parallel count is correct", func(t *testing.T) {
+		ctx := context.Background()
+		accountRepo := &account.RepositoryMock{
+			GetByIDFunc: func(ctx context.Context, accountID types.ExternalID) (account.Account, error) {
+				return account.Account{}, customError.ErrorTransferCreateOriginError
+			},
+		}
+		tRepo := transfer.ParallelMock{WaitChan: make(chan bool)}
+
+		transfer1 := transfer.Transfer{
+			AccountOriginExternalID:      "01aacb75-cbd4-45a9-91ed-6cf2f6dcf772",
+			AccountDestinationExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
+			Amount:                       100,
+		}
+
+		transfer2 := transfer.Transfer{
+			AccountOriginExternalID:      "01aacb75-cbd4-45a9-91ed-6cf2f6dcf772",
+			AccountDestinationExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
+			Amount:                       100,
+		}
+		u := New(&tRepo, accountRepo, &logHelper.RepositoryMock{})
+		go u.Create(ctx, transfer1)
+		go u.Create(ctx, transfer2)
+
+		time.Sleep(5 * time.Millisecond)
+		if tRepo.Count != int32(1) {
+			log.Fatalf("error in the count %v", tRepo.Count)
+		}
+
+		tRepo.WaitChan <- true
+		time.Sleep(5 * time.Millisecond)
+		if tRepo.Count != int32(2) {
+			log.Fatalf("error in the count %v", tRepo.Count)
+		}
+
+	})
 }

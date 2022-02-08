@@ -34,13 +34,13 @@ type ParallelMock struct {
 	GetByIDFunc           func(ctx context.Context, transferID types.ExternalID) (Transfer, error)
 	GetAllFunc            func(ctx context.Context) ([]Transfer, error)
 	GetAllByAccountIDFunc func(ctx context.Context, accountID types.InternalID) ([]Transfer, error)
-	count                 int32
-	waitChan              chan bool
+	Count                 int32
+	WaitChan              chan bool
 }
 
 func (pr *ParallelMock) Create(ctx context.Context, transfer Transfer) (Transfer, error) {
-	atomic.AddInt32(&pr.count, 1)
-	<-pr.waitChan
+	atomic.AddInt32(&pr.Count, 1)
+	<-pr.WaitChan
 	return pr.CreateFunc(ctx, transfer)
 }
 
