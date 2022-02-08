@@ -41,8 +41,7 @@ func Test_GetAll(t *testing.T) {
 		test := test
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
-			database, teardown := pgtest.SetDatabase(t, pgtest.GetRandomDBName())
-			defer teardown()
+			database := pgtest.SetDatabase(pgtest.GetRandomDBName())
 			accountRepository := NewAccountRepository(database)
 
 			_, err := accountRepository.Create(ctx, test.input)

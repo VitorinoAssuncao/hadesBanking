@@ -9,7 +9,6 @@ import (
 	"math/big"
 	"stoneBanking/app/gateway/database/postgres"
 	"strings"
-	"testing"
 
 	"github.com/jackc/pgx/v4/pgxpool"
 )
@@ -19,7 +18,7 @@ func GetRandomDBName() string {
 	return fmt.Sprintf("db_%d", n)
 }
 
-func SetDatabase(t *testing.T, dbName string) (pgxConn *pgxpool.Pool, teardownFn func()) {
+func SetDatabase(dbName string) (pgxConn *pgxpool.Pool) {
 	err := createDB(dbName, testPool)
 	if err != nil {
 		log.Fatalf("was not possible to create the new database error:%s", err.Error())
@@ -37,12 +36,7 @@ func SetDatabase(t *testing.T, dbName string) (pgxConn *pgxpool.Pool, teardownFn
 		log.Fatalf("error during migration %v", err)
 	}
 
-	teardownFn = func() {
-		pgxConn.Close()
-		dropDB(dbName, testPool)
-	}
-
-	return pgxConn, teardownFn
+	return pgxConn
 }
 
 func createDB(dbName string, conn *pgxpool.Pool) error {
@@ -51,5 +45,8 @@ func createDB(dbName string, conn *pgxpool.Pool) error {
 }
 
 func dropDB(dbName string, conn *pgxpool.Pool) {
-
+	_, err := conn.Exec(context.Background(), fmt.Sprintf(`DROP DATABASE IF EXISTS %s`, dbName))
+	if err != nil {
+		log.Fatalf("was not possible to delete the database %s", err.Error())
+	}
 }

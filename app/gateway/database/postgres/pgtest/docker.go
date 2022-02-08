@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"testing"
 	"time"
 
 	"github.com/jackc/pgx/v4"
@@ -14,7 +13,7 @@ import (
 
 var testPool *pgxpool.Pool
 
-func SetupTests(m *testing.M) int {
+func SetupTests() (teardownFn func(), err error) {
 	dbName := GetRandomDBName()
 	pool, err := dockertest.NewPool("")
 	ctx := context.Background()
@@ -36,10 +35,10 @@ func SetupTests(m *testing.M) int {
 		log.Fatalf("it was not possible to connect to resource: %s", err)
 	}
 
+	pool.MaxWait = 120 * time.Second
+	_ = resource.Expire(120)
 	hostAndPort := resource.GetHostPort("5432/tcp")
 	dbUrl := fmt.Sprintf("postgres://user_name:secret@%s/%s?sslmode=disable", hostAndPort, dbName)
-	resource.Expire(120) //nolint: errorlint
-	pool.MaxWait = 120 * time.Second
 
 	if err = pool.Retry(func() error {
 		testPool, err := pgx.Connect(ctx, dbUrl)
@@ -55,11 +54,11 @@ func SetupTests(m *testing.M) int {
 		log.Fatalf(err.Error())
 	}
 	testPool = newConn
-	defer teardown()
 
-	return m.Run()
-}
+	teardownFN := func() {
+		testPool.Close()
+		dropDB(dbName, testPool)
 
-func teardown() {
-	testPool.Close()
+	}
+	return teardownFN, err
 }

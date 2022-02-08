@@ -53,8 +53,7 @@ func Test_GetBalanceByAccountID(t *testing.T) {
 		test := test
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
-			database, teardown := pgtest.SetDatabase(t, pgtest.GetRandomDBName())
-			defer teardown()
+			database := pgtest.SetDatabase(pgtest.GetRandomDBName())
 			accountRepository := NewAccountRepository(database)
 
 			if test.runBefore != nil {
