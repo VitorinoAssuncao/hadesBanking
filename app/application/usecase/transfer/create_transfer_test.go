@@ -2,17 +2,16 @@ package transfer
 
 import (
 	"context"
-	"log"
 	"testing"
 	"time"
-
-	"github.com/stretchr/testify/assert"
 
 	"stoneBanking/app/domain/entities/account"
 	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/transfer"
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func Test_Create(t *testing.T) {
@@ -153,14 +152,34 @@ func Test_Create(t *testing.T) {
 		})
 	}
 
-	t.Run("test if the parallel count is correct", func(t *testing.T) {
+	t.Run("with parallelization, counter should increase in value between calls", func(t *testing.T) {
+		t.Parallel()
 		ctx := context.Background()
 		accountRepo := &account.RepositoryMock{
 			GetByIDFunc: func(ctx context.Context, accountID types.ExternalID) (account.Account, error) {
-				return account.Account{}, customError.ErrorTransferCreateOriginError
+				return account.Account{
+					ID:         1,
+					Name:       "Joao do Rio",
+					ExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
+					CPF:        "761.647.810-78",
+					Secret:     "J0@0doR10",
+					Balance:    100}, nil
 			},
 		}
-		tRepo := transfer.ParallelMock{WaitChan: make(chan bool)}
+		ch := make(chan bool)
+		tRepo := &transfer.ParallelMock{
+			CreateFunc: func(ctx context.Context, transferData transfer.Transfer) (transfer.Transfer, error) {
+				return transfer.Transfer{
+					ID:                           1,
+					ExternalID:                   "56286ebe-8798-40ba-81aa-3caa74197cd1",
+					AccountOriginID:              1,
+					AccountOriginExternalID:      "01aacb75-cbd4-45a9-91ed-6cf2f6dcf772",
+					AccountDestinationID:         2,
+					AccountDestinationExternalID: "f53420f2-616c-4fe3-a957-84f03386a82f",
+					Amount:                       1,
+				}, nil
+			},
+			WaitChan: ch}
 
 		transfer1 := transfer.Transfer{
 			AccountOriginExternalID:      "01aacb75-cbd4-45a9-91ed-6cf2f6dcf772",
@@ -173,20 +192,15 @@ func Test_Create(t *testing.T) {
 			AccountDestinationExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
 			Amount:                       100,
 		}
-		u := New(&tRepo, accountRepo, &logHelper.RepositoryMock{})
+		u := New(tRepo, accountRepo, &logHelper.RepositoryMock{})
 		go u.Create(ctx, transfer1)
 		go u.Create(ctx, transfer2)
 
-		time.Sleep(5 * time.Millisecond)
-		if tRepo.Count != int32(1) {
-			log.Fatalf("error in the count %v", tRepo.Count)
-		}
+		time.Sleep(10 * time.Millisecond)
+		assert.Equal(t, int32(1), tRepo.Count)
 
 		tRepo.WaitChan <- true
-		time.Sleep(5 * time.Millisecond)
-		if tRepo.Count != int32(2) {
-			log.Fatalf("error in the count %v", tRepo.Count)
-		}
-
+		time.Sleep(10 * time.Millisecond)
+		assert.Equal(t, int32(2), tRepo.Count)
 	})
 }
