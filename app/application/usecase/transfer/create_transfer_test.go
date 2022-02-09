@@ -192,6 +192,7 @@ func Test_Create(t *testing.T) {
 			AccountDestinationExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
 			Amount:                       100,
 		}
+		// Run the two creates in parallel with the aim of trying to make two simultaneous insertions, the mutex should hold one of them, leaving only the first one through
 		u := New(tRepo, accountRepo, &logHelper.RepositoryMock{})
 		go u.Create(ctx, transfer1) //nolint
 		go u.Create(ctx, transfer2) //nolint
@@ -199,6 +200,7 @@ func Test_Create(t *testing.T) {
 		time.Sleep(10 * time.Millisecond)
 		assert.Equal(t, int32(1), tRepo.Count)
 
+		// sends release to the channel, so that counter validation and evaluation can continue
 		tRepo.WaitChan <- true
 		time.Sleep(10 * time.Millisecond)
 		assert.Equal(t, int32(2), tRepo.Count)
