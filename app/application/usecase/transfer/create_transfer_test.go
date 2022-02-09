@@ -14,6 +14,8 @@ import (
 )
 
 func Test_Create(t *testing.T) {
+	t.Parallel()
+
 	testCases := []struct {
 		name         string
 		accountMock  account.Repository
@@ -143,7 +145,9 @@ func Test_Create(t *testing.T) {
 		},
 	}
 	for _, test := range testCases {
+		test := test
 		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
 			u := New(test.transferMock, test.accountMock, test.logMock)
 			got, err := u.Create(context.Background(), test.input)
 			assert.Equal(t, err, test.wantErr)

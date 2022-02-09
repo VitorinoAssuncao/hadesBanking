@@ -1,83 +1,19 @@
 package account
 
 import (
-	"context"
-	"database/sql"
-	"fmt"
 	"log"
 	"os"
 	"testing"
-	"time"
 
-	"github.com/jackc/pgx/v4"
-	"github.com/ory/dockertest"
-
-	"stoneBanking/app/gateway/database/postgres"
+	"stoneBanking/app/gateway/database/postgres/pgtest"
 )
 
-var databaseTest *pgx.Conn
-
 func TestMain(m *testing.M) {
-	pool, err := dockertest.NewPool("")
+	teardown, err := pgtest.SetupTests()
 	if err != nil {
-		log.Fatalf("error when trying to connect to docker")
-	}
-	SetupTests(*pool)
-
-	code := m.Run()
-
-	os.Exit(code)
-}
-
-func SetupTests(pool dockertest.Pool) dockertest.Resource {
-	resource, err := pool.RunWithOptions(&dockertest.RunOptions{
-		Repository: "postgres",
-		Tag:        "13",
-		Env: []string{
-			"POSTGRES_PASSWORD=secret",
-			"POSTGRES_USER=user_name",
-			"POSTGRES_DB=dbname",
-			"listen_addresses = '*'",
-		},
-	})
-	if err != nil {
-		log.Fatalf("has not possible to connect to resource: %s", err)
+		log.Fatalf(err.Error())
 	}
 
-	hostAndPort := resource.GetHostPort("5432/tcp")
-	dbUrl := fmt.Sprintf("postgres://user_name:secret@%s/dbname?sslmode=disable", hostAndPort)
-	resource.Expire(120) //nolint: errorlint
-	pool.MaxWait = 120 * time.Second
-
-	if err = pool.Retry(func() error {
-		databaseTest, err := sql.Open("postgres", dbUrl)
-		if err != nil {
-			return err
-		}
-		return databaseTest.Ping()
-	}); err != nil {
-		log.Fatalf("Could not connect to docker: %s", err)
-	}
-	setDatabase(*resource)
-	return *resource
-}
-
-func setDatabase(resource dockertest.Resource) {
-	hostAndPort := resource.GetHostPort("5432/tcp")
-	dbUrl := fmt.Sprintf("postgres://user_name:secret@%s/dbname?sslmode=disable", hostAndPort)
-	databaseTest, _ = pgx.Connect(context.Background(), dbUrl)
-	migrationPath := "file:../migrations"
-	err := postgres.Migrate(migrationPath, dbUrl)
-	if err != nil {
-		log.Fatalf("error during migration %v", err)
-	}
-}
-
-func TruncateTable(ctx context.Context, db *pgx.Conn) error {
-	sqlQuery := `truncate accounts RESTART IDENTITY cascade`
-	_, err := db.Exec(ctx, sqlQuery)
-	if err != nil {
-		return err
-	}
-	return nil
+	defer teardown()
+	os.Exit(m.Run())
 }

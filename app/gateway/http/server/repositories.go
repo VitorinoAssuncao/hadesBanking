@@ -9,7 +9,7 @@ import (
 	postgresTransfer "stoneBanking/app/gateway/database/postgres/transfers"
 	webToken "stoneBanking/app/gateway/http/token"
 
-	"github.com/jackc/pgx/v4"
+	"github.com/jackc/pgx/v4/pgxpool"
 )
 
 type RepositoryWrapper struct {
@@ -19,7 +19,7 @@ type RepositoryWrapper struct {
 	Log      logHelper.Logger
 }
 
-func NewPostgresRepositoryWrapper(db *pgx.Conn, signKey string, log logHelper.Logger) *RepositoryWrapper {
+func NewPostgresRepositoryWrapper(db *pgxpool.Pool, signKey string, log logHelper.Logger) *RepositoryWrapper {
 	return &RepositoryWrapper{
 		Account:  postgresAccount.NewAccountRepository(db),
 		Transfer: postgresTransfer.NewTransferRepository(db),

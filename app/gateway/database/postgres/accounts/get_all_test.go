@@ -2,17 +2,18 @@ package account
 
 import (
 	"context"
+	"log"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 
 	"stoneBanking/app/domain/entities/account"
+	"stoneBanking/app/gateway/database/postgres/pgtest"
 )
 
 func Test_GetAll(t *testing.T) {
+	t.Parallel()
 	ctx := context.Background()
-	database := databaseTest
-	accountRepository := NewAccountRepository(database)
 	testCases := []struct {
 		name    string
 		input   account.Account
@@ -38,12 +39,16 @@ func Test_GetAll(t *testing.T) {
 	}
 
 	for _, test := range testCases {
+		test := test
 		t.Run(test.name, func(t *testing.T) {
-			if TruncateTable(ctx, database) != nil {
-				t.Errorf("has not possible clean the databases")
+			t.Parallel()
+			database, err := pgtest.SetDatabase(pgtest.GetRandomDBName())
+			if err != nil {
+				log.Fatalf(err.Error())
 			}
+			accountRepository := NewAccountRepository(database)
 
-			_, err := accountRepository.Create(ctx, test.input)
+			_, err = accountRepository.Create(ctx, test.input)
 			if err != nil {
 				t.Errorf("error when creating account")
 			}

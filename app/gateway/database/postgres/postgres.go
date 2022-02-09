@@ -8,18 +8,18 @@ import (
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
-	"github.com/jackc/pgx/v4"
+	"github.com/jackc/pgx/v4/pgxpool"
 
 	"stoneBanking/app/common/utils/config"
 )
 
-func InitializeDatabase(config config.Config) (*pgx.Conn, error) {
+func InitializeDatabase(config config.Config) (*pgxpool.Pool, error) {
 	const migrationPath = "file://app/gateway/database/postgres/migrations"
 
 	dbUrl := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s",
 		config.DBUser, config.DBPass, config.DBHost, config.DBPort, config.DBBase, config.DBSSLMode)
 
-	db, _ := pgx.Connect(context.Background(), dbUrl)
+	db, _ := pgxpool.Connect(context.Background(), dbUrl)
 	err := Migrate(migrationPath, dbUrl)
 	if err != nil {
 		if !errors.Is(err, migrate.ErrNoChange) {

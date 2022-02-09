@@ -17,6 +17,8 @@ import (
 )
 
 func Test_GetAll(t *testing.T) {
+	t.Parallel()
+
 	const routePattern = "/accounts"
 
 	type fields struct {
@@ -85,7 +87,9 @@ func Test_GetAll(t *testing.T) {
 		},
 	}
 	for _, test := range testCases {
+		test := test
 		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
 			controller := New(test.fields.accountUsecase, test.fields.authenticator, test.fields.logger)
 			req := httptest.NewRequest(http.MethodGet, "/accounts", nil)
 

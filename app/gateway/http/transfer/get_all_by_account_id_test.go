@@ -20,6 +20,8 @@ import (
 )
 
 func Test_GetAllByAccountID(t *testing.T) {
+	t.Parallel()
+
 	const routePattern = "/transfers"
 
 	type fields struct {
@@ -124,8 +126,9 @@ func Test_GetAllByAccountID(t *testing.T) {
 		},
 	}
 	for _, test := range testCases {
+		test := test
 		t.Run(test.name, func(t *testing.T) {
-
+			t.Parallel()
 			req := httptest.NewRequest(http.MethodGet, "/transfers", nil)
 			if test.runBefore != nil {
 				test.runBefore(*req)

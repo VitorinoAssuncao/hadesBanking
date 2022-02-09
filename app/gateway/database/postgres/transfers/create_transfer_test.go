@@ -2,22 +2,24 @@ package transfer
 
 import (
 	"context"
+	"log"
 	"testing"
 
-	"github.com/jackc/pgx/v4"
+	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/stretchr/testify/assert"
 
+	"stoneBanking/app/domain/entities/account"
 	"stoneBanking/app/domain/entities/transfer"
+	"stoneBanking/app/gateway/database/postgres/pgtest"
 )
 
 func Test_Create(t *testing.T) {
+	t.Parallel()
 	ctx := context.Background()
-	database := databaseTest
-	transferRepository := NewTransferRepository(database)
 	testCases := []struct {
 		name      string
 		input     transfer.Transfer
-		runBefore func(db *pgx.Conn)
+		runBefore func(db *pgxpool.Pool)
 		want      transfer.Transfer
 		wantErr   bool
 	}{
@@ -28,17 +30,16 @@ func Test_Create(t *testing.T) {
 				AccountDestinationID: 1,
 				Amount:               100,
 			},
-			runBefore: func(db *pgx.Conn) {
-				sqlQuery :=
-					`
-				INSERT INTO
-					accounts (name, cpf, secret, balance)
-				VALUES
-					('Joao da Silva', '38330499912', 'password', 100)
-				`
-				_, err := db.Exec(ctx, sqlQuery)
+			runBefore: func(db *pgxpool.Pool) {
+				acc := account.Account{
+					Name:    "Joao da Silva",
+					CPF:     "38330499912",
+					Secret:  "password",
+					Balance: 100,
+				}
+				_, err := pgtest.CreateAccount(db, acc)
 				if err != nil {
-					t.Errorf(err.Error())
+					t.Errorf("was not possible to create the test account %s", err.Error())
 				}
 			},
 			want: transfer.Transfer{
@@ -51,10 +52,15 @@ func Test_Create(t *testing.T) {
 	}
 
 	for _, test := range testCases {
+		test := test
 		t.Run(test.name, func(t *testing.T) {
-			if TruncateTable(ctx, database) != nil {
-				t.Errorf("has not possible clean the databases")
+			t.Parallel()
+			database, err := pgtest.SetDatabase(pgtest.GetRandomDBName())
+			if err != nil {
+				log.Fatalf(err.Error())
 			}
+
+			transferRepository := NewTransferRepository(database)
 
 			if test.runBefore != nil {
 				test.runBefore(database)

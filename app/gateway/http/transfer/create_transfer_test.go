@@ -22,6 +22,8 @@ import (
 )
 
 func Test_Create(t *testing.T) {
+	t.Parallel()
+
 	const routePattern = "/transfers"
 
 	type fields struct {
@@ -363,8 +365,9 @@ func Test_Create(t *testing.T) {
 		},
 	}
 	for _, test := range testCases {
+		test := test
 		t.Run(test.name, func(t *testing.T) {
-
+			t.Parallel()
 			body, _ := json.Marshal(test.args.input)
 			req := httptest.NewRequest(http.MethodPost, "/transfers", bytes.NewReader(body))
 

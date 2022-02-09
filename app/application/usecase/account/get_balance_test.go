@@ -15,6 +15,8 @@ import (
 )
 
 func Test_GetBalance(t *testing.T) {
+	t.Parallel()
+
 	testCases := []struct {
 		name        string
 		accountMock account.Repository
@@ -62,7 +64,9 @@ func Test_GetBalance(t *testing.T) {
 		},
 	}
 	for _, test := range testCases {
+		test := test
 		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
 			u := New(test.accountMock, test.tokenMock, test.logMock)
 			got, err := u.GetBalance(context.Background(), test.input)
 			assert.Equal(t, err, test.wantErr)
