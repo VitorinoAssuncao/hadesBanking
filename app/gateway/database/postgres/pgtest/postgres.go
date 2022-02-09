@@ -7,6 +7,9 @@ import (
 	"log"
 	"math"
 	"math/big"
+	"stoneBanking/app/domain/entities/account"
+	"stoneBanking/app/domain/entities/transfer"
+	"stoneBanking/app/domain/types"
 	"stoneBanking/app/gateway/database/postgres"
 	"strings"
 
@@ -49,4 +52,40 @@ func dropDB(dbName string, conn *pgxpool.Pool) {
 	if err != nil {
 		log.Fatalf("was not possible to delete the database %s", err.Error())
 	}
+}
+
+func CreateAccount(conn *pgxpool.Pool, acc account.Account) (accID types.ExternalID, err error) {
+	sqlQuery :=
+		`
+			INSERT INTO
+				accounts (name, cpf, secret, balance)
+			VALUES
+				($1, $2, $3, $4)
+			RETURNING
+				external_id
+		`
+	result, err := conn.Exec(context.Background(), sqlQuery, acc.Name, acc.CPF, acc.Secret, acc.Balance)
+	if err != nil {
+		return "", err
+	}
+
+	return types.ExternalID(result), nil
+}
+
+func CreateTransfer(conn *pgxpool.Pool, tf transfer.Transfer) (tfID types.ExternalID, err error) {
+	sqlQuery :=
+		`
+		INSERT INTO
+			transfers (account_origin_id, account_destiny_id, amount)
+		VALUES
+			($1, $2, $3)
+		RETURNING
+			id
+		`
+	result, err := conn.Exec(context.Background(), sqlQuery, tf.AccountOriginID, tf.AccountDestinationID, tf.Amount)
+	if err != nil {
+		return "", err
+	}
+
+	return types.ExternalID(result), nil
 }

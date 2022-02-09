@@ -10,6 +10,7 @@ import (
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/stretchr/testify/assert"
 
+	"stoneBanking/app/domain/entities/account"
 	"stoneBanking/app/domain/entities/transfer"
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
@@ -31,30 +32,22 @@ func Test_GetAllByID(t *testing.T) {
 			name: "with a valid id in the input, find the transfers and return without errors",
 
 			runBefore: func(db *pgxpool.Pool) (value types.ExternalID) {
-				sqlQuery :=
-					`
-				INSERT INTO
-					accounts (name, cpf, secret, balance)
-				VALUES
-					('Joao da Silva', '38330499912', 'password', 100)
-				`
-				_, err := db.Exec(ctx, sqlQuery)
+				acc := account.Account{
+					Name:    "Joao da Silva",
+					CPF:     "38330499912",
+					Secret:  "password",
+					Balance: 100,
+				}
+				_, err := pgtest.CreateAccount(db, acc)
 				if err != nil {
-					t.Errorf(err.Error())
+					t.Errorf("was not possible to create the test account %s", err.Error())
 				}
 
-				sqlQuery2 := `
-				INSERT INTO
-					transfers (account_origin_id, account_destiny_id, amount)
-				VALUES
-					(1, 1, 100)
-				RETURNING
-					id
-				`
-				created, err := db.Exec(ctx, sqlQuery2)
+				created, err := pgtest.CreateTransfer(db, transfer.Transfer{AccountOriginID: 1, AccountDestinationID: 1, Amount: 100})
 				if err != nil {
-					t.Errorf(err.Error())
+					t.Errorf("was not possible to create the test transfer %s", err.Error())
 				}
+
 				return types.ExternalID(created)
 			},
 			want: []transfer.Transfer{
