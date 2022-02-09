@@ -1,6 +1,7 @@
 package account
 
 import (
+	"log"
 	"os"
 	"testing"
 
@@ -8,7 +9,11 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	teardown := pgtest.SetupTests()
+	teardown, err := pgtest.SetupTests()
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
+
 	defer teardown()
 	os.Exit(m.Run())
 }

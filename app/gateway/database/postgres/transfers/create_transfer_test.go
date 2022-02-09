@@ -2,6 +2,7 @@ package transfer
 
 import (
 	"context"
+	"log"
 	"testing"
 
 	"github.com/jackc/pgx/v4/pgxpool"
@@ -54,7 +55,11 @@ func Test_Create(t *testing.T) {
 		test := test
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
-			database := pgtest.SetDatabase(pgtest.GetRandomDBName())
+			database, err := pgtest.SetDatabase(pgtest.GetRandomDBName())
+			if err != nil {
+				log.Fatalf(err.Error())
+			}
+
 			transferRepository := NewTransferRepository(database)
 
 			if test.runBefore != nil {

@@ -2,6 +2,7 @@ package account
 
 import (
 	"context"
+	"log"
 	"testing"
 	"time"
 
@@ -67,7 +68,11 @@ func Test_Create(t *testing.T) {
 		test := test
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
-			database := pgtest.SetDatabase(pgtest.GetRandomDBName())
+			database, err := pgtest.SetDatabase(pgtest.GetRandomDBName())
+			if err != nil {
+				log.Fatalf(err.Error())
+			}
+
 			accountRepository := NewAccountRepository(database)
 
 			if test.runBefore != nil {

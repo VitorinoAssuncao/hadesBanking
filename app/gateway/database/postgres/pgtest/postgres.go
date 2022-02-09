@@ -18,25 +18,25 @@ func GetRandomDBName() string {
 	return fmt.Sprintf("db_%d", n)
 }
 
-func SetDatabase(dbName string) (pgxConn *pgxpool.Pool) {
+func SetDatabase(dbName string) (*pgxpool.Pool, error) {
 	err := createDB(dbName, testPool)
 	if err != nil {
-		log.Fatalf("was not possible to create the new database error:%s", err.Error())
+		return nil, fmt.Errorf("was not possible to create the new database error:%s", err.Error())
 	}
 	conn := testPool
 	dbUrl := strings.Replace(conn.Config().ConnString(), conn.Config().ConnConfig.Database, dbName, 1)
-	pgxConn, err = pgxpool.Connect(context.Background(), dbUrl)
+	pgxConn, err := pgxpool.Connect(context.Background(), dbUrl)
 	if err != nil {
-		log.Fatalf("was not possible to connect to database %v", err.Error())
+		return nil, fmt.Errorf("was not possible to connect to database %v", err.Error())
 	}
 	migrationPath := "file:../migrations"
 
 	err = postgres.Migrate(migrationPath, dbUrl)
 	if err != nil {
-		log.Fatalf("error during migration %v", err)
+		return nil, fmt.Errorf("error during migration %v", err)
 	}
 
-	return pgxConn
+	return pgxConn, nil
 }
 
 func createDB(dbName string, conn *pgxpool.Pool) error {

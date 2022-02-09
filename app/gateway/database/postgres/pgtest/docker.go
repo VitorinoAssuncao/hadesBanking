@@ -13,12 +13,12 @@ import (
 
 var testPool *pgxpool.Pool
 
-func SetupTests() (teardownFn func()) {
+func SetupTests() (func(), error) {
 	dbName := GetRandomDBName()
 	pool, err := dockertest.NewPool("")
 	ctx := context.Background()
 	if err != nil {
-		log.Fatalf("error when trying to connect to docker")
+		return nil, fmt.Errorf("error when trying to connect to docker: %s", err)
 	}
 
 	resource, err := pool.RunWithOptions(&dockertest.RunOptions{
@@ -32,7 +32,7 @@ func SetupTests() (teardownFn func()) {
 		},
 	})
 	if err != nil {
-		log.Fatalf("it was not possible to connect to resource: %s", err)
+		return nil, fmt.Errorf("it was not possible to connect to resource: %s", err)
 	}
 
 	pool.MaxWait = 120 * time.Second
@@ -47,7 +47,7 @@ func SetupTests() (teardownFn func()) {
 		}
 		return testPool.Ping(ctx)
 	}); err != nil {
-		log.Fatalf("Could not connect to docker: %s", err)
+		return nil, fmt.Errorf("could not connect to docker: %s", err)
 	}
 	newConn, err := pgxpool.Connect(ctx, dbUrl)
 	if err != nil {
@@ -60,5 +60,5 @@ func SetupTests() (teardownFn func()) {
 		dropDB(dbName, testPool)
 
 	}
-	return teardownFN
+	return teardownFN, nil
 }
