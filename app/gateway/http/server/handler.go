@@ -24,7 +24,6 @@ func New(usecase *UseCaseWrapper, token token.Authenticator, logger logHelper.Lo
 	router := mux.NewRouter().StrictSlash(true)
 	m := middleware.NewMiddleware(logger, token)
 	router.Use(m.LogRoutes)
-	router.PathPrefix("/documentation/").Handler(httpSwagger.WrapHandler)
 	controller_account := accounts.New(usecase.Accounts, token, logger)
 	controller_auth := auth.New(usecase.Auth, token, logger)
 	controller_transfer := transfers.New(usecase.Transfer, token, logger)
