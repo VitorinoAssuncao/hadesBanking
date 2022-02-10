@@ -10,6 +10,7 @@ import (
 
 func (u *usecase) Create(ctx context.Context, transferData transfer.Transfer) (transfer.Transfer, error) {
 	const operation = "Usecase.Transfer.Create"
+	u.m.Lock()
 
 	u.logger.LogDebug(operation, "searching for account of origin")
 	accountOrigin, err := u.accountRepository.GetByID(ctx, types.ExternalID(transferData.AccountOriginExternalID))
@@ -45,7 +46,7 @@ func (u *usecase) Create(ctx context.Context, transferData transfer.Transfer) (t
 		u.logger.LogError(operation, err.Error())
 		return transfer.Transfer{}, customError.ErrorTransferCreate
 	}
-
+	u.m.Unlock()
 	u.logger.LogDebug(operation, "transfer created successfully")
 	return newTransfer, nil
 }

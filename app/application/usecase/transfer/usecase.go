@@ -2,6 +2,7 @@ package transfer
 
 import (
 	"context"
+	"sync"
 
 	"stoneBanking/app/domain/entities/account"
 	logHelper "stoneBanking/app/domain/entities/logger"
@@ -18,6 +19,7 @@ type usecase struct {
 	transferRepository transfer.Repository
 	accountRepository  account.Repository
 	logger             logHelper.Logger
+	m                  *sync.Mutex
 }
 
 func New(transfer transfer.Repository, account account.Repository, log logHelper.Logger) *usecase {
@@ -25,5 +27,6 @@ func New(transfer transfer.Repository, account account.Repository, log logHelper
 		transferRepository: transfer,
 		accountRepository:  account,
 		logger:             log,
+		m:                  &sync.Mutex{},
 	}
 }

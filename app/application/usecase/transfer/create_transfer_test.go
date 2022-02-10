@@ -3,14 +3,15 @@ package transfer
 import (
 	"context"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
+	"time"
 
 	"stoneBanking/app/domain/entities/account"
 	logHelper "stoneBanking/app/domain/entities/logger"
 	"stoneBanking/app/domain/entities/transfer"
 	customError "stoneBanking/app/domain/errors"
 	"stoneBanking/app/domain/types"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func Test_Create(t *testing.T) {
@@ -154,4 +155,58 @@ func Test_Create(t *testing.T) {
 			assert.Equal(t, test.want, got)
 		})
 	}
+
+	t.Run("with parallelization, counter should increase in value between calls", func(t *testing.T) {
+		t.Parallel()
+		ctx := context.Background()
+		accountRepo := &account.RepositoryMock{
+			GetByIDFunc: func(ctx context.Context, accountID types.ExternalID) (account.Account, error) {
+				return account.Account{
+					ID:         1,
+					Name:       "Joao do Rio",
+					ExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
+					CPF:        "761.647.810-78",
+					Secret:     "J0@0doR10",
+					Balance:    100}, nil
+			},
+		}
+		ch := make(chan bool)
+		tRepo := &transfer.ParallelMock{
+			CreateFunc: func(ctx context.Context, transferData transfer.Transfer) (transfer.Transfer, error) {
+				return transfer.Transfer{
+					ID:                           1,
+					ExternalID:                   "56286ebe-8798-40ba-81aa-3caa74197cd1",
+					AccountOriginID:              1,
+					AccountOriginExternalID:      "01aacb75-cbd4-45a9-91ed-6cf2f6dcf772",
+					AccountDestinationID:         2,
+					AccountDestinationExternalID: "f53420f2-616c-4fe3-a957-84f03386a82f",
+					Amount:                       1,
+				}, nil
+			},
+			WaitChan: ch}
+
+		transfer1 := transfer.Transfer{
+			AccountOriginExternalID:      "01aacb75-cbd4-45a9-91ed-6cf2f6dcf772",
+			AccountDestinationExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
+			Amount:                       100,
+		}
+
+		transfer2 := transfer.Transfer{
+			AccountOriginExternalID:      "01aacb75-cbd4-45a9-91ed-6cf2f6dcf772",
+			AccountDestinationExternalID: "94b9c27e-2880-42e3-8988-62dceb6b6463",
+			Amount:                       100,
+		}
+		// Run the two creates in parallel with the aim of trying to make two simultaneous insertions, the mutex should hold one of them, leaving only the first one through
+		u := New(tRepo, accountRepo, &logHelper.RepositoryMock{})
+		go u.Create(ctx, transfer1) //nolint
+		go u.Create(ctx, transfer2) //nolint
+
+		time.Sleep(10 * time.Millisecond)
+		assert.Equal(t, int32(1), tRepo.Count)
+
+		// sends release to the channel, so that counter validation and evaluation can continue
+		tRepo.WaitChan <- true
+		time.Sleep(10 * time.Millisecond)
+		assert.Equal(t, int32(2), tRepo.Count)
+	})
 }
